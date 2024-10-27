@@ -86,6 +86,7 @@ class Character extends MovableObject {
     currentAnimation = 'idle';
     world;
     walking_sound = new Audio('audio/swimming.mp3');
+    shooting_sound = new Audio('audio/shoot.mp3');
     lastKeyPressTime = Date.now();
     isLongIdle = false;
     currentLongIdleImageIndex = 0;
@@ -229,6 +230,9 @@ class Character extends MovableObject {
             this.y += this.speed;
             isMoving = true;
         }
+        if (this.keyboard.SPACE) {
+            this.shooting_sound.play();
+        }
 
         if (isMoving) {
             this.playWalkSound();
@@ -320,6 +324,11 @@ class Character extends MovableObject {
 
     addAmmo() {
         this.ammo += 1;
+        if (this.ammo < 0) {
+            this.ammo = 0;
+        } else if (this.ammo > 10) {
+            this.ammo = 10
+        }
     }
 
     useAmmo() {
@@ -345,15 +354,6 @@ class Character extends MovableObject {
             this.coins = 0;
         } else if (this.coins > 10) {
             this.coins = 10
-        }
-    }
-
-    addAmmo() {
-        this.ammo += 1;
-        if (this.ammo < 0) {
-            this.ammo = 0;
-        } else if (this.ammo > 10) {
-            this.ammo = 10
         }
     }
 }
