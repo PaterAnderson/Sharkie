@@ -86,6 +86,8 @@ class World {
                 this.ammoBar.setAmmo(this.character.ammo);
                 this.collectingAmmo_sound.play();
                 this.level.ammo.splice(index, 1);
+                let AmmoItemIndex = AmmoItem.ammo.indexOf(ammo);
+                AmmoItem.ammo.splice(AmmoItemIndex, 1);
                 if (this.level.ammo.length <= 1) {
                     for (let index = this.level.ammo.length; index <= 5; index++) {
                         this.level.ammo.push(new AmmoItem());  

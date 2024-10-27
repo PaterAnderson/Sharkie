@@ -27,25 +27,11 @@ class AmmoItem extends MovableObject {
     }
 
     placeAmmo() {
-        let validPosition = false;
 
-        while (!validPosition) {
-            this.x = 800 + Math.random() * 1500;
-            this.y = 0;
-            validPosition = this.isPositionValid(this.x);
-        }
+        this.x = 800 + Math.random() * 1500;
+        this.y = Math.random() * -100;
 
         AmmoItem.ammo.push({ x: this.x, y: this.y });
-    }
-
-    isPositionValid(newX) {
-        for (let ammo of AmmoItem.ammo) {
-            let distance = Math.sqrt(Math.pow(newX - ammo.x, 2));
-            if (distance < AmmoItem.MIN_DISTANCE) {
-                return false;
-            }
-        }
-        return true;
     }
 
     animate() {
@@ -59,15 +45,15 @@ class AmmoItem extends MovableObject {
 
         const gravityInterval = setInterval(() => {
             this.y += 1;
-            
+
             if (this.y >= AmmoItem.MAX_Y) {
-                this.y = AmmoItem.MAX_Y; 
-                
+                this.y = AmmoItem.MAX_Y;
+
                 AmmoItem.ammo = AmmoItem.ammo.filter(ammo => ammo.x !== this.x && ammo.y !== this.y);
 
-                this.placeAmmo(); 
-                this.drop(); 
-                clearInterval(gravityInterval); 
+                this.placeAmmo();
+                this.drop();
+                clearInterval(gravityInterval);
             }
         }, 30);
     }
