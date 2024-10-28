@@ -87,6 +87,7 @@ class Character extends MovableObject {
     world;
     walking_sound = new Audio('audio/swimming.mp3');
     shooting_sound = new Audio('audio/shoot.mp3');
+    melee_sound = new Audio('audio/melee.mp3');
     lastKeyPressTime = Date.now();
     isLongIdle = false;
     currentLongIdleImageIndex = 0;
@@ -175,7 +176,7 @@ class Character extends MovableObject {
             this.isLongIdle = false;
             this.currentLongIdleImageIndex = 0;
             this.isFinSlapAnimating = false; // Stop FinSlap, wenn in Bewegung
-
+    
             if (!this.isAnimatingSwim) {
                 this.isAnimatingSwim = true;
             }
@@ -184,8 +185,11 @@ class Character extends MovableObject {
             this.currentImage = 0; // Setze den aktuellen Frame auf 0
             this.attackCooldown = true; // Aktivieren des Cooldowns
             this.animateAttack(); // Attack Animation starten
+            this.melee_sound.play(); // Melee-Sound abspielen
             setTimeout(() => {
                 this.attackCooldown = false; // Cooldown nach der festgelegten Zeit zurücksetzen
+                this.melee_sound.pause(); // Den Sound anhalten, wenn der Cooldown vorbei ist
+                this.melee_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
             }, this.attackCooldownTime);
         } else {
             this.isAnimatingSwim = false;
