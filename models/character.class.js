@@ -204,7 +204,7 @@ class Character extends MovableObject {
                 this.melee_sound.pause(); // Den Sound anhalten, wenn der Cooldown vorbei ist
                 this.melee_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
             }, this.attackCooldownTime);
-        } else if (this.keyboard.SPACE && !this.shootCooldown && this.useAmmo()) { // Schuss nur abspielen, wenn kein Cooldown aktiv ist
+        } else if (this.keyboard.SPACE && !this.shootCooldown && this.ammo > 0) { // Schuss nur abspielen, wenn kein Cooldown aktiv ist
             this.shooting_sound.play();
             this.shootCooldown = true; // Cooldown aktivieren
             setTimeout(() => {
