@@ -77,6 +77,16 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Fin slap/7.png',
         'img/1.Sharkie/4.Attack/Fin slap/8.png',
     ];
+    IMAGES_SHOOT = [
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
+    ];
 
     speed = 10; //2
     width = 250;
@@ -94,6 +104,8 @@ class Character extends MovableObject {
     isFinSlapAnimating = false;
     attackCooldown = false;
     attackCooldownTime = 600;
+    shootCooldown = false; 
+    shootCooldownTime = 600; 
     coins = 0;
     ammo = 0;
 
@@ -106,6 +118,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_FINSLAP);
+        this.loadImages(this.IMAGES_SHOOT);
         this.keyboard = keyboard;
         this.animate();
         this.startMovement();
@@ -180,10 +193,10 @@ class Character extends MovableObject {
             if (!this.isAnimatingSwim) {
                 this.isAnimatingSwim = true;
             }
-        } else if (this.keyboard.ATTACK && !this.attackCooldown) { // Prüfen, ob die Attack-Taste gedrückt ist und kein Cooldown aktiv ist
+        } else if (this.keyboard.ATTACK && !this.attackCooldown) {
             this.isFinSlapAnimating = true;
             this.currentImage = 0; // Setze den aktuellen Frame auf 0
-            this.attackCooldown = true; // Aktivieren des Cooldowns
+            this.attackCooldown = true; // Cooldown aktivieren für die Nahkampfattacke
             this.animateAttack(); // Attack Animation starten
             this.melee_sound.play(); // Melee-Sound abspielen
             setTimeout(() => {
@@ -191,6 +204,14 @@ class Character extends MovableObject {
                 this.melee_sound.pause(); // Den Sound anhalten, wenn der Cooldown vorbei ist
                 this.melee_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
             }, this.attackCooldownTime);
+        } else if (this.keyboard.SPACE && !this.shootCooldown && this.useAmmo()) { // Schuss nur abspielen, wenn kein Cooldown aktiv ist
+            this.shooting_sound.play();
+            this.shootCooldown = true; // Cooldown aktivieren
+            setTimeout(() => {
+                this.shootCooldown = false; // Cooldown nach der festgelegten Zeit zurücksetzen
+                this.shooting_sound.pause(); // Den Sound anhalten, wenn der Cooldown vorbei ist
+                this.shooting_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
+            }, this.shootCooldownTime);
         } else {
             this.isAnimatingSwim = false;
         }
@@ -233,9 +254,6 @@ class Character extends MovableObject {
         if (this.keyboard.DOWN && this.y < 290) {
             this.y += this.speed;
             isMoving = true;
-        }
-        if (this.keyboard.SPACE) {
-            this.shooting_sound.play();
         }
 
         if (isMoving) {

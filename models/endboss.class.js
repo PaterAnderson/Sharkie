@@ -1,7 +1,4 @@
 class Endboss extends MovableObject {
-    y = -650;
-    height = 600;
-    width = 600;
 
     IMAGES_SPAWNING = [
         'img/2.Enemy/3 Final Enemy/1.Introduce/1.png',
@@ -51,6 +48,11 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 9.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 10.png'
     ];
+
+    y = -650;
+    height = 600;
+    width = 600;
+    energy = 300;
     spawning = false;
     spawned = false;
     speed = 0.1;
