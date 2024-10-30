@@ -15,6 +15,9 @@ class World {
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
+    hurt_sound = new Audio('audio/sharkie-hurt.mp3');
+    electric_hurt_sound = new Audio('audio/electric-damage.mp3');
+    hit_sound = new Audio('audio/enemy-hit.mp3');
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -74,9 +77,11 @@ class World {
             if (this.character.isColliding(enemy)) {
                 if (enemy instanceof SuperJellyFish) {
                     this.character.electricHit(); 
+                    this.electric_hurt_sound.play();
                     this.statusBar.setPercentage(this.character.energy);
                 } else {
                     this.character.hit(); 
+                    this.hurt_sound.play();
                     this.statusBar.setPercentage(this.character.energy);
                 }
             }
@@ -97,6 +102,7 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (throwable.isColliding(enemy)) {
                     enemy.bubbleHit();
+                    this.hit_sound.play();
                     throwable.remove();
                     this.throwableObject.splice(index, 1);
                 }
@@ -108,6 +114,7 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (finslap.isColliding(enemy)) {
                     enemy.bubbleHit(); // Damaging the enemy
+                    this.hit_sound.play();
                     this.removeFinslapObject(); // Optionally remove the finslap object upon collision
                     // You can re-enable this if you keep the finslap once created
                     // this.finslapObject.splice(index, 1);

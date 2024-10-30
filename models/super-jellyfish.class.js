@@ -17,7 +17,7 @@ class SuperJellyFish extends MovableObject {
         this.loadImages(this.IMAGES_FLOATING);
 
         this.y = Math.random() * 430;
-        this.x = 850 + Math.random() * 2500;
+        this.x = 850 + Math.random() * 2000;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }

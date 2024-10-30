@@ -56,6 +56,8 @@ class Endboss extends MovableObject {
     spawning_sound = new Audio('audio/boss-spawn.mp3');
     boss_music = new Audio('audio/boss-music.mp3');
     boss_bite = new Audio('audio/bite.mp3');
+    boss_hurt = new Audio('audio/boss-hurt.mp3');
+    boss_death = new Audio('audio/boss-death.mp3');
     spawning = false;
     spawned = false;
     speed = 0.1;
@@ -107,6 +109,7 @@ class Endboss extends MovableObject {
             }
             this.playDeadAnimation(this.IMAGES_DEAD);
         } else if (this.isHurt()) {
+            this.boss_hurt.play();
             this.playAnimation(this.IMAGES_HURT);
         } else if (this.isAttacking) {
             this.playAnimation(this.IMAGES_ATTACK);
