@@ -1,8 +1,5 @@
 class PufferFish extends MovableObject {
 
-    y = 360;
-    height = 60;
-    width = 80;
     IMAGES_FLOATING = [
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png',
@@ -24,12 +21,24 @@ class PufferFish extends MovableObject {
         'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition4.png',
         'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition5.png',
     ];
+    IMAGES_DEAD = [
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 2 (can animate by going down to the floor after the Fin Slap attack).png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 3 (can animate by going down to the floor after the Fin Slap attack).png',
+    ];
+
+    y = 360;
+    height = 60;
+    width = 80;
+    currentImage = 0; // Initialisierung für die aktuelle Bildnummer
+    energy = 100; // Beispielenergiewert
 
     constructor() {
         super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png');
         this.loadImages(this.IMAGES_FLOATING);
         this.loadImages(this.IMAGES_BULKFLOAT);
         this.loadImages(this.IMAGES_BULKING);
+        this.loadImages(this.IMAGES_DEAD);
 
         this.y = Math.random() * 450;
         this.x = 700 + Math.random() * 2500;
