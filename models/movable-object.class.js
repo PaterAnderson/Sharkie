@@ -8,7 +8,7 @@ class MovableObject extends DrawableObject {
 
     isColliding(mo) {
         // Durchführung der Kollisionserkennung mit logischem ODER
-        return !( !(this.getHitbox().x < mo.getHitbox().x + mo.getHitbox().width) ||
+        return !(!(this.getHitbox().x < mo.getHitbox().x + mo.getHitbox().width) ||
             !(this.getHitbox().x + this.getHitbox().width > mo.getHitbox().x) ||
             !(this.getHitbox().y < mo.getHitbox().y + mo.getHitbox().height) ||
             !(this.getHitbox().y + this.getHitbox().height > mo.getHitbox().y));
@@ -16,11 +16,13 @@ class MovableObject extends DrawableObject {
 
     hit() {
         this.energy -= 10;
+        this.world.character.isElectricHurt = false;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
         }
+        console.log(world.character.isElectricHurt);
     }
 
     bubbleHit() {
@@ -30,6 +32,25 @@ class MovableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
+    }
+
+    electricHit() {
+        this.energy -= 40;
+        this.world.character.isElectricHurt = true;
+
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+        console.log(this.world.character.isElectricHurt);
+
+        // Setzen Sie einen Timer, um isElectricHurt nach Ablauf einer bestimmten Zeit zu aktualisieren
+        setTimeout(() => {
+            let timePassed = new Date().getTime() - this.lastHit;
+            this.world.character.isElectricHurt = false;
+            console.log(this.world.character.isElectricHurt);
+        }, 1000);
     }
 
     isDead() {

@@ -5,7 +5,7 @@ class Finslap extends MovableObject {
         this.x = x;
         this.y = y;
         this.height = 30;
-        this.width = 30;
+        this.width = 40;
         this.damage = 100;
         this.throw();
     }

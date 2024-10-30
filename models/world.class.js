@@ -70,10 +70,17 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
+            // Überprüfen, ob der Charakter mit einem Gegner kollidiert
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+                if (enemy instanceof SuperJellyFish) {
+                    this.character.electricHit(); 
+                    this.statusBar.setPercentage(this.character.energy);
+                } else {
+                    this.character.hit(); 
+                    this.statusBar.setPercentage(this.character.energy);
+                }
             }
+    
 
             if (enemy.isDead()) {
                 setTimeout(() => {
