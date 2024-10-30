@@ -7,7 +7,6 @@ class MovableObject extends DrawableObject {
     lastHit = 0;
 
     isColliding(mo) {
-        // Durchführung der Kollisionserkennung mit logischem ODER
         return !(!(this.getHitbox().x < mo.getHitbox().x + mo.getHitbox().width) ||
             !(this.getHitbox().x + this.getHitbox().width > mo.getHitbox().x) ||
             !(this.getHitbox().y < mo.getHitbox().y + mo.getHitbox().height) ||

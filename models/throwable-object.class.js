@@ -1,20 +1,29 @@
 class ThrowableObject extends MovableObject {
-
-    constructor(x, y) {
+      constructor(x, y, otherDirection = false) {
         super().loadImage('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
-        this.x = x;
-        this.y = y;
-        this.height = 30;
-        this.width = 30;
-        this.damage = 100;
-        this.throw();
+
+        if (otherDirection) {
+            this.x = x - 150; 
+            this.y = y + 50;
+        } else {
+            this.x = x; 
+            this.y = y + 50; 
+        }
+        
+        this.width = 30; 
+        this.height = 30; 
+        this.otherDirection = otherDirection; 
+
+        this.throw(); 
     }
 
     throw() {
         this.speedY = 5;
         this.applyGravity();
+        
+        let directionMultiplier = this.otherDirection ? -1 : 1; 
         setInterval(() => {
-            this.x += 30;
+            this.x += directionMultiplier * 30; 
         }, 50);
     }
 
@@ -23,7 +32,6 @@ class ThrowableObject extends MovableObject {
     }
 
     remove() {
-        // Logik, um das Wurfobjekt zu entfernen (z.B. von der Welt oder dem Canvas)
-        this.isRemoved = true; // Setze ein Flag, um das Wurfobjekt als entfernt zu markieren
+        this.isRemoved = true; 
     }
 }
