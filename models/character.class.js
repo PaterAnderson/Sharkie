@@ -67,6 +67,15 @@ class Character extends MovableObject {
         'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
     ];
 
+    IMAGES_ELECTRIC_HURT = [
+        'img/1.Sharkie/5.Hurt/2.Electric shock/1.png',
+        'img/1.Sharkie/5.Hurt/2.Electric shock/2.png',
+        'img/1.Sharkie/5.Hurt/2.Electric shock/3.png',
+        'img/1.Sharkie/5.Hurt/2.Electric shock/4.png',
+        'img/1.Sharkie/5.Hurt/2.Electric shock/5.png'
+
+    ];
+
     IMAGES_FINSLAP = [
         'img/1.Sharkie/4.Attack/Fin slap/1.png',
         'img/1.Sharkie/4.Attack/Fin slap/2.png',
@@ -98,9 +107,13 @@ class Character extends MovableObject {
     walking_sound = new Audio('audio/swimming.mp3');
     shooting_sound = new Audio('audio/shoot.mp3');
     melee_sound = new Audio('audio/melee.mp3');
+    hurt_sound = new Audio('audio/sharkie-hurt.mp3');
+    electric_hurt_sound = new Audio('audio/electric-damage.mp3');
     lastKeyPressTime = Date.now();
     isLongIdle = false;
     currentLongIdleImageIndex = 0;
+    isAlive = true;
+    isElectricHurt = false;
     isFinSlapAnimating = false;
     attackCooldown = false;
     attackCooldownTime = 600;
@@ -117,6 +130,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_ELECTRIC_HURT);
         this.loadImages(this.IMAGES_FINSLAP);
         this.loadImages(this.IMAGES_SHOOT);
         this.keyboard = keyboard;
@@ -144,27 +158,36 @@ class Character extends MovableObject {
         this.checkKeyboardInput();
         this.updateCurrentAnimation();
         this.handleMovement();
-
+    
         if (this.isDead()) {
             this.playDeadAnimation(this.IMAGES_DEAD);
             return;
         }
-
-        if (this.isHurt()) {
-            this.playHurtAnimation();
-            return;
+    
+        if (this.isElectricHurt) {
+            // Wenn der Charakter elektrisch verletzt ist, spiele die elektrische Verletzungsanimation
+            this.playElectricHurtAnimation();
+            this.electric_hurt_sound.play();
+            return; // Beende hier die Funktion, um die normale Hurt Animation zu verhindern
         }
-
+        
+        if (this.isHurt()) {
+            // Wenn der Charakter normal verletzt ist, spiele die Hurt-Animation
+            this.playAnimation(this.IMAGES_HURT);
+            this.hurt_sound.play();
+            return; // Beende die Funktion, um zu verhindern, dass weitere Animationen gestartet werden
+        }
+    
         if (this.isFinSlapAnimating) {
             this.playFinSlapAnimation();
             return;
         }
-
+    
         this.playCurrentAnimation();
     }
 
-    playHurtAnimation() {
-        this.playAnimation(this.IMAGES_HURT);
+    playElectricHurtAnimation() {
+        this.playAnimation(this.IMAGES_ELECTRIC_HURT);
     }
 
     playCurrentAnimation() {

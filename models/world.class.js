@@ -15,6 +15,7 @@ class World {
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
+    hit_sound = new Audio('audio/enemy-hit.mp3');
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -40,7 +41,7 @@ class World {
     checkThrowObjects() {
         if (this.keyboard.SPACE && this.canCreateBubble) {
             if (this.character.useAmmo()) {
-                let bubble = new ThrowableObject(this.character.x + 180, this.character.y + 100);
+                let bubble = new ThrowableObject(this.character.x + 180, this.character.y + 100, this.character.otherDirection);
                 this.throwableObject.push(bubble);
                 this.ammoBar.setAmmo(this.character.ammo);
                 this.canCreateBubble = false;
@@ -51,19 +52,17 @@ class World {
         }
         
         if (this.keyboard.ATTACK && this.canCreateFinslap) {
-            let slap = new Finslap(this.character.x + 210, this.character.y + 130);
+            let slap = new Finslap(this.character.x + 210, this.character.y + 130, this.character.otherDirection);
             this.finslapObject.push(slap);
-            this.canCreateFinslap = false;  // Cooldown aktivieren
-
-            // Objekt nach 300 ms löschen
+            this.canCreateFinslap = false;  
+    
             setTimeout(() => {
                 this.removeFinslapObject(slap);
-            }, 300);  // Löschen nach 300 ms
-
-            // Cooldown zurücksetzen nach 1 Sekunde
+            }, 300);  
+    
             setTimeout(() => {
-                this.canCreateFinslap = true;  // Cooldown zurücksetzen
-            }, 600);  // Cooldown-Zeit für die Erstellung eines neuen Finslaps
+                this.canCreateFinslap = true; 
+            }, 600);  
         }
     }
 
@@ -71,9 +70,15 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+                if (enemy instanceof SuperJellyFish) {
+                    this.character.electricHit(); 
+                    this.statusBar.setPercentage(this.character.energy);
+                } else {
+                    this.character.hit(); 
+                    this.statusBar.setPercentage(this.character.energy);
+                }
             }
+    
 
             if (enemy.isDead()) {
                 setTimeout(() => {
@@ -85,30 +90,27 @@ class World {
             }
         });
 
-        // Check collisions for throwable objects
         this.throwableObject.forEach((throwable, index) => {
             this.level.enemies.forEach((enemy) => {
                 if (throwable.isColliding(enemy)) {
                     enemy.bubbleHit();
+                    this.hit_sound.play();
                     throwable.remove();
                     this.throwableObject.splice(index, 1);
                 }
             });
         });
 
-        // Check collisions for finslap objects
         this.finslapObject.forEach((finslap, index) => {
             this.level.enemies.forEach((enemy) => {
                 if (finslap.isColliding(enemy)) {
-                    enemy.bubbleHit(); // Damaging the enemy
-                    this.removeFinslapObject(); // Optionally remove the finslap object upon collision
-                    // You can re-enable this if you keep the finslap once created
-                    // this.finslapObject.splice(index, 1);
+                    enemy.bubbleHit(); 
+                    this.hit_sound.play();
+                    this.removeFinslapObject(); 
                 }
             });
         });
 
-        // Check collisions for coins
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
                 this.character.addCoin();
@@ -118,7 +120,6 @@ class World {
             }
         });
 
-        // Check collisions for ammo
         this.level.ammo.forEach((ammo, index) => {
             if (this.character.isColliding(ammo)) {
                 this.character.addAmmo();
@@ -141,7 +142,7 @@ class World {
     removeFinslapObject(slap) {
         const index = this.finslapObject.indexOf(slap);
         if (index !== -1) {
-            this.finslapObject.splice(index, 1); // Nur das spezifische Finslap-Objekt entfernen
+            this.finslapObject.splice(index, 1); 
         }
     }
 

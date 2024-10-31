@@ -29,7 +29,7 @@ class DrawableObject {
     drawHitbox(ctx) {
             ctx.beginPath();
             ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
+            ctx.strokeStyle = 'transparent';
             ctx.rect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
             ctx.stroke();
     }

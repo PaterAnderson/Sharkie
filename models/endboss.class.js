@@ -52,7 +52,12 @@ class Endboss extends MovableObject {
     y = -650;
     height = 600;
     width = 600;
-    energy = 300;
+    energy = 500;
+    spawning_sound = new Audio('audio/boss-spawn.mp3');
+    boss_music = new Audio('audio/boss-music.mp3');
+    boss_bite = new Audio('audio/bite.mp3');
+    boss_hurt = new Audio('audio/boss-hurt.mp3');
+    boss_death = new Audio('audio/boss-death.mp3');
     spawning = false;
     spawned = false;
     speed = 0.1;
@@ -75,7 +80,7 @@ class Endboss extends MovableObject {
     animate() {
         setInterval(() => {
             this.updateAnimation();
-        }, 200);
+        }, 180);
     }
 
     updateAnimation() {
@@ -92,7 +97,9 @@ class Endboss extends MovableObject {
                 this.spawning = false;
             }
             this.y = -150;
+            this.spawning_sound.play();
             this.moveleft();
+            this.boss_music.play();
             return;
         }
         if (this.isDead()) {
@@ -102,6 +109,7 @@ class Endboss extends MovableObject {
             }
             this.playDeadAnimation(this.IMAGES_DEAD);
         } else if (this.isHurt()) {
+            this.boss_hurt.play();
             this.playAnimation(this.IMAGES_HURT);
         } else if (this.isAttacking) {
             this.playAnimation(this.IMAGES_ATTACK);
@@ -148,6 +156,10 @@ class Endboss extends MovableObject {
             if (!this.isDead() && !this.isHurt() && this.spawning == false) {
                 this.isAttacking = true;
                 this.currentImage = 0;
+                // Den Bite-Sound nur abspielen, wenn der Boss gespawnt ist und angreift
+                if (this.spawned) {
+                    this.boss_bite.play();
+                }
             }
         }, 5000);
     }
