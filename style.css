@@ -2,8 +2,44 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0;
+    background-image: url('img/3. Background/Background.jpg');
+    min-height: 100vh;
+    background-position: center;
+    background-size: cover;
+    font-family: 'luckiest', Arial, Helvetica, sans-serif;
+}
+
+@font-face {
+    font-family: 'luckiest';
+    src: url('fonts/LuckiestGuy-Regular.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+
+h1 {
+    font-size: 64px;
+    letter-spacing: 8px;
+    text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 canvas {
     background-color:  black;
+    display: block;
+}
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+    h1 {
+        display: none;
+    }
+    body {
+        align-items: normal;
+    }
 }
