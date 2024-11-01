@@ -63,6 +63,7 @@ class Endboss extends MovableObject {
     speed = 0.1;
     firstframedead = true;
     isAttacking = false;
+    despawnTimer = 1000;
 
     constructor() {
         super().loadImage(this.IMAGES_FLOATING[0]);

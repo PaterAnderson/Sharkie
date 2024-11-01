@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
     acceleration = 1;
     energy = 100;
     lastHit = 0;
+    despawnTimer = 0;
 
     isColliding(mo) {
         return !(!(this.getHitbox().x < mo.getHitbox().x + mo.getHitbox().width) ||
