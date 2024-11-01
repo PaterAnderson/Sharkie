@@ -52,7 +52,7 @@ class PufferFish extends MovableObject {
         this.moveleft();
         setInterval(() => {
             this.updateAnimation();
-        }, 250);
+        }, 150);
     }
 
     updateAnimation() {
@@ -77,9 +77,10 @@ class PufferFish extends MovableObject {
     async playBulkAnimation() {
         this.isBulking = true; // Setze das Flag, da nun die Bulk Animation startet
         this.hasBulked = true; // Setze das Flag, dass die Bulk Animation bereits abgespielt wurde
+        this.currentImage = 0;
         for (let index = 0; index < this.IMAGES_BULKING.length; index++) {
             this.playAnimation(this.IMAGES_BULKING);
-            await this.sleep(50); // Warten für die Dauer der Animation
+            await this.sleep(150); // Warten für die Dauer der Animation
         }
         this.isBulking = false; // Setze das Flag zurück, nachdem die Bulking-Animation beendet ist
     }
