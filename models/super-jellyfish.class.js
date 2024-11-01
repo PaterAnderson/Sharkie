@@ -19,13 +19,12 @@ class SuperJellyFish extends MovableObject {
         this.y = Math.random() * 430;
         this.x = 850 + Math.random() * 2000;
         this.speed = 0.15 + Math.random() * 0.25;
-        this.animate();
     }
 
     animate() {
         this.moveleft();
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             this.playAnimation(this.IMAGES_FLOATING);
-        }, 250);
+        }, 250));
     };
 }

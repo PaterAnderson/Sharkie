@@ -97,7 +97,7 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
     ];
 
-    speed = 10; //2
+    speed = 2; //2
     width = 250;
     height = 250;
     y = 90;
@@ -135,14 +135,13 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_FINSLAP);
         this.loadImages(this.IMAGES_SHOOT);
         this.keyboard = keyboard;
-        this.animate();
-        this.startMovement();
     }
 
     animate() {
-        setInterval(() => {
+        this.startMovement();
+        this.intervalIDs.push(setInterval(() => {
             this.updateAnimation();
-        }, 150);
+        }, 150));
     }
 
     animateAttack() {
@@ -150,9 +149,9 @@ class Character extends MovableObject {
     }
 
     startMovement() {
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             this.handleMovement();
-        }, 1000 / 60);
+        }, 1000 / 60));
     }
 
     updateAnimation() {

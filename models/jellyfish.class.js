@@ -17,13 +17,12 @@ class JellyFish extends MovableObject {
         this.y = Math.random() * 400;
         this.x = 600 + Math.random() * 2500;
         this.speed = 0.15 + Math.random() * 0.25;
-        this.animate();
     }
 
     animate() {
         this.moveleft();
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             this.playAnimation(this.IMAGES_FLOATING);
-        }, 250);
+        }, 250));
     };
 }

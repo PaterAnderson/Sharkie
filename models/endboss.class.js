@@ -74,14 +74,13 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.x = 2000;
         this.currentImage = 0; // Initialisierung der aktuellen Bildindex
-        this.animate();
-        this.startAttackAnimation();
     }
 
     animate() {
-        setInterval(() => {
+        this.startAttackAnimation();
+        this.intervalIDs.push(setInterval(() => {
             this.updateAnimation();
-        }, 180);
+        }, 180));
     }
 
     updateAnimation() {
@@ -153,7 +152,7 @@ class Endboss extends MovableObject {
     }
 
     startAttackAnimation() {
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             if (!this.isDead() && !this.isHurt() && this.spawning == false) {
                 this.isAttacking = true;
                 this.currentImage = 0;
@@ -162,6 +161,6 @@ class Endboss extends MovableObject {
                     this.boss_bite.play();
                 }
             }
-        }, 5000);
+        }, 5000));
     }
 }

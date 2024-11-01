@@ -6,6 +6,17 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     despawnTimer = 0;
+    intervalIDs = [];
+
+    startAnimation() {
+        this.animate();
+    }
+
+    stopAnimation() {
+        this.intervalIDs.forEach(id => {
+            clearInterval(id);
+        });
+    }
 
     isColliding(mo) {
         return !(!(this.getHitbox().x < mo.getHitbox().x + mo.getHitbox().width) ||
@@ -68,9 +79,9 @@ class MovableObject extends DrawableObject {
     }
 
     moveleft() {
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             this.x -= this.speed;
-        }, 1000 / 60);
+        }, 1000 / 60));
     }
 
     /**

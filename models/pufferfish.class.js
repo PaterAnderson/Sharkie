@@ -46,14 +46,13 @@ class PufferFish extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.45;
         this.isBulking = false; // Flag um zu wissen, ob wir bereits in der Bulk Animation sind.
         this.hasBulked = false; // Flag um zu wissen, ob die Bulk Animation bereits abgespielt wurde.
-        this.animate();
     }
 
     animate() {
         this.moveleft();
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             this.updateAnimation();
-        }, 150);
+        }, 150));
     }
 
     updateAnimation() {

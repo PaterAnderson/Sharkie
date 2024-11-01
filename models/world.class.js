@@ -12,6 +12,7 @@ class World {
     finslapObject = [];
     canCreateFinslap = true; 
     canCreateBubble = true;
+    intervalIDs = [];
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
@@ -23,7 +24,6 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.run();
     }
 
     setWorld() {
@@ -31,10 +31,30 @@ class World {
     }
 
     run() {
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 200);
+        }, 200));
+        this.level.enemies.forEach(enemy => {
+            enemy.startAnimation();
+        });
+        this.level.lights.forEach(light => {
+            light.startAnimation();
+        });
+        this.character.startAnimation();
+    }
+
+    stop() {
+        this.level.enemies.forEach(enemy => {
+            enemy.stopAnimation();
+        });
+        this.level.lights.forEach(light => {
+            light.stopAnimation();
+        });
+        this.character.stopAnimation();
+        this.intervalIDs.forEach(id => {
+            clearInterval(id);
+        });
     }
 
     
@@ -78,8 +98,8 @@ class World {
             }
     
 
-            if (enemy.isDead()) {
-                setTimeout(() => {
+            if (enemy.isDead()) { 
+                setTimeout(() => { //endscreen hier
                     let index = this.level.enemies.indexOf(enemy);
                     if (index != -1) {
                         this.level.enemies.splice(index, 1);
