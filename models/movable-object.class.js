@@ -72,11 +72,17 @@ class MovableObject extends DrawableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * 
+     * @param {string[]} images 
+     * @returns {boolean}
+     */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+        return (this.currentImage % images.length) == 0;
     }
 
     applyGravity() {

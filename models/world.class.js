@@ -41,8 +41,6 @@ class World {
     checkThrowObjects() {
         if (this.keyboard.SPACE && this.canCreateBubble) {
             if (this.character.useAmmo()) {
-                let bubble = new ThrowableObject(this.character.x + 180, this.character.y + 100, this.character.otherDirection);
-                this.throwableObject.push(bubble);
                 this.ammoBar.setAmmo(this.character.ammo);
                 this.canCreateBubble = false;
             }

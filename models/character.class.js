@@ -113,6 +113,7 @@ class Character extends MovableObject {
     isLongIdle = false;
     currentLongIdleImageIndex = 0;
     isAlive = true;
+    isShooting = false;
     isElectricHurt = false;
     isFinSlapAnimating = false;
     attackCooldown = false;
@@ -141,7 +142,7 @@ class Character extends MovableObject {
     animate() {
         setInterval(() => {
             this.updateAnimation();
-        }, 200);
+        }, 150);
     }
 
     animateAttack() {
@@ -180,6 +181,11 @@ class Character extends MovableObject {
     
         if (this.isFinSlapAnimating) {
             this.playFinSlapAnimation();
+            return;
+        }
+
+        if (this.isShooting) {
+            this.playShootingAnimation();
             return;
         }
     
@@ -228,7 +234,8 @@ class Character extends MovableObject {
                 this.melee_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
             }, this.attackCooldownTime);
         } else if (this.keyboard.SPACE && !this.shootCooldown && this.ammo > 0) { // Schuss nur abspielen, wenn kein Cooldown aktiv ist
-            this.shooting_sound.play();
+            this.isShooting = true;
+            this.currentImage = 0;
             this.shootCooldown = true; // Cooldown aktivieren
             setTimeout(() => {
                 this.shootCooldown = false; // Cooldown nach der festgelegten Zeit zurücksetzen
@@ -299,6 +306,21 @@ class Character extends MovableObject {
             } else {
                 this.isFinSlapAnimating = false;
             }
+        }
+    }
+
+    playShootingAnimation() {
+        if (this.isShooting) {
+            let isFinished = this.playAnimation(this.IMAGES_SHOOT);
+            if (isFinished) {
+                this.shooting_sound.play();
+                let bubble = new ThrowableObject(this.x + 180, this.y + 100, this.otherDirection);
+                this.world.throwableObject.push(bubble);
+                this.isShooting = false;
+            } else {
+                setTimeout(()=> this.playShootingAnimation(), 80);
+            }
+            return; 
         }
     }
 
