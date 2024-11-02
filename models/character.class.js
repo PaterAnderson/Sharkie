@@ -160,7 +160,11 @@ class Character extends MovableObject {
         this.handleMovement();
     
         if (this.isDead()) {
+            this.isAlive = false;
             this.playDeadAnimation(this.IMAGES_DEAD);
+            setTimeout(() => {
+                this.world.stop();
+            }, 1500);
             return;
         }
     
@@ -221,7 +225,7 @@ class Character extends MovableObject {
             if (!this.isAnimatingSwim) {
                 this.isAnimatingSwim = true;
             }
-        } else if (this.keyboard.ATTACK && !this.attackCooldown) {
+        } else if (this.keyboard.ATTACK && !this.attackCooldown && this.isAlive) {
             this.isFinSlapAnimating = true;
             this.currentImage = 0; // Setze den aktuellen Frame auf 0
             this.attackCooldown = true; // Cooldown aktivieren für die Nahkampfattacke
@@ -232,7 +236,7 @@ class Character extends MovableObject {
                 this.melee_sound.pause(); // Den Sound anhalten, wenn der Cooldown vorbei ist
                 this.melee_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
             }, this.attackCooldownTime);
-        } else if (this.keyboard.SPACE && !this.shootCooldown && this.ammo > 0) { // Schuss nur abspielen, wenn kein Cooldown aktiv ist
+        } else if (this.keyboard.SPACE && !this.shootCooldown && this.ammo > 0 && this.isAlive) { // Schuss nur abspielen, wenn kein Cooldown aktiv ist
             this.isShooting = true;
             this.currentImage = 0;
             this.shootCooldown = true; // Cooldown aktivieren
@@ -266,21 +270,21 @@ class Character extends MovableObject {
     handleMovement() {
         let isMoving = false;
 
-        if (this.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        if (this.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.isAlive) {
             this.x += this.speed;
             this.otherDirection = false;
             isMoving = true;
         }
-        if (this.keyboard.LEFT && this.x > 0) {
+        if (this.keyboard.LEFT && this.x > 0 && this.isAlive) {
             this.x -= this.speed;
             this.otherDirection = true;
             isMoving = true;
         }
-        if (this.keyboard.UP && this.y > -120) {
+        if (this.keyboard.UP && this.y > -120 && this.isAlive) {
             this.y -= this.speed;
             isMoving = true;
         }
-        if (this.keyboard.DOWN && this.y < 290) {
+        if (this.keyboard.DOWN && this.y < 290 && this.isAlive) {
             this.y += this.speed;
             isMoving = true;
         }
@@ -373,19 +377,6 @@ class Character extends MovableObject {
         if (i < images.length - 1) {
             this.currentImage++;
         }
-    }
-
-    stayDead() {
-        this.currentAnimation = 'dead';
-        this.currentImage = this.IMAGES_DEAD.length - 1; // Setze den Animationsindex auf das letzte Bild
-
-        // Zeige das letzte Bild aus dem IMAGES_DEAD-Array permanent an
-        this.img = this.imageCache[this.IMAGES_DEAD[this.currentImage]];
-
-        // Setze alle Animationen zurück, um unerwünschte Animationen zu vermeiden
-        this.isFinSlapAnimating = false;
-        this.isAnimatingSwim = false;
-        this.isLongIdle = false;
     }
 
     addAmmo() {

@@ -33,7 +33,6 @@ class MovableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
-        console.log(world.character.isElectricHurt);
     }
 
     bubbleHit() {
@@ -54,13 +53,11 @@ class MovableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
-        console.log(this.world.character.isElectricHurt);
 
         // Setzen Sie einen Timer, um isElectricHurt nach Ablauf einer bestimmten Zeit zu aktualisieren
         setTimeout(() => {
             let timePassed = new Date().getTime() - this.lastHit;
             this.world.character.isElectricHurt = false;
-            console.log(this.world.character.isElectricHurt);
         }, 1000);
     }
 
