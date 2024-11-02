@@ -10,7 +10,7 @@ class World {
     coinBar = new CoinBar();
     throwableObject = [];
     finslapObject = [];
-    canCreateFinslap = true; 
+    canCreateFinslap = true;
     canCreateBubble = true;
     intervalIDs = [];
 
@@ -57,7 +57,7 @@ class World {
         });
     }
 
-    
+
     checkThrowObjects() {
         if (this.keyboard.SPACE && this.canCreateBubble) {
             if (this.character.useAmmo()) {
@@ -65,22 +65,22 @@ class World {
                 this.canCreateBubble = false;
             }
             setTimeout(() => {
-                this.canCreateBubble = true; 
-            }, 600);  
+                this.canCreateBubble = true;
+            }, 600);
         }
-        
+
         if (this.keyboard.ATTACK && this.canCreateFinslap) {
             let slap = new Finslap(this.character.x + 210, this.character.y + 130, this.character.otherDirection);
             this.finslapObject.push(slap);
-            this.canCreateFinslap = false;  
-    
+            this.canCreateFinslap = false;
+
             setTimeout(() => {
                 this.removeFinslapObject(slap);
-            }, 300);  
-    
+            }, 300);
+
             setTimeout(() => {
-                this.canCreateFinslap = true; 
-            }, 600);  
+                this.canCreateFinslap = true;
+            }, 600);
         }
     }
 
@@ -89,22 +89,27 @@ class World {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             if (this.character.isColliding(enemy)) {
                 if (enemy instanceof SuperJellyFish) {
-                    this.character.electricHit(); 
+                    this.character.electricHit();
                     this.statusBar.setPercentage(this.character.energy);
                 } else {
-                    this.character.hit(); 
+                    this.character.hit();
                     this.statusBar.setPercentage(this.character.energy);
                 }
             }
-    
 
-            if (enemy.isDead()) { 
-                setTimeout(() => { //endscreen hier
+
+            if (enemy.isDead()) {
+                setTimeout(() => {
                     let index = this.level.enemies.indexOf(enemy);
                     if (index != -1) {
                         this.level.enemies.splice(index, 1);
                     }
                 }, enemy.despawnTimer);
+                if (enemy instanceof Endboss) {
+                    setTimeout(() => { 
+                        this.stop();
+                    }, enemy.despawnTimer);
+                }
             }
         });
 
@@ -122,9 +127,9 @@ class World {
         this.finslapObject.forEach((finslap, index) => {
             this.level.enemies.forEach((enemy) => {
                 if (finslap.isColliding(enemy)) {
-                    enemy.bubbleHit(); 
+                    enemy.bubbleHit();
                     this.hit_sound.play();
-                    this.removeFinslapObject(); 
+                    this.removeFinslapObject();
                 }
             });
         });
@@ -144,10 +149,10 @@ class World {
                 this.ammoBar.setAmmo(this.character.ammo);
                 this.collectingAmmo_sound.play();
                 this.level.ammo.splice(index, 1);
-                
+
                 let AmmoItemIndex = AmmoItem.ammo.indexOf(ammo);
                 AmmoItem.ammo.splice(AmmoItemIndex, 1);
-                
+
                 if (this.level.ammo.length <= 1) {
                     for (let index = this.level.ammo.length; index <= 5; index++) {
                         this.level.ammo.push(new AmmoItem());
@@ -160,7 +165,7 @@ class World {
     removeFinslapObject(slap) {
         const index = this.finslapObject.indexOf(slap);
         if (index !== -1) {
-            this.finslapObject.splice(index, 1); 
+            this.finslapObject.splice(index, 1);
         }
     }
 
@@ -171,7 +176,7 @@ class World {
         this.addObjectsToMap(this.level.backgroundObjects);
 
         this.ctx.translate(-this.camera_x, 0);
-        
+
         // Space for fixed Objects
         this.addToMap(this.statusBar);
         this.addToMap(this.ammoBar);

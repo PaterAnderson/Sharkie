@@ -103,6 +103,7 @@ class Endboss extends MovableObject {
             return;
         }
         if (this.isDead()) {
+            this.boss_music.pause();
             if (this.firstframedead) {
                 this.currentImage = 0;
                 this.firstframedead = false;

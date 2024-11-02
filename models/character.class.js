@@ -118,8 +118,8 @@ class Character extends MovableObject {
     isFinSlapAnimating = false;
     attackCooldown = false;
     attackCooldownTime = 600;
-    shootCooldown = false; 
-    shootCooldownTime = 600; 
+    shootCooldown = false;
+    shootCooldownTime = 600;
     coins = 0;
     ammo = 0;
 
@@ -158,7 +158,7 @@ class Character extends MovableObject {
         this.checkKeyboardInput();
         this.updateCurrentAnimation();
         this.handleMovement();
-    
+
         if (this.isDead()) {
             this.isAlive = false;
             this.playDeadAnimation(this.IMAGES_DEAD);
@@ -167,21 +167,21 @@ class Character extends MovableObject {
             }, 1500);
             return;
         }
-    
+
         if (this.isElectricHurt) {
             // Wenn der Charakter elektrisch verletzt ist, spiele die elektrische Verletzungsanimation
             this.playElectricHurtAnimation();
             this.electric_hurt_sound.play();
             return; // Beende hier die Funktion, um die normale Hurt Animation zu verhindern
         }
-        
+
         if (this.isHurt()) {
             // Wenn der Charakter normal verletzt ist, spiele die Hurt-Animation
             this.playAnimation(this.IMAGES_HURT);
             this.hurt_sound.play();
             return; // Beende die Funktion, um zu verhindern, dass weitere Animationen gestartet werden
         }
-    
+
         if (this.isFinSlapAnimating) {
             this.playFinSlapAnimation();
             return;
@@ -191,7 +191,7 @@ class Character extends MovableObject {
             this.playShootingAnimation();
             return;
         }
-    
+
         this.playCurrentAnimation();
     }
 
@@ -221,7 +221,7 @@ class Character extends MovableObject {
             this.isLongIdle = false;
             this.currentLongIdleImageIndex = 0;
             this.isFinSlapAnimating = false; // Stop FinSlap, wenn in Bewegung
-    
+
             if (!this.isAnimatingSwim) {
                 this.isAnimatingSwim = true;
             }
@@ -321,9 +321,9 @@ class Character extends MovableObject {
                 this.world.throwableObject.push(bubble);
                 this.isShooting = false;
             } else {
-                setTimeout(()=> this.playShootingAnimation(), 80);
+                setTimeout(() => this.playShootingAnimation(), 80);
             }
-            return; 
+            return;
         }
     }
 
