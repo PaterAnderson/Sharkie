@@ -77,12 +77,14 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             if (this.character.isColliding(enemy)) {
-                if (enemy instanceof SuperJellyFish) {
-                    this.character.electricHit();
-                    this.statusBar.setPercentage(this.character.energy);
-                } else {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
+                if (enemy.energy > 0) {
+                    if (enemy instanceof SuperJellyFish) {
+                        this.character.electricHit();
+                        this.statusBar.setPercentage(this.character.energy);
+                    } else {
+                        this.character.hit();
+                        this.statusBar.setPercentage(this.character.energy);
+                    }
                 }
             }
 
