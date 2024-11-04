@@ -97,7 +97,7 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
     ];
 
-    speed = 2; //2
+    speed = 3; //2
     width = 250;
     height = 250;
     y = 90;
@@ -122,7 +122,6 @@ class Character extends MovableObject {
     shootCooldownTime = 600;
     coins = 0;
     ammo = 0;
-
 
     constructor() {
         super().loadImage('img/1.Sharkie/1.IDLE/1.png');
@@ -169,17 +168,15 @@ class Character extends MovableObject {
         }
 
         if (this.isElectricHurt) {
-            // Wenn der Charakter elektrisch verletzt ist, spiele die elektrische Verletzungsanimation
             this.playElectricHurtAnimation();
             this.electric_hurt_sound.play();
-            return; // Beende hier die Funktion, um die normale Hurt Animation zu verhindern
+            return;
         }
 
         if (this.isHurt()) {
-            // Wenn der Charakter normal verletzt ist, spiele die Hurt-Animation
             this.playAnimation(this.IMAGES_HURT);
             this.hurt_sound.play();
-            return; // Beende die Funktion, um zu verhindern, dass weitere Animationen gestartet werden
+            return;
         }
 
         if (this.isFinSlapAnimating) {
@@ -220,33 +217,60 @@ class Character extends MovableObject {
             this.lastKeyPressTime = Date.now();
             this.isLongIdle = false;
             this.currentLongIdleImageIndex = 0;
-            this.isFinSlapAnimating = false; // Stop FinSlap, wenn in Bewegung
+            this.isFinSlapAnimating = false; 
 
             if (!this.isAnimatingSwim) {
                 this.isAnimatingSwim = true;
             }
         } else if (this.keyboard.ATTACK && !this.attackCooldown && this.isAlive) {
-            this.isFinSlapAnimating = true;
-            this.currentImage = 0; // Setze den aktuellen Frame auf 0
-            this.attackCooldown = true; // Cooldown aktivieren für die Nahkampfattacke
-            this.animateAttack(); // Attack Animation starten
-            this.melee_sound.play(); // Melee-Sound abspielen
-            setTimeout(() => {
-                this.attackCooldown = false; // Cooldown nach der festgelegten Zeit zurücksetzen
-                this.melee_sound.pause(); // Den Sound anhalten, wenn der Cooldown vorbei ist
-                this.melee_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
-            }, this.attackCooldownTime);
-        } else if (this.keyboard.SPACE && !this.shootCooldown && this.ammo > 0 && this.isAlive) { // Schuss nur abspielen, wenn kein Cooldown aktiv ist
-            this.isShooting = true;
-            this.currentImage = 0;
-            this.shootCooldown = true; // Cooldown aktivieren
-            setTimeout(() => {
-                this.shootCooldown = false; // Cooldown nach der festgelegten Zeit zurücksetzen
-                this.shooting_sound.pause(); // Den Sound anhalten, wenn der Cooldown vorbei ist
-                this.shooting_sound.currentTime = 0; // Zurücksetzen des Sounds für den nächsten Einsatz
-            }, this.shootCooldownTime);
+            this.startFinSlapAttack();
+        } else if (this.keyboard.SPACE && this.canShoot()) {
+            this.startShooting();
         } else {
             this.isAnimatingSwim = false;
+        }
+    }
+
+    canShoot() {
+        return !this.shootCooldown && this.ammo > 0 && this.isAlive;
+    }
+
+    startShooting() {
+        this.isShooting = true;
+        this.currentImage = 0;
+        this.shootCooldown = true; 
+
+        this.playShootingAnimation();
+        setTimeout(() => {
+            this.shootCooldown = false; 
+            this.shooting_sound.pause(); 
+            this.shooting_sound.currentTime = 0; 
+        }, this.shootCooldownTime);
+    }
+
+    startFinSlapAttack() {
+        this.isFinSlapAnimating = true;
+        this.currentImage = 0; // Setze den aktuellen Frame auf 0
+        this.attackCooldown = true; // Cooldown aktivieren für die Nahkampfattacke
+        this.animateAttack(); // Attack Animation starten
+        this.melee_sound.play(); // Melee-Sound abspielen
+
+        setTimeout(() => {
+            this.attackCooldown = false; // Cooldown zurücksetzen
+            this.melee_sound.pause(); // Den Sound anhalten
+            this.melee_sound.currentTime = 0; 
+        }, this.attackCooldownTime);
+    }
+
+    playShootingAnimation() {
+        if (this.isShooting) {
+            let isFinished = this.playAnimation(this.IMAGES_SHOOT);
+            if (isFinished) { 
+                this.shooting_sound.play();
+                this.isShooting = false; // Setze auf false, wenn die Animation beendet ist
+            } else {
+                setTimeout(() => this.playShootingAnimation(), 80);
+            }
         }
     }
 
@@ -312,21 +336,6 @@ class Character extends MovableObject {
         }
     }
 
-    playShootingAnimation() {
-        if (this.isShooting) {
-            let isFinished = this.playAnimation(this.IMAGES_SHOOT);
-            if (isFinished) {
-                this.shooting_sound.play();
-                let bubble = new ThrowableObject(this.x + 180, this.y + 100, this.otherDirection);
-                this.world.throwableObject.push(bubble);
-                this.isShooting = false;
-            } else {
-                setTimeout(() => this.playShootingAnimation(), 80);
-            }
-            return;
-        }
-    }
-
     playWalkSound() {
         if (this.walking_sound.paused) {
             this.walking_sound.currentTime = 0;
@@ -367,7 +376,7 @@ class Character extends MovableObject {
     }
 
     calculateCurrentIndexForSubsequentImages() {
-        return 10 + (this.currentLongIdleImageIndex - 10) % 4; // Bilder 11-14
+        return 10 + (this.currentLongIdleImageIndex - 10) % 4; 
     }
 
     playDeadAnimation(images) {
@@ -384,7 +393,7 @@ class Character extends MovableObject {
         if (this.ammo < 0) {
             this.ammo = 0;
         } else if (this.ammo > 10) {
-            this.ammo = 10
+            this.ammo = 10;
         }
     }
 
@@ -402,7 +411,7 @@ class Character extends MovableObject {
             y: this.y + 120,
             width: this.width - 100,
             height: this.height - 180
-        }
+        };
     }
 
     addCoin() {
@@ -410,7 +419,7 @@ class Character extends MovableObject {
         if (this.coins < 0) {
             this.coins = 0;
         } else if (this.coins > 10) {
-            this.coins = 10
+            this.coins = 10;
         }
     }
 }

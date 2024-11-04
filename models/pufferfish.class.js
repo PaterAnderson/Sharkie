@@ -32,7 +32,7 @@ class PufferFish extends MovableObject {
     width = 80;
     currentImage = 0; // Initialisierung für die aktuelle Bildnummer
     energy = 100; // Beispielenergiewert
-    despawnTimer = 1000;
+    despawnTimer = 500;
 
     constructor() {
         super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png');

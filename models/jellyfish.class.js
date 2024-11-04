@@ -15,7 +15,7 @@ class JellyFish extends MovableObject {
     y = 360;
     height = 80;
     width = 80;
-    despawnTimer = 1000;
+    despawnTimer = 500;
     currentImage = 0;
 
     constructor() {
