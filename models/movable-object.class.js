@@ -44,6 +44,15 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    slapHit() {
+        this.energy -= 50;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
+
     electricHit() {
         this.energy -= 40;
         this.world.character.isElectricHurt = true;

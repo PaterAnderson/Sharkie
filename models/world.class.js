@@ -58,6 +58,7 @@ class World {
 
 
     checkThrowObjects() {
+
         if (this.keyboard.ATTACK && this.canCreateFinslap) {
             let slap = new Finslap(this.character.x + 210, this.character.y + 130, this.character.otherDirection);
             this.finslapObject.push(slap);
@@ -97,7 +98,7 @@ class World {
                     }
                 }, enemy.despawnTimer);
                 if (enemy instanceof Endboss) {
-                    setTimeout(() => { 
+                    setTimeout(() => {
                         this.stop();
                     }, enemy.despawnTimer);
                 }
@@ -118,7 +119,10 @@ class World {
         this.finslapObject.forEach((finslap, index) => {
             this.level.enemies.forEach((enemy) => {
                 if (finslap.isColliding(enemy)) {
-                    enemy.bubbleHit();
+                    if (enemy instanceof PufferFish) {
+                        enemy.throw();
+                    }
+                    enemy.slapHit();
                     this.hit_sound.play();
                     this.removeFinslapObject();
                 }

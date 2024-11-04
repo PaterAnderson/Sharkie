@@ -31,7 +31,7 @@ class PufferFish extends MovableObject {
     height = 60;
     width = 80;
     currentImage = 0; // Initialisierung für die aktuelle Bildnummer
-    energy = 100; // Beispielenergiewert
+    energy = 50; // Beispielenergiewert
     despawnTimer = 500;
 
     constructor() {
@@ -95,6 +95,16 @@ class PufferFish extends MovableObject {
         if (i < images.length - 1) {
             this.currentImage++;
         }
+    }
+
+    throw() {
+        this.speedY = 25;
+        this.applyGravity();
+        
+        let directionMultiplier = this.otherDirection ? -1 : 1; 
+        setInterval(() => {
+            this.x += directionMultiplier * -10; 
+        }, 1000 / 60);
     }
 
     sleep(ms) {
