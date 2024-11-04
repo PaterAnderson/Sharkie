@@ -117,6 +117,7 @@ class Character extends MovableObject {
     isElectricHurt = false;
     isFinSlapAnimating = false;
     attackCooldown = false;
+    canCreateBubble = true;
     attackCooldownTime = 600;
     shootCooldown = false;
     shootCooldownTime = 600;
@@ -265,12 +266,19 @@ class Character extends MovableObject {
     playShootingAnimation() {
         if (this.isShooting) {
             let isFinished = this.playAnimation(this.IMAGES_SHOOT);
-            if (isFinished) { 
+            if (isFinished && this.useAmmo()) { 
                 this.shooting_sound.play();
+                this.world.ammoBar.setAmmo(this.ammo);
+                let bubble = new ThrowableObject(this.x + 180, this.y + 100, this.otherDirection);
+                this.world.throwableObject.push(bubble);
+                this.canCreateBubble = false;
                 this.isShooting = false; // Setze auf false, wenn die Animation beendet ist
             } else {
                 setTimeout(() => this.playShootingAnimation(), 80);
             }
+            setTimeout(() => {
+                this.canCreateBubble = true;
+            }, 600);
         }
     }
 

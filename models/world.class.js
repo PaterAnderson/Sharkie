@@ -11,7 +11,6 @@ class World {
     throwableObject = [];
     finslapObject = [];
     canCreateFinslap = true;
-    canCreateBubble = true;
     intervalIDs = [];
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
@@ -59,18 +58,6 @@ class World {
 
 
     checkThrowObjects() {
-        if (this.keyboard.SPACE && this.canCreateBubble) {
-            if (this.character.useAmmo()) {
-                this.ammoBar.setAmmo(this.character.ammo);
-                let bubble = new ThrowableObject(this.character.x + 180, this.character.y + 100, this.character.otherDirection);
-                this.throwableObject.push(bubble);
-                this.canCreateBubble = false;
-            }
-            setTimeout(() => {
-                this.canCreateBubble = true;
-            }, 600);
-        }
-
         if (this.keyboard.ATTACK && this.canCreateFinslap) {
             let slap = new Finslap(this.character.x + 210, this.character.y + 130, this.character.otherDirection);
             this.finslapObject.push(slap);
