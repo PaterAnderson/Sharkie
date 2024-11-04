@@ -121,6 +121,9 @@ class World {
                 if (finslap.isColliding(enemy)) {
                     if (enemy instanceof PufferFish) {
                         enemy.throw();
+                    } else if (enemy instanceof SuperJellyFish) {
+                        this.character.electricHit();
+                        this.statusBar.setPercentage(this.character.energy);
                     }
                     enemy.slapHit();
                     this.hit_sound.play();
