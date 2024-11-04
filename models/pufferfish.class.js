@@ -61,12 +61,15 @@ class PufferFish extends MovableObject {
         let distanceY = this.y - world.character.y;
         let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
+        if (this.isDead()) {
+            this.playDeadAnimation(this.IMAGES_DEAD);
+            return;
+        }
+
         // Überprüfung, ob der Pufferfish in den Radius des Characters kommt
         if (distance < 300 && !this.hasBulked && !this.isBulking) {
             this.playBulkAnimation();
         } else if (this.isBulking) {
-            // Während der Bulking-Animation spielt keine andere Animation ab.
-            // Hier muss nichts passieren.
         } else if (this.hasBulked) {
             this.playAnimation(this.IMAGES_BULKFLOAT); // Immer in BulkFloat bleiben
         } else {
@@ -83,6 +86,15 @@ class PufferFish extends MovableObject {
             await this.sleep(150); // Warten für die Dauer der Animation
         }
         this.isBulking = false; // Setze das Flag zurück, nachdem die Bulking-Animation beendet ist
+    }
+
+    playDeadAnimation(images) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        if (i < images.length - 1) {
+            this.currentImage++;
+        }
     }
 
     sleep(ms) {
