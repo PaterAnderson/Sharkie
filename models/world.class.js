@@ -71,7 +71,7 @@ class World {
     restart() {
         this.stop(); 
         this.character = new Character(); 
-        this.level = level1; 
+        this.level = level1;
 
         this.camera_x = 0;
         this.showVictoryScreen = false;
@@ -287,9 +287,9 @@ class World {
         let tryAgainHeight = this.tryAgainImage.height * scaleFactor;
         let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
         let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
-        
+
         return x >= tryAgainX && x <= tryAgainX + tryAgainWidth &&
-               y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
+            y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
     }
 
     addObjectsToMap(objects) {
