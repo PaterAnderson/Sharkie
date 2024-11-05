@@ -17,6 +17,7 @@ class World {
     finslapObject = [];
     canCreateFinslap = true;
     intervalIDs = [];
+    isGameActive = true;
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
@@ -33,6 +34,7 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
     }
 
     setWorld() {
@@ -67,25 +69,19 @@ class World {
     }
 
     restart() {
-        this.stop(); // Stopp alle Animationen und Intervalle
-        this.character = new Character(); // Setze den Charakter zurück
-        this.level = level1; // Setze das Level zurück
+        this.stop(); 
+        this.character = new Character(); 
+        this.level = level1; 
 
-        this.camera_x = 0; // Setze die Kamera zurück
+        this.camera_x = 0;
         this.showVictoryScreen = false;
         this.showGameOverScreen = false;
-
-        // Reset der Statusleisten
         this.statusBar = new StatusBar();
         this.ammoBar = new AmmoBar();
         this.coinBar = new CoinBar();
-
-        // Leere die kollektionen für Objekt
         this.throwableObject = [];
         this.finslapObject = [];
         this.canCreateFinslap = true;
-
-        // Setze das Spiel wieder an
         this.setWorld();
         this.run();
     }
@@ -238,22 +234,62 @@ class World {
             self.draw();
         });
         if (this.showVictoryScreen) {
-            this.ctx.drawImage(this.victoryImage, 0, 0, this.canvas.width, this.canvas.height);
-            let tryAgainScaleFactor = 0.3; 
-            let tryAgainWidth = this.tryAgainImage.width * tryAgainScaleFactor;
-            let tryAgainHeight = this.tryAgainImage.height * tryAgainScaleFactor;
-            let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
-            let tryAgainY = this.canvas.height - tryAgainHeight - 100; 
-            this.ctx.drawImage(this.tryAgainImage, tryAgainX, tryAgainY, tryAgainWidth, tryAgainHeight);
+            this.drawVictoryScreen(this.victoryImage);
+            this.drawTryAgainButton(0.3, -100); // 0.3 ist der Skalierungsfaktor, -100 ist der Offset auf der Y-Achse
         } else if (this.showGameOverScreen) {
-            let scaleFactor = 0.3;
-            let newWidth = this.gameOverImage.width * scaleFactor;
-            let newHeight = this.gameOverImage.height * scaleFactor;
-            let x = (this.canvas.width - newWidth) / 2;
-            let y = (this.canvas.height - newHeight) / 3;
-            this.ctx.drawImage(this.gameOverImage, x, y, newWidth, newHeight);
-            this.ctx.drawImage(this.tryAgainImage, x + 75, y + 150, newWidth - 150, newHeight - 100);
+            this.drawScreen(this.gameOverImage);
+            this.drawTryAgainButton(0.3, -200); // 150 ist der Offset auf der Y-Achse für Game Over
         }
+    }
+
+    drawVictoryScreen() {
+        this.ctx.drawImage(this.victoryImage, 0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    drawScreen(image) {
+        let scaleFactor = 0.3;
+        let newWidth = image.width * scaleFactor;
+        let newHeight = image.height * scaleFactor;
+        let x = (this.canvas.width - newWidth) / 2;
+        let y = (this.canvas.height - newHeight) / 3;
+
+        this.ctx.drawImage(image, x, y, newWidth, newHeight);
+    }
+
+    drawTryAgainButton(scaleFactor, offsetY) {
+        let tryAgainWidth = this.tryAgainImage.width * scaleFactor;
+        let tryAgainHeight = this.tryAgainImage.height * scaleFactor;
+        let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
+        let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
+
+        this.ctx.drawImage(this.tryAgainImage, tryAgainX, tryAgainY, tryAgainWidth, tryAgainHeight);
+    }
+
+    handleCanvasClick(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // Überprüfen, ob der Klick innerhalb des Try Again Buttons war
+        if (this.showVictoryScreen) {
+            if (this.isInsideTryAgainButton(x, y, 0.3, -100)) {
+                this.restart();
+            }
+        } else if (this.showGameOverScreen) {
+            if (this.isInsideTryAgainButton(x, y, 0.3, -200)) {
+                this.restart();
+            }
+        }
+    }
+
+    isInsideTryAgainButton(x, y, scaleFactor, offsetY) {
+        let tryAgainWidth = this.tryAgainImage.width * scaleFactor;
+        let tryAgainHeight = this.tryAgainImage.height * scaleFactor;
+        let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
+        let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
+        
+        return x >= tryAgainX && x <= tryAgainX + tryAgainWidth &&
+               y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
     }
 
     addObjectsToMap(objects) {
