@@ -122,7 +122,7 @@ class Character extends MovableObject {
     shootCooldown = false;
     shootCooldownTime = 600;
     coins = 0;
-    ammo = 0;
+    ammo = 10;
 
     constructor() {
         super().loadImage('img/1.Sharkie/1.IDLE/1.png');

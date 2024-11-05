@@ -5,6 +5,8 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    victoryImage = new Image();
+    showVictoryScreen = false;
     statusBar = new StatusBar();
     ammoBar = new AmmoBar();
     coinBar = new CoinBar();
@@ -16,8 +18,10 @@ class World {
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
     hit_sound = new Audio('audio/enemy-hit.mp3');
+    winningSound = new Audio('audio/winning.mp3');
 
     constructor(canvas, keyboard) {
+        this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -96,12 +100,13 @@ class World {
                     if (index != -1) {
                         this.level.enemies.splice(index, 1);
                     }
-                }, enemy.despawnTimer);
-                if (enemy instanceof Endboss) {
-                    setTimeout(() => {
+
+                    if (enemy instanceof Endboss) {
+                        this.showVictoryScreen = true;
+                        this.winningSound.play();
                         this.stop();
-                    }, enemy.despawnTimer);
-                }
+                    }
+                }, enemy.despawnTimer);
             }
         });
 
@@ -196,6 +201,9 @@ class World {
         requestAnimationFrame(function () {
             self.draw();
         });
+        if (this.showVictoryScreen) {
+            this.ctx.drawImage(this.victoryImage, 0, 0, this.canvas.width, this.canvas.height);
+        }
     }
 
     addObjectsToMap(objects) {
