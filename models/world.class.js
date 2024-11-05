@@ -6,7 +6,10 @@ class World {
     keyboard;
     camera_x = 0;
     victoryImage = new Image();
+    gameOverImage = new Image();
+    tryAgainImage = new Image();
     showVictoryScreen = false;
+    showGameOverScreen = false;
     statusBar = new StatusBar();
     ammoBar = new AmmoBar();
     coinBar = new CoinBar();
@@ -19,9 +22,12 @@ class World {
     collectingAmmo_sound = new Audio('audio/potion.mp3');
     hit_sound = new Audio('audio/enemy-hit.mp3');
     winningSound = new Audio('audio/winning.mp3');
+    loosingSound = new Audio('audio/loosing.mp3');
 
     constructor(canvas, keyboard) {
         this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
+        this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
+        this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -58,6 +64,30 @@ class World {
         this.intervalIDs.forEach(id => {
             clearInterval(id);
         });
+    }
+
+    restart() {
+        this.stop(); // Stopp alle Animationen und Intervalle
+        this.character = new Character(); // Setze den Charakter zurück
+        this.level = level1; // Setze das Level zurück
+
+        this.camera_x = 0; // Setze die Kamera zurück
+        this.showVictoryScreen = false;
+        this.showGameOverScreen = false;
+
+        // Reset der Statusleisten
+        this.statusBar = new StatusBar();
+        this.ammoBar = new AmmoBar();
+        this.coinBar = new CoinBar();
+
+        // Leere die kollektionen für Objekt
+        this.throwableObject = [];
+        this.finslapObject = [];
+        this.canCreateFinslap = true;
+
+        // Setze das Spiel wieder an
+        this.setWorld();
+        this.run();
     }
 
 
@@ -107,6 +137,12 @@ class World {
                         this.stop();
                     }
                 }, enemy.despawnTimer);
+            }
+            if (this.character.isDead()) {
+                setTimeout(() => {
+                    this.showGameOverScreen = true;
+                    this.loosingSound.play();
+                }, 1500);
             }
         });
 
@@ -203,6 +239,20 @@ class World {
         });
         if (this.showVictoryScreen) {
             this.ctx.drawImage(this.victoryImage, 0, 0, this.canvas.width, this.canvas.height);
+            let tryAgainScaleFactor = 0.3; 
+            let tryAgainWidth = this.tryAgainImage.width * tryAgainScaleFactor;
+            let tryAgainHeight = this.tryAgainImage.height * tryAgainScaleFactor;
+            let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
+            let tryAgainY = this.canvas.height - tryAgainHeight - 100; 
+            this.ctx.drawImage(this.tryAgainImage, tryAgainX, tryAgainY, tryAgainWidth, tryAgainHeight);
+        } else if (this.showGameOverScreen) {
+            let scaleFactor = 0.3;
+            let newWidth = this.gameOverImage.width * scaleFactor;
+            let newHeight = this.gameOverImage.height * scaleFactor;
+            let x = (this.canvas.width - newWidth) / 2;
+            let y = (this.canvas.height - newHeight) / 3;
+            this.ctx.drawImage(this.gameOverImage, x, y, newWidth, newHeight);
+            this.ctx.drawImage(this.tryAgainImage, x + 75, y + 150, newWidth - 150, newHeight - 100);
         }
     }
 

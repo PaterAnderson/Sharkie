@@ -10,6 +10,12 @@ function init() {
     world.run();
 }
 
+function restart() {
+    if (world) {
+        world.restart(); // Call the restart method on the world instance
+    }
+}
+
 
 window.addEventListener("keydown", (event) => {
     switch (event.key) {

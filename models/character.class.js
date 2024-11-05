@@ -109,6 +109,7 @@ class Character extends MovableObject {
     melee_sound = new Audio('audio/melee.mp3');
     hurt_sound = new Audio('audio/sharkie-hurt.mp3');
     electric_hurt_sound = new Audio('audio/electric-damage.mp3');
+    dying_sound = new Audio('audio/dying.mp3');
     lastKeyPressTime = Date.now();
     isLongIdle = false;
     currentLongIdleImageIndex = 0;
@@ -161,6 +162,7 @@ class Character extends MovableObject {
 
         if (this.isDead()) {
             this.isAlive = false;
+            this.dying_sound.play();
             this.playDeadAnimation(this.IMAGES_DEAD);
             setTimeout(() => {
                 this.world.stop();
