@@ -8,6 +8,8 @@ class World {
     victoryImage = new Image();
     gameOverImage = new Image();
     tryAgainImage = new Image();
+    startMenuImage = new Image();
+    startButton = new Image();
     showVictoryScreen = false;
     showGameOverScreen = false;
     statusBar = new StatusBar();
@@ -17,7 +19,7 @@ class World {
     finslapObject = [];
     canCreateFinslap = true;
     intervalIDs = [];
-    isGameActive = true;
+    isGameActive = false;
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
@@ -29,11 +31,13 @@ class World {
         this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
         this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
         this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
+        this.startMenuImage.src = "img/welcome-screen.png";
+        this.startButton.src = "img/start.png";
+        this.startButton.src = "img/start.png";
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
-        this.setWorld();
         canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
     }
 
@@ -69,8 +73,8 @@ class World {
     }
 
     restart() {
-        this.stop(); 
-        this.character = new Character(); 
+        this.stop();
+        this.character = new Character();
         this.level = level1;
 
         this.camera_x = 0;
@@ -228,17 +232,46 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-        // Draw() wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
         });
         if (this.showVictoryScreen) {
             this.drawVictoryScreen(this.victoryImage);
-            this.drawTryAgainButton(0.3, -100); // 0.3 ist der Skalierungsfaktor, -100 ist der Offset auf der Y-Achse
+            this.drawTryAgainButton(0.3, -100); 
         } else if (this.showGameOverScreen) {
             this.drawScreen(this.gameOverImage);
-            this.drawTryAgainButton(0.3, -200); // 150 ist der Offset auf der Y-Achse für Game Over
+            this.drawTryAgainButton(0.3, -200); 
+        }
+        if (!this.isGameActive) {
+            this.drawStartButton()
+            this.drawStartMenu();
+            return;
+        }
+    }
+
+    drawStartMenu() {
+        if (this.startMenuImage.complete) { 
+            let scaleFactor = 1; 
+            let newWidth = this.startMenuImage.width * scaleFactor;
+            let newHeight = this.startMenuImage.height * scaleFactor;
+            let x = (this.canvas.width - newWidth) / 2;
+            let y = (this.canvas.height - newHeight) / 2;
+            this.ctx.drawImage(this.startMenuImage, x, y, newWidth, newHeight);
+
+            this.drawStartButton(); 
+        } 
+    }
+
+    drawStartButton() {
+        if (this.startButton.complete) {
+            let scaleFactor = 1; // Setze den Skalierungsfaktor für den Button
+            let newWidth = this.startButton.width * scaleFactor;
+            let newHeight = this.startButton.height * scaleFactor;
+            let x = (this.canvas.width - newWidth) / 2;
+            let y = (this.canvas.height - newHeight) / 2.3; 
+
+            this.ctx.drawImage(this.startButton, x, y, newWidth, newHeight);
         }
     }
 
@@ -269,7 +302,15 @@ class World {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-
+    
+        // Überprüfen, ob der Klick auf den Startbutton war
+        if (!this.isGameActive) {
+            if (this.isInsideStartButton(x, y)) {
+                this.isGameActive = true;
+                this.restart(); 
+            }
+        }
+    
         // Überprüfen, ob der Klick innerhalb des Try Again Buttons war
         if (this.showVictoryScreen) {
             if (this.isInsideTryAgainButton(x, y, 0.3, -100)) {
@@ -281,6 +322,17 @@ class World {
             }
         }
     }
+
+    isInsideStartButton(x, y) {
+    let scaleFactor = 1; // Verwende denselben Skalierungsfaktor wie in drawStartButton
+    let buttonWidth = this.startButton.width * scaleFactor;
+    let buttonHeight = this.startButton.height * scaleFactor;
+    let buttonX = (this.canvas.width - buttonWidth) / 2;
+    let buttonY = (this.canvas.height - buttonHeight) / 2.3; // Entsprechend der Position in drawStartButton
+
+    return x >= buttonX && x <= buttonX + buttonWidth &&
+        y >= buttonY && y <= buttonY + buttonHeight;
+}
 
     isInsideTryAgainButton(x, y, scaleFactor, offsetY) {
         let tryAgainWidth = this.tryAgainImage.width * scaleFactor;
