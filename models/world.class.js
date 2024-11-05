@@ -10,6 +10,7 @@ class World {
     tryAgainImage = new Image();
     startMenuImage = new Image();
     startButton = new Image();
+    optionMenu = new Image();
     showVictoryScreen = false;
     showGameOverScreen = false;
     statusBar = new StatusBar();
@@ -20,6 +21,7 @@ class World {
     canCreateFinslap = true;
     intervalIDs = [];
     isGameActive = false;
+    isGamePaused = false
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
@@ -33,6 +35,7 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
+        this.expectPause();
         canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
     }
 
@@ -42,6 +45,7 @@ class World {
         this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
         this.startMenuImage.src = "img/welcome-screen.png";
         this.startButton.src = "img/start.png";
+        this.optionMenu.src = "img/controlls.png";
     }
 
     setWorld() {
@@ -246,6 +250,14 @@ class World {
 
         requestAnimationFrame(() => this.draw());
         this.handleEndGameScreens();
+        this.handleOptionsMenu();
+    }
+
+    handleOptionsMenu() {
+        if (this.isGamePaused) {
+            this.drawPauseMenu();
+            return;
+        }
     }
 
     addFixedObjectsToMap() {
@@ -267,10 +279,10 @@ class World {
     handleEndGameScreens() {
         if (this.showVictoryScreen) {
             this.drawVictoryScreen(this.victoryImage);
-            this.drawTryAgainButton(0.3, -100); 
+            this.drawTryAgainButton(0.3, -100);
         } else if (this.showGameOverScreen) {
             this.drawScreen(this.gameOverImage);
-            this.drawTryAgainButton(0.3, -200); 
+            this.drawTryAgainButton(0.3, -200);
         }
         if (!this.isGameActive) {
             this.drawStartMenu();
@@ -278,25 +290,57 @@ class World {
         }
     }
 
+    togglePause() {
+        this.isGamePaused = !this.isGamePaused; // Umkehren des Pause-Status
+        this.keyboard.PAUSE = this.isGamePaused; // Aktualisieren des PAUSE-Keys
+
+        if (this.isGamePaused) {
+            this.stop(); // Stoppe das Spiel, wenn es pausiert wird
+        } else {
+            this.run(); // Starte das Spiel neu, wenn es fortgesetzt wird
+        }
+
+        console.log("Game is now paused: " + this.isGamePaused);
+    }
+
+    expectPause() {
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Escape') {
+                this.togglePause();
+            }
+        });
+    }
+
+    drawPauseMenu() {
+        if (this.optionMenu.complete) {
+            let scaleFactor = 1;
+            let newWidth = this.optionMenu.width * scaleFactor;
+            let newHeight = this.optionMenu.height * scaleFactor;
+            let x = (this.canvas.width - newWidth) / 2;
+            let y = (this.canvas.height - newHeight) / 2;
+            this.ctx.drawImage(this.optionMenu, x, y, newWidth, newHeight);
+        }
+    }
+
     drawStartMenu() {
-        if (this.startMenuImage.complete) { 
-            let scaleFactor = 1; 
+        if (this.startMenuImage.complete) {
+            let scaleFactor = 1;
             let newWidth = this.startMenuImage.width * scaleFactor;
             let newHeight = this.startMenuImage.height * scaleFactor;
             let x = (this.canvas.width - newWidth) / 2;
             let y = (this.canvas.height - newHeight) / 2;
             this.ctx.drawImage(this.startMenuImage, x, y, newWidth, newHeight);
-            this.drawStartButton(); 
-        } 
+            this.drawStartButton();
+        }
     }
 
     drawStartButton() {
         if (this.startButton.complete) {
-            let scaleFactor = 1; 
+            let scaleFactor = 1;
             let newWidth = this.startButton.width * scaleFactor;
             let newHeight = this.startButton.height * scaleFactor;
             let x = (this.canvas.width - newWidth) / 2;
-            let y = (this.canvas.height - newHeight) / 2.3; 
+            let y = (this.canvas.height - newHeight) / 2.3;
 
             this.ctx.drawImage(this.startButton, x, y, newWidth, newHeight);
         }
@@ -340,7 +384,7 @@ class World {
     handleStartButtonClick(x, y) {
         if (this.isInsideStartButton(x, y)) {
             this.isGameActive = true;
-            this.restart(); 
+            this.restart();
         }
     }
 
@@ -353,14 +397,14 @@ class World {
     }
 
     isInsideStartButton(x, y) {
-        let scaleFactor = 1; 
+        let scaleFactor = 1;
         let buttonWidth = this.startButton.width * scaleFactor;
         let buttonHeight = this.startButton.height * scaleFactor;
         let buttonX = (this.canvas.width - buttonWidth) / 2;
-        let buttonY = (this.canvas.height - buttonHeight) / 2.3; 
+        let buttonY = (this.canvas.height - buttonHeight) / 2.3;
 
         return x >= buttonX && x <= buttonX + buttonWidth &&
-               y >= buttonY && y <= buttonY + buttonHeight;
+            y >= buttonY && y <= buttonY + buttonHeight;
     }
 
     isInsideTryAgainButton(x, y, scaleFactor, offsetY) {
@@ -370,7 +414,7 @@ class World {
         let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
 
         return x >= tryAgainX && x <= tryAgainX + tryAgainWidth &&
-               y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
+            y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
     }
 
     addObjectsToMap(objects) {

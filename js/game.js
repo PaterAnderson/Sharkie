@@ -1,8 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-
-
+let isPaused = false; // Variable zur Verfolgung des Pausenstatus
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -30,6 +29,9 @@ window.addEventListener("keydown", (event) => {
         case ' ': // Space
             keyboard.SPACE = true;
             break;
+        case 'Escape': // ESC
+            togglePause();
+            break;
     }
 });
 
@@ -55,3 +57,9 @@ window.addEventListener("keyup", (event) => {
             break;
     }
 });
+
+function togglePause() {
+    isPaused = !isPaused; // Zustand umkehren
+    keyboard.PAUSE = isPaused; // PAUSE-Wert setzen
+    console.log("Pause is now: " + isPaused); // Optional: Ausgabe des Pausenstatus
+}
