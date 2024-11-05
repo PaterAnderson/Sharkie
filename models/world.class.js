@@ -28,17 +28,20 @@ class World {
     loosingSound = new Audio('audio/loosing.mp3');
 
     constructor(canvas, keyboard) {
-        this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
-        this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
-        this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
-        this.startMenuImage.src = "img/welcome-screen.png";
-        this.startButton.src = "img/start.png";
-        this.startButton.src = "img/start.png";
+        this.loadImages();
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
         canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
+    }
+
+    loadImages() {
+        this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
+        this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
+        this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
+        this.startMenuImage.src = "img/welcome-screen.png";
+        this.startButton.src = "img/start.png";
     }
 
     setWorld() {
@@ -50,33 +53,28 @@ class World {
             this.checkCollisions();
             this.checkThrowObjects();
         }, 200));
-        this.level.enemies.forEach(enemy => {
-            enemy.startAnimation();
-        });
-        this.level.lights.forEach(light => {
-            light.startAnimation();
-        });
+        this.level.enemies.forEach(enemy => enemy.startAnimation());
+        this.level.lights.forEach(light => light.startAnimation());
         this.character.startAnimation();
     }
 
     stop() {
-        this.level.enemies.forEach(enemy => {
-            enemy.stopAnimation();
-        });
-        this.level.lights.forEach(light => {
-            light.stopAnimation();
-        });
+        this.level.enemies.forEach(enemy => enemy.stopAnimation());
+        this.level.lights.forEach(light => light.stopAnimation());
         this.character.stopAnimation();
-        this.intervalIDs.forEach(id => {
-            clearInterval(id);
-        });
+        this.intervalIDs.forEach(id => clearInterval(id));
     }
 
     restart() {
         this.stop();
+        this.resetWorld();
+        this.setWorld();
+        this.run();
+    }
+
+    resetWorld() {
         this.character = new Character();
         this.level = level1;
-
         this.camera_x = 0;
         this.showVictoryScreen = false;
         this.showGameOverScreen = false;
@@ -86,66 +84,77 @@ class World {
         this.throwableObject = [];
         this.finslapObject = [];
         this.canCreateFinslap = true;
-        this.setWorld();
-        this.run();
     }
 
-
     checkThrowObjects() {
-
         if (this.keyboard.ATTACK && this.canCreateFinslap) {
-            let slap = new Finslap(this.character.x + 210, this.character.y + 130, this.character.otherDirection);
-            this.finslapObject.push(slap);
-            this.canCreateFinslap = false;
-
-            setTimeout(() => {
-                this.removeFinslapObject(slap);
-            }, 300);
-
-            setTimeout(() => {
-                this.canCreateFinslap = true;
-            }, 600);
+            this.createFinslap();
         }
     }
 
+    createFinslap() {
+        let slap = new Finslap(this.character.x + 210, this.character.y + 130, this.character.otherDirection);
+        this.finslapObject.push(slap);
+        this.canCreateFinslap = false;
+
+        setTimeout(() => this.removeFinslapObject(slap), 300);
+        setTimeout(() => this.canCreateFinslap = true, 600);
+    }
 
     checkCollisions() {
-        this.level.enemies.forEach((enemy, enemyIndex) => {
+        this.checkCharacterEnemyCollisions();
+        this.checkThrowableCollisions();
+        this.checkCoinCollisions();
+        this.checkAmmoCollisions();
+    }
+
+    checkCharacterEnemyCollisions() {
+        this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                if (enemy.energy > 0) {
-                    if (enemy instanceof SuperJellyFish) {
-                        this.character.electricHit();
-                        this.statusBar.setPercentage(this.character.energy);
-                    } else {
-                        this.character.hit();
-                        this.statusBar.setPercentage(this.character.energy);
-                    }
-                }
+                this.handleCharacterHitByEnemy(enemy);
             }
-
-
             if (enemy.isDead()) {
-                setTimeout(() => {
-                    let index = this.level.enemies.indexOf(enemy);
-                    if (index != -1) {
-                        this.level.enemies.splice(index, 1);
-                    }
-
-                    if (enemy instanceof Endboss) {
-                        this.showVictoryScreen = true;
-                        this.winningSound.play();
-                        this.stop();
-                    }
-                }, enemy.despawnTimer);
-            }
-            if (this.character.isDead()) {
-                setTimeout(() => {
-                    this.showGameOverScreen = true;
-                    this.loosingSound.play();
-                }, 1500);
+                this.handleEnemyDeath(enemy);
             }
         });
+        if (this.character.isDead()) {
+            this.showGameOver();
+        }
+    }
 
+    handleCharacterHitByEnemy(enemy) {
+        if (enemy.energy > 0) {
+            if (enemy instanceof SuperJellyFish) {
+                this.character.electricHit();
+            } else {
+                this.character.hit();
+            }
+            this.statusBar.setPercentage(this.character.energy);
+        }
+    }
+
+    handleEnemyDeath(enemy) {
+        setTimeout(() => {
+            const index = this.level.enemies.indexOf(enemy);
+            if (index !== -1) {
+                this.level.enemies.splice(index, 1);
+            }
+            if (enemy instanceof Endboss) {
+                this.showVictoryScreen = true;
+                this.winningSound.play();
+                this.stop();
+            }
+        }, enemy.despawnTimer);
+    }
+
+    showGameOver() {
+        setTimeout(() => {
+            this.showGameOverScreen = true;
+            this.loosingSound.play();
+        }, 1500);
+    }
+
+    checkThrowableCollisions() {
         this.throwableObject.forEach((throwable, index) => {
             this.level.enemies.forEach((enemy) => {
                 if (throwable.isColliding(enemy)) {
@@ -160,19 +169,25 @@ class World {
         this.finslapObject.forEach((finslap, index) => {
             this.level.enemies.forEach((enemy) => {
                 if (finslap.isColliding(enemy)) {
-                    if (enemy instanceof PufferFish) {
-                        enemy.throw();
-                    } else if (enemy instanceof SuperJellyFish) {
-                        this.character.electricHit();
-                        this.statusBar.setPercentage(this.character.energy);
-                    }
-                    enemy.slapHit();
-                    this.hit_sound.play();
-                    this.removeFinslapObject();
+                    this.handleFinslapHit(enemy);
+                    this.removeFinslapObject(finslap);
                 }
             });
         });
+    }
 
+    handleFinslapHit(enemy) {
+        if (enemy instanceof PufferFish) {
+            enemy.throw();
+        } else if (enemy instanceof SuperJellyFish) {
+            this.character.electricHit();
+            this.statusBar.setPercentage(this.character.energy);
+        }
+        enemy.slapHit();
+        this.hit_sound.play();
+    }
+
+    checkCoinCollisions() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
                 this.character.addCoin();
@@ -181,24 +196,34 @@ class World {
                 this.level.coins.splice(index, 1);
             }
         });
+    }
 
+    checkAmmoCollisions() {
         this.level.ammo.forEach((ammo, index) => {
             if (this.character.isColliding(ammo)) {
-                this.character.addAmmo();
-                this.ammoBar.setAmmo(this.character.ammo);
-                this.collectingAmmo_sound.play();
-                this.level.ammo.splice(index, 1);
-
-                let AmmoItemIndex = AmmoItem.ammo.indexOf(ammo);
-                AmmoItem.ammo.splice(AmmoItemIndex, 1);
-
-                if (this.level.ammo.length <= 1) {
-                    for (let index = this.level.ammo.length; index <= 5; index++) {
-                        this.level.ammo.push(new AmmoItem());
-                    }
-                }
+                this.collectAmmo(ammo, index);
             }
         });
+    }
+
+    collectAmmo(ammo, index) {
+        this.character.addAmmo();
+        this.ammoBar.setAmmo(this.character.ammo);
+        this.collectingAmmo_sound.play();
+        this.level.ammo.splice(index, 1);
+
+        let AmmoItemIndex = AmmoItem.ammo.indexOf(ammo);
+        AmmoItem.ammo.splice(AmmoItemIndex, 1);
+
+        if (this.level.ammo.length <= 1) {
+            this.spawnAmmoItems();
+        }
+    }
+
+    spawnAmmoItems() {
+        for (let index = this.level.ammo.length; index <= 5; index++) {
+            this.level.ammo.push(new AmmoItem());
+        }
     }
 
     removeFinslapObject(slap) {
@@ -209,19 +234,27 @@ class World {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
-
         this.ctx.translate(-this.camera_x, 0);
 
-        // Space for fixed Objects
+        this.addFixedObjectsToMap();
+        this.ctx.translate(this.camera_x, 0);
+        this.addDynamicObjectsToMap();
+        this.ctx.translate(-this.camera_x, 0);
+
+        requestAnimationFrame(() => this.draw());
+        this.handleEndGameScreens();
+    }
+
+    addFixedObjectsToMap() {
         this.addToMap(this.statusBar);
         this.addToMap(this.ammoBar);
         this.addToMap(this.coinBar);
-        this.ctx.translate(this.camera_x, 0);
+    }
 
+    addDynamicObjectsToMap() {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.lights);
@@ -229,13 +262,9 @@ class World {
         this.addObjectsToMap(this.level.ammo);
         this.addObjectsToMap(this.throwableObject);
         this.addObjectsToMap(this.finslapObject);
+    }
 
-        this.ctx.translate(-this.camera_x, 0);
-
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+    handleEndGameScreens() {
         if (this.showVictoryScreen) {
             this.drawVictoryScreen(this.victoryImage);
             this.drawTryAgainButton(0.3, -100); 
@@ -244,9 +273,8 @@ class World {
             this.drawTryAgainButton(0.3, -200); 
         }
         if (!this.isGameActive) {
-            this.drawStartButton()
             this.drawStartMenu();
-            return;
+            this.drawStartButton();
         }
     }
 
@@ -258,14 +286,13 @@ class World {
             let x = (this.canvas.width - newWidth) / 2;
             let y = (this.canvas.height - newHeight) / 2;
             this.ctx.drawImage(this.startMenuImage, x, y, newWidth, newHeight);
-
             this.drawStartButton(); 
         } 
     }
 
     drawStartButton() {
         if (this.startButton.complete) {
-            let scaleFactor = 1; // Setze den Skalierungsfaktor für den Button
+            let scaleFactor = 1; 
             let newWidth = this.startButton.width * scaleFactor;
             let newHeight = this.startButton.height * scaleFactor;
             let x = (this.canvas.width - newWidth) / 2;
@@ -302,37 +329,39 @@ class World {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-    
-        // Überprüfen, ob der Klick auf den Startbutton war
+
         if (!this.isGameActive) {
-            if (this.isInsideStartButton(x, y)) {
-                this.isGameActive = true;
-                this.restart(); 
-            }
+            this.handleStartButtonClick(x, y);
+        } else {
+            this.handleTryAgainButtonClick(x, y);
         }
-    
-        // Überprüfen, ob der Klick innerhalb des Try Again Buttons war
-        if (this.showVictoryScreen) {
-            if (this.isInsideTryAgainButton(x, y, 0.3, -100)) {
-                this.restart();
-            }
-        } else if (this.showGameOverScreen) {
-            if (this.isInsideTryAgainButton(x, y, 0.3, -200)) {
-                this.restart();
-            }
+    }
+
+    handleStartButtonClick(x, y) {
+        if (this.isInsideStartButton(x, y)) {
+            this.isGameActive = true;
+            this.restart(); 
+        }
+    }
+
+    handleTryAgainButtonClick(x, y) {
+        if (this.showVictoryScreen && this.isInsideTryAgainButton(x, y, 0.3, -100)) {
+            this.restart();
+        } else if (this.showGameOverScreen && this.isInsideTryAgainButton(x, y, 0.3, -200)) {
+            this.restart();
         }
     }
 
     isInsideStartButton(x, y) {
-    let scaleFactor = 1; // Verwende denselben Skalierungsfaktor wie in drawStartButton
-    let buttonWidth = this.startButton.width * scaleFactor;
-    let buttonHeight = this.startButton.height * scaleFactor;
-    let buttonX = (this.canvas.width - buttonWidth) / 2;
-    let buttonY = (this.canvas.height - buttonHeight) / 2.3; // Entsprechend der Position in drawStartButton
+        let scaleFactor = 1; 
+        let buttonWidth = this.startButton.width * scaleFactor;
+        let buttonHeight = this.startButton.height * scaleFactor;
+        let buttonX = (this.canvas.width - buttonWidth) / 2;
+        let buttonY = (this.canvas.height - buttonHeight) / 2.3; 
 
-    return x >= buttonX && x <= buttonX + buttonWidth &&
-        y >= buttonY && y <= buttonY + buttonHeight;
-}
+        return x >= buttonX && x <= buttonX + buttonWidth &&
+               y >= buttonY && y <= buttonY + buttonHeight;
+    }
 
     isInsideTryAgainButton(x, y, scaleFactor, offsetY) {
         let tryAgainWidth = this.tryAgainImage.width * scaleFactor;
@@ -341,13 +370,11 @@ class World {
         let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
 
         return x >= tryAgainX && x <= tryAgainX + tryAgainWidth &&
-            y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
+               y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
     }
 
     addObjectsToMap(objects) {
-        objects.forEach((o) => {
-            this.addToMap(o);
-        });
+        objects.forEach((o) => this.addToMap(o));
     }
 
     addToMap(mo) {
