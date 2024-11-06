@@ -107,9 +107,7 @@ class Endboss extends MovableObject {
             return;
         }
         if (this.isDead()) {
-            if (!this.isSoundMuted) {
-                this.boss_music.pause();  
-            }
+            this.boss_music.pause();
             if (this.firstframedead) {
                 this.currentImage = 0;
                 this.firstframedead = false;
@@ -159,10 +157,10 @@ class Endboss extends MovableObject {
     checkSpawnDistance() {
         return world.character.x >= 1500;
     }
-    
+
     checkMusicPlay() {
         setInterval(() => {
-            if (this.spawned && !this.isSoundMuted) {
+            if (this.spawned && !this.isSoundMuted && !this.isDead()) {
                 this.boss_music.play();
             } else {
                 this.boss_music.pause();
