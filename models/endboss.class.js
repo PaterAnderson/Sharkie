@@ -61,9 +61,10 @@ class Endboss extends MovableObject {
     boss_death = new Audio('audio/boss-death.mp3');
     spawning = false;
     spawned = false;
-    speed = 0.1;
+    speed = 0.8;
     firstframedead = true;
     isAttacking = false;
+    hasMovedLeft = false;
     despawnTimer = 1000;
 
     constructor(world) {
@@ -79,17 +80,21 @@ class Endboss extends MovableObject {
     }
 
     animate() {
+        if (this.hasMovedLeft) {
+            this.moveleft();
+        }
         this.startAttackAnimation();
         this.intervalIDs.push(setInterval(() => {
             this.updateAnimation();
-        }, 180));
+        }, 180));          
+        console.log(this.hasMovedLeft)
     }
 
     updateAnimation() {
         if (!this.spawned) {
             if (this.checkSpawnDistance()) {
-                this.spawned = true;
                 this.spawning = true;
+                this.spawned = true;
                 this.currentImage = 0;
             }
         }
@@ -102,9 +107,12 @@ class Endboss extends MovableObject {
             if (!this.isSoundMuted) {
                 this.spawning_sound.play();
             }
-            this.moveleft();
             this.checkMusicPlay();
             return;
+        }
+        if (this.spawned && !this.hasMovedLeft) { // Überprüfen, ob er noch nicht bewegt wurde
+            this.moveleft();
+            this.hasMovedLeft = true; // Setze das Flagco
         }
         if (this.isDead()) {
             this.boss_music.pause();

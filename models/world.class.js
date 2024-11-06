@@ -311,13 +311,13 @@ class World {
     }
 
     togglePause() {
-        this.isGamePaused = !this.isGamePaused; // Umkehren des Pause-Status
-        this.keyboard.PAUSE = this.isGamePaused; // Aktualisieren des PAUSE-Keys
+        this.isGamePaused = !this.isGamePaused; 
+        this.keyboard.PAUSE = this.isGamePaused; 
 
         if (this.isGamePaused) {
-            this.stop(); // Stoppe das Spiel, wenn es pausiert wird
+            this.stop();
         } else {
-            this.run(); // Starte das Spiel neu, wenn es fortgesetzt wird
+            this.run(); 
         }
     }
 
