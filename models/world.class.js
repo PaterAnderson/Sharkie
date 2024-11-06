@@ -62,6 +62,7 @@ class World {
         this.intervalIDs.push(setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkEndbossPosition();
         }, 200));
         this.level.enemies.forEach(enemy => enemy.startAnimation());
         this.level.lights.forEach(light => light.startAnimation());
@@ -217,6 +218,17 @@ class World {
         });
     }
 
+    checkEndbossPosition() {
+        for (let enemy of this.level.enemies) {
+            if (enemy instanceof Endboss) {
+                if (enemy.x <= -500) {
+                    this.stop();
+                    this.showGameOver();
+                }
+            }
+        }
+    }
+
     collectAmmo(ammo, index) {
         this.character.addAmmo();
         this.ammoBar.setAmmo(this.character.ammo);
@@ -256,7 +268,7 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
 
         this.handleEndGameScreens();
-        this.handleOptionsMenu(); 
+        this.handleOptionsMenu();
         requestAnimationFrame(() => this.draw());
     }
 
@@ -269,7 +281,7 @@ class World {
     }
 
     drawSoundIcon() {
-        const iconX = 520; 
+        const iconX = 520;
         const iconY = 43;
         const iconSize = 60;
 
@@ -311,13 +323,13 @@ class World {
     }
 
     togglePause() {
-        this.isGamePaused = !this.isGamePaused; 
-        this.keyboard.PAUSE = this.isGamePaused; 
+        this.isGamePaused = !this.isGamePaused;
+        this.keyboard.PAUSE = this.isGamePaused;
 
         if (this.isGamePaused) {
             this.stop();
         } else {
-            this.run(); 
+            this.run();
         }
     }
 
@@ -396,31 +408,31 @@ class World {
             this.handleStartButtonClick(x, y);
         } else {
             this.handleTryAgainButtonClick(x, y);
-            this.handleSoundIconClick(x, y); 
+            this.handleSoundIconClick(x, y);
         }
     }
 
     handleSoundIconClick(x, y) {
-        const iconX = 520; 
-        const iconY = 43; 
-        const iconSize = 60; 
+        const iconX = 520;
+        const iconY = 43;
+        const iconSize = 60;
 
         if (x >= iconX && x <= iconX + iconSize && y >= iconY && y <= iconY + iconSize) {
-            this.toggleSound(); 
+            this.toggleSound();
         }
     }
 
     toggleSound() {
         this.isSoundMuted = !this.isSoundMuted;
-        this.updateEnemySound(); 
+        this.updateEnemySound();
         this.updateCharacterSounds();
         this.updateWorldSounds();
     }
-    
+
     updateEnemySound() {
         for (let enemy of this.level.enemies) {
             if (enemy instanceof Endboss) {
-                enemy.isSoundMuted = this.isSoundMuted; 
+                enemy.isSoundMuted = this.isSoundMuted;
             }
         }
     }
@@ -431,13 +443,13 @@ class World {
             this.collectingAmmo_sound,
             this.hit_sound,
             this.winningSound,
-            this.loosingSound, 
+            this.loosingSound,
         ];
         sounds.forEach(sound => {
             sound.muted = this.isSoundMuted;
         });
     }
-    
+
     updateCharacterSounds() {
         let sounds = [
             this.character.dying_sound,

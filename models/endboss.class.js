@@ -171,7 +171,7 @@ class Endboss extends MovableObject {
 
     checkMusicPlay() {
         setInterval(() => {
-            if (this.spawned && !this.isSoundMuted && !this.isDead() && !this.checkCharacterHealth()) {
+            if (this.spawned && !this.isSoundMuted && !this.isDead() && !this.checkCharacterHealth() && this.x >= -500) {
                 this.boss_music.play();
             } else {
                 this.boss_music.pause();
