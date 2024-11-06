@@ -11,6 +11,8 @@ class World {
     startMenuImage = new Image();
     startButton = new Image();
     optionMenu = new Image();
+    soundUmuteImg = new Image();
+    soundMuteImg = new Image();
     showVictoryScreen = false;
     showGameOverScreen = false;
     statusBar = new StatusBar();
@@ -21,7 +23,7 @@ class World {
     canCreateFinslap = true;
     intervalIDs = [];
     isGameActive = false;
-    isGamePaused = false
+    isGamePaused = false;
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
@@ -34,9 +36,11 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.isSoundMuted = false;
         this.draw();
         this.expectPause();
         canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
+        this.endboss = new Endboss(this);
     }
 
     loadImages() {
@@ -46,6 +50,8 @@ class World {
         this.startMenuImage.src = "img/welcome-screen.png";
         this.startButton.src = "img/start.png";
         this.optionMenu.src = "img/controlls.png";
+        this.soundUmuteImg.src = "img/unmute.png";
+        this.soundMuteImg.src = "img/mute.png";
     }
 
     setWorld() {
@@ -77,6 +83,7 @@ class World {
     }
 
     resetWorld() {
+        this.isSoundMuted = false;
         this.character = new Character();
         this.level = level1;
         this.camera_x = 0;
@@ -248,15 +255,28 @@ class World {
         this.addDynamicObjectsToMap();
         this.ctx.translate(-this.camera_x, 0);
 
-        requestAnimationFrame(() => this.draw());
         this.handleEndGameScreens();
-        this.handleOptionsMenu();
+        this.handleOptionsMenu(); 
+        requestAnimationFrame(() => this.draw());
     }
 
     handleOptionsMenu() {
         if (this.isGamePaused) {
             this.drawPauseMenu();
+            this.drawSoundIcon();
             return;
+        }
+    }
+
+    drawSoundIcon() {
+        const iconX = 520; 
+        const iconY = 43;
+        const iconSize = 60;
+
+        if (this.isSoundMuted) {
+            this.ctx.drawImage(this.soundMuteImg, iconX, iconY, iconSize, iconSize);
+        } else {
+            this.ctx.drawImage(this.soundUmuteImg, iconX, iconY, iconSize, iconSize);
         }
     }
 
@@ -299,8 +319,6 @@ class World {
         } else {
             this.run(); // Starte das Spiel neu, wenn es fortgesetzt wird
         }
-
-        console.log("Game is now paused: " + this.isGamePaused);
     }
 
     expectPause() {
@@ -378,6 +396,51 @@ class World {
             this.handleStartButtonClick(x, y);
         } else {
             this.handleTryAgainButtonClick(x, y);
+            this.handleSoundIconClick(x, y); 
+        }
+    }
+
+    handleSoundIconClick(x, y) {
+        const iconX = 520; 
+        const iconY = 43; 
+        const iconSize = 60; 
+
+        if (x >= iconX && x <= iconX + iconSize && y >= iconY && y <= iconY + iconSize) {
+            this.toggleSound(); 
+        }
+    }
+
+    toggleSound()  {
+        this.isSoundMuted = !this.isSoundMuted;
+        for (let enemy of this.level.enemies) {
+            if (enemy instanceof Endboss) {
+                enemy.isSoundMuted = this.isSoundMuted; 
+            }
+        }
+        if (this.isSoundMuted) {
+            this.collectingCoin_sound.muted = true;
+            this.collectingAmmo_sound.muted = true;
+            this.hit_sound.muted = true;
+            this.winningSound.muted = true;
+            this.loosingSound.muted = true;
+            this.character.dying_sound.muted = true;
+            this.character.electric_hurt_sound.muted = true;
+            this.character.hurt_sound.muted = true;
+            this.character.melee_sound.muted = true;
+            this.character.shooting_sound.muted = true;
+            this.character.walking_sound.muted = true;
+            this.endboss.spawning_sound.muted = true;
+        } else {
+            this.collectingCoin_sound.muted = false;
+            this.collectingAmmo_sound.muted = false;
+            this.hit_sound.muted = false;
+            this.winningSound.muted = false;
+            this.loosingSound.muted = false;
+            this.character.electric_hurt_sound.muted = false;
+            this.character.hurt_sound.muted = false;
+            this.character.melee_sound.muted = false;
+            this.character.shooting_sound.muted = false;
+            this.character.walking_sound.muted = false;
         }
     }
 

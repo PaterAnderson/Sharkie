@@ -53,6 +53,7 @@ class Endboss extends MovableObject {
     height = 600;
     width = 600;
     energy = 500;
+    world;
     spawning_sound = new Audio('audio/boss-spawn.mp3');
     boss_music = new Audio('audio/boss-music.mp3');
     boss_bite = new Audio('audio/bite.mp3');
@@ -65,8 +66,9 @@ class Endboss extends MovableObject {
     isAttacking = false;
     despawnTimer = 1000;
 
-    constructor() {
+    constructor(world) {
         super().loadImage(this.IMAGES_FLOATING[0]);
+        this.world = world;
         this.loadImages(this.IMAGES_FLOATING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
@@ -97,20 +99,26 @@ class Endboss extends MovableObject {
                 this.spawning = false;
             }
             this.y = -150;
-            this.spawning_sound.play();
+            if (!this.isSoundMuted) {
+                this.spawning_sound.play();
+            }
             this.moveleft();
-            this.boss_music.play();
+            this.checkMusicPlay();
             return;
         }
         if (this.isDead()) {
-            this.boss_music.pause();
+            if (!this.isSoundMuted) {
+                this.boss_music.pause();  
+            }
             if (this.firstframedead) {
                 this.currentImage = 0;
                 this.firstframedead = false;
             }
             this.playDeadAnimation(this.IMAGES_DEAD);
         } else if (this.isHurt()) {
-            this.boss_hurt.play();
+            if (!this.isSoundMuted) {
+                this.boss_hurt.play();
+            }
             this.playAnimation(this.IMAGES_HURT);
         } else if (this.isAttacking) {
             this.playAnimation(this.IMAGES_ATTACK);
@@ -151,6 +159,16 @@ class Endboss extends MovableObject {
     checkSpawnDistance() {
         return world.character.x >= 1500;
     }
+    
+    checkMusicPlay() {
+        setInterval(() => {
+            if (this.spawned && !this.isSoundMuted) {
+                this.boss_music.play();
+            } else {
+                this.boss_music.pause();
+            }
+        }, 1000);
+    }
 
     startAttackAnimation() {
         this.intervalIDs.push(setInterval(() => {
@@ -159,7 +177,9 @@ class Endboss extends MovableObject {
                 this.currentImage = 0;
                 // Den Bite-Sound nur abspielen, wenn der Boss gespawnt ist und angreift
                 if (this.spawned) {
-                    this.boss_bite.play();
+                    if (!this.isSoundMuted) {
+                        this.boss_bite.play();
+                    }
                 }
             }
         }, 5000));

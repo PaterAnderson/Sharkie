@@ -61,5 +61,4 @@ window.addEventListener("keyup", (event) => {
 function togglePause() {
     isPaused = !isPaused; // Zustand umkehren
     keyboard.PAUSE = isPaused; // PAUSE-Wert setzen
-    console.log("Pause is now: " + isPaused); // Optional: Ausgabe des Pausenstatus
 }
