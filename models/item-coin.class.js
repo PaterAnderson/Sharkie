@@ -9,7 +9,7 @@ class CoinItem extends MovableObject {
     y = 30;
     height = 40;
     width = 40;
-    static MIN_DISTANCE = 200; // Mindestabstand zwischen den Coins
+    static MIN_DISTANCE = 150; // Mindestabstand zwischen den Coins
     static coins = [];
 
     constructor() {

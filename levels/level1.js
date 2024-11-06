@@ -1,36 +1,11 @@
 const level1 = new Level(
     [
-        new JellyFish(),
-        new JellyFish(),
-        new JellyFish(),
-        new JellyFish(),
-        new JellyFish(),
-        new JellyFish(),
-        new SuperJellyFish(),
-        new SuperJellyFish(),
-        new SuperJellyFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
         new Endboss()
     ],
     [
         new Light()
     ],
     [
-        new CoinItem(),
-        new CoinItem(),
-        new CoinItem(),
-        new CoinItem(),
-        new CoinItem(),
-        new CoinItem(),
-        new CoinItem(),
-        new CoinItem(),
-        new CoinItem(),
         new CoinItem()
     ],
     [
@@ -71,4 +46,5 @@ const level1 = new Level(
         new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 720 * 4),
         new BackgroundObject('img/3. Background/Layers/2. Floor/D1.png', 720 * 4),
     ],
+    
 );

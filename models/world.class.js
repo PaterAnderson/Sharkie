@@ -86,7 +86,9 @@ class World {
     resetWorld() {
         this.isSoundMuted = false;
         this.character = new Character();
-        this.level = level1;
+        this.level.resetEnemies();
+        this.level.resetCoins();
+        this.level.resetEnemies();
         this.camera_x = 0;
         this.showVictoryScreen = false;
         this.showGameOverScreen = false;

@@ -14,4 +14,52 @@ class Level {
         this.ammo = ammo;
         this.backgroundObjects = backgroundObjects;
     }
+
+    
+    resetEnemies() {
+        this.enemies = []; 
+        this.enemies = [
+            new JellyFish(),
+            new JellyFish(),
+            new JellyFish(),
+            new JellyFish(),
+            new JellyFish(),
+            new JellyFish(),
+            new SuperJellyFish(),
+            new SuperJellyFish(),
+            new SuperJellyFish(),
+            new PufferFish(),
+            new PufferFish(),
+            new PufferFish(),
+            new PufferFish(),
+            new PufferFish(),
+            new PufferFish(),
+            new PufferFish(),
+            new Endboss()
+        ];
+    }
+
+    resetCoins() {
+        this.coins = [];
+        this.coins = [
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem(),
+            new CoinItem()
+        ];
+    }
+
+
+    resetLights() {
+        this.lights = [];
+        this.lights = [
+            new Light()
+        ];
+    }
 }
