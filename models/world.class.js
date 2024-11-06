@@ -24,6 +24,7 @@ class World {
     intervalIDs = [];
     isGameActive = false;
     isGamePaused = false;
+    isGameStopped = false;
 
     collectingCoin_sound = new Audio('audio/coin.mp3');
     collectingAmmo_sound = new Audio('audio/potion.mp3');
@@ -67,13 +68,17 @@ class World {
         this.level.enemies.forEach(enemy => enemy.startAnimation());
         this.level.lights.forEach(light => light.startAnimation());
         this.character.startAnimation();
+        this.isGameStopped = false;
     }
 
     stop() {
+        if (this.isGameStopped) return;
+        this.isGameStopped = true;
         this.level.enemies.forEach(enemy => enemy.stopAnimation());
         this.level.lights.forEach(light => light.stopAnimation());
         this.character.stopAnimation();
         this.intervalIDs.forEach(id => clearInterval(id));
+        this.intervalIDs = [];
     }
 
     restart() {
@@ -137,14 +142,14 @@ class World {
 
     checkCharacterEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
+            if (this.character.isColliding(enemy) && !this.isGameStopped) { 
                 this.handleCharacterHitByEnemy(enemy);
             }
-            if (enemy.isDead()) {
+            if (enemy.isDead() && !this.isGameStopped) { 
                 this.handleEnemyDeath(enemy);
             }
         });
-        if (this.character.isDead()) {
+        if (this.character.isDead() && !this.isGameStopped) { 
             this.showGameOver();
         }
     }
@@ -178,6 +183,7 @@ class World {
         setTimeout(() => {
             this.showGameOverScreen = true;
             this.loosingSound.play();
+            this.stop();
         }, 1500);
     }
 
@@ -340,12 +346,15 @@ class World {
     togglePause() {
         this.isGamePaused = !this.isGamePaused;
         this.keyboard.PAUSE = this.isGamePaused;
-
+    
         if (this.isGamePaused) {
-            this.stop();
+            if (this.isGameActive) { 
+                this.stop();
+            }
         } else {
             this.run();
         }
+        console.log(this.isGameActive)
     }
 
     expectPause() {
@@ -487,10 +496,12 @@ class World {
     }
 
     handleTryAgainButtonClick(x, y) {
-        if (this.showVictoryScreen && this.isInsideTryAgainButton(x, y, 0.3, -100)) {
-            this.restart();
-        } else if (this.showGameOverScreen && this.isInsideTryAgainButton(x, y, 0.3, -200)) {
-            this.restart();
+        if (this.isGameStopped) { // Nur wenn das Spiel gestoppt ist
+            if (this.showVictoryScreen && this.isInsideTryAgainButton(x, y, 0.3, -100)) {
+                this.restart();
+            } else if (this.showGameOverScreen && this.isInsideTryAgainButton(x, y, 0.3, -200)) {
+                this.restart();
+            }
         }
     }
 

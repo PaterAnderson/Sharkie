@@ -165,9 +165,6 @@ class Character extends MovableObject {
             this.isAlive = false;
             this.dying_sound.play();
             this.playDeadAnimation(this.IMAGES_DEAD);
-            setTimeout(() => {
-                this.world.stop();
-            }, 1500);
             return;
         }
 

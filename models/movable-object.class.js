@@ -63,7 +63,6 @@ class MovableObject extends DrawableObject {
             this.lastHit = new Date().getTime();
         }
 
-        // Setzen Sie einen Timer, um isElectricHurt nach Ablauf einer bestimmten Zeit zu aktualisieren
         setTimeout(() => {
             let timePassed = new Date().getTime() - this.lastHit;
             this.world.character.isElectricHurt = false;
