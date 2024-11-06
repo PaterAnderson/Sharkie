@@ -410,38 +410,46 @@ class World {
         }
     }
 
-    toggleSound()  {
+    toggleSound() {
         this.isSoundMuted = !this.isSoundMuted;
+        this.updateEnemySound(); 
+        this.updateCharacterSounds();
+        this.updateWorldSounds();
+    }
+    
+    updateEnemySound() {
         for (let enemy of this.level.enemies) {
             if (enemy instanceof Endboss) {
                 enemy.isSoundMuted = this.isSoundMuted; 
             }
         }
-        if (this.isSoundMuted) {
-            this.collectingCoin_sound.muted = true;
-            this.collectingAmmo_sound.muted = true;
-            this.hit_sound.muted = true;
-            this.winningSound.muted = true;
-            this.loosingSound.muted = true;
-            this.character.dying_sound.muted = true;
-            this.character.electric_hurt_sound.muted = true;
-            this.character.hurt_sound.muted = true;
-            this.character.melee_sound.muted = true;
-            this.character.shooting_sound.muted = true;
-            this.character.walking_sound.muted = true;
-            this.endboss.spawning_sound.muted = true;
-        } else {
-            this.collectingCoin_sound.muted = false;
-            this.collectingAmmo_sound.muted = false;
-            this.hit_sound.muted = false;
-            this.winningSound.muted = false;
-            this.loosingSound.muted = false;
-            this.character.electric_hurt_sound.muted = false;
-            this.character.hurt_sound.muted = false;
-            this.character.melee_sound.muted = false;
-            this.character.shooting_sound.muted = false;
-            this.character.walking_sound.muted = false;
-        }
+    }
+
+    updateWorldSounds() {
+        let sounds = [
+            this.collectingCoin_sound,
+            this.collectingAmmo_sound,
+            this.hit_sound,
+            this.winningSound,
+            this.loosingSound, 
+        ];
+        sounds.forEach(sound => {
+            sound.muted = this.isSoundMuted;
+        });
+    }
+    
+    updateCharacterSounds() {
+        let sounds = [
+            this.character.dying_sound,
+            this.character.electric_hurt_sound,
+            this.character.hurt_sound,
+            this.character.melee_sound,
+            this.character.shooting_sound,
+            this.character.walking_sound
+        ];
+        sounds.forEach(sound => {
+            sound.muted = this.isSoundMuted;
+        });
     }
 
     handleStartButtonClick(x, y) {
