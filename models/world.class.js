@@ -84,20 +84,33 @@ class World {
     }
 
     resetWorld() {
-        this.isSoundMuted = false;
         this.character = new Character();
+        this.camera_x = 0;
+        this.resetFlags();
+        this.resetObjects();
+        this.throwableObject = [];
+        this.finslapObject = [];
+        this.resetWorldItems();
+    }
+
+    resetWorldItems() {
         this.level.resetEnemies();
         this.level.resetCoins();
-        this.level.resetEnemies();
-        this.camera_x = 0;
+        this.level.resetAmmo();
+        this.level.resetLights();
+    }
+
+    resetFlags() {
+        this.isSoundMuted = false;
         this.showVictoryScreen = false;
         this.showGameOverScreen = false;
+        this.canCreateFinslap = true;
+    }
+
+    resetObjects() {
         this.statusBar = new StatusBar();
         this.ammoBar = new AmmoBar();
         this.coinBar = new CoinBar();
-        this.throwableObject = [];
-        this.finslapObject = [];
-        this.canCreateFinslap = true;
     }
 
     checkThrowObjects() {

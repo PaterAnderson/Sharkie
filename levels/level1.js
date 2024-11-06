@@ -9,11 +9,7 @@ const level1 = new Level(
         new CoinItem()
     ],
     [
-        new AmmoItem(),
-        new AmmoItem(),
-        new AmmoItem(),
-        new AmmoItem(),
-        new AmmoItem(),
+        new AmmoItem()
     ],
     [
         new BackgroundObject('img/3. Background/Layers/5. Water/D2.png', -720),

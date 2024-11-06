@@ -55,6 +55,17 @@ class Level {
         ];
     }
 
+    resetAmmo() {
+        this.ammo = [];
+        this.ammo = [
+            new AmmoItem(),
+            new AmmoItem(),
+            new AmmoItem(),
+            new AmmoItem(),
+            new AmmoItem()
+        ];
+    }
+
 
     resetLights() {
         this.lights = [];
