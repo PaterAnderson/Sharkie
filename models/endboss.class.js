@@ -87,7 +87,6 @@ class Endboss extends MovableObject {
         this.intervalIDs.push(setInterval(() => {
             this.updateAnimation();
         }, 180));          
-        console.log(this.hasMovedLeft)
     }
 
     updateAnimation() {
@@ -166,9 +165,13 @@ class Endboss extends MovableObject {
         return world.character.x >= 1500;
     }
 
+    checkCharacterHealth() {
+        return world.character.energy <= 0;
+    }
+
     checkMusicPlay() {
         setInterval(() => {
-            if (this.spawned && !this.isSoundMuted && !this.isDead()) {
+            if (this.spawned && !this.isSoundMuted && !this.isDead() && !this.checkCharacterHealth()) {
                 this.boss_music.play();
             } else {
                 this.boss_music.pause();

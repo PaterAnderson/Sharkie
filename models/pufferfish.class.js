@@ -30,8 +30,8 @@ class PufferFish extends MovableObject {
     y = 360;
     height = 60;
     width = 80;
-    currentImage = 0; // Initialisierung für die aktuelle Bildnummer
-    energy = 50; // Beispielenergiewert
+    currentImage = 0; 
+    energy = 50; 
     despawnTimer = 500;
 
     constructor() {
