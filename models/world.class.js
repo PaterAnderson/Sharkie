@@ -358,7 +358,6 @@ class World {
         } else {
             this.run();
         }
-        console.log(this.isGameActive)
     }
 
     expectPause() {

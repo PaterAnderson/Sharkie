@@ -177,7 +177,6 @@ class Character extends MovableObject {
         if (this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
             this.hurt_sound.play();
-            console.log(this.energy);
             return;
         }
 

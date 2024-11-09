@@ -126,5 +126,4 @@ function checkShootBtn() {
 function togglePause() {
     isPaused = !isPaused; 
     keyboard.PAUSE = isPaused;
-    console.log(isPaused)
 }
