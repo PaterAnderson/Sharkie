@@ -7,6 +7,7 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     world.stop();
+    setupTouchControls();
 }
 
 window.addEventListener("keydown", (event) => {
@@ -57,6 +58,52 @@ window.addEventListener("keyup", (event) => {
             break;
     }
 });
+
+
+function setupTouchControls() {
+    document.getElementById('up-btn').addEventListener('touchstart', () => {
+        keyboard.UP = true;
+    });
+    document.getElementById('up-btn').addEventListener('touchend', () => {
+        keyboard.UP = false;
+    });
+
+    document.getElementById('left-btn').addEventListener('touchstart', () => {
+        keyboard.LEFT = true;
+    });
+    document.getElementById('left-btn').addEventListener('touchend', () => {
+        keyboard.LEFT = false;
+    });
+
+    document.getElementById('right-btn').addEventListener('touchstart', () => {
+        keyboard.RIGHT = true;
+    });
+    document.getElementById('right-btn').addEventListener('touchend', () => {
+        keyboard.RIGHT = false;
+    });
+
+    document.getElementById('down-btn').addEventListener('touchstart', () => {
+        keyboard.DOWN = true;
+    });
+    document.getElementById('down-btn').addEventListener('touchend', () => {
+        keyboard.DOWN = false;
+    });
+
+    document.getElementById('slap-btn').addEventListener('touchstart', () => {
+        keyboard.ATTACK = true;
+    });
+    document.getElementById('slap-btn').addEventListener('touchend', () => {
+        keyboard.ATTACK = false;
+    });
+
+    document.getElementById('shoot-btn').addEventListener('touchstart', () => {
+        keyboard.SPACE = true;
+    });
+    document.getElementById('shoot-btn').addEventListener('touchend', () => {
+        keyboard.SPACE = false;
+    });
+}
+
 
 function togglePause() {
     isPaused = !isPaused; // Zustand umkehren
