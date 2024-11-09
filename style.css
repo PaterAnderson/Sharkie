@@ -12,8 +12,13 @@ body {
 
 @font-face {
     font-family: 'luckiest';
-    src: url('fonts/LuckiestGuy-Regular.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
-}  
+    src: url('fonts/LuckiestGuy-Regular.ttf') format('truetype');
+    /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}
+
+.d-none {
+    visibility: hidden;
+}
 
 h1 {
     font-size: 64px;
@@ -22,8 +27,160 @@ h1 {
 }
 
 canvas {
-    background-color:  black;
+    background-color: black;
     display: block;
+}
+
+.align {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 15px;
+    right: 280px;
+}
+
+.panel1 {
+    position: absolute;
+}
+
+.circle {
+    width: 50px;
+    /* Die Breite jedes Bildes */
+    height: 50px;
+    /* Die Höhe jedes Bildes */
+    border-radius: 50%;
+    /* Macht die Bilder rund */
+}
+
+.panel1:nth-child(1) {
+    top: -10px;
+    /* Positioniert das erste Bild oben */
+    left: 50%;
+    /* Zentriert es horizontal */
+    transform: translate(-50%, 0);
+}
+
+.panel1:nth-child(2) {
+    bottom: -10px;
+    /* Positioniert das zweite Bild unten */
+    left: 50%;
+    /* Zentriert es horizontal */
+    transform: translate(-50%, 0);
+}
+
+.panel1:nth-child(3) {
+    left: -20px;
+    /* Positioniert das dritte Bild links */
+    top: 50%;
+    /* Zentriert es vertikal */
+    transform: translate(0, -50%);
+}
+
+.panel1:nth-child(4) {
+    right: -20px;
+    /* Positioniert das vierte Bild rechts */
+    top: 50%;
+    /* Zentriert es vertikal */
+    transform: translate(0, -50%);
+}
+
+/* Abstand zwischen den Bildern */
+.panel2 {
+    position: absolute;
+}
+
+.panel2:nth-child(1) {
+    /* Positioniert das dritte Bild links */
+    top: 50%;
+    /* Zentriert es vertikal */
+    transform: translate(0, -50%);
+}
+
+.panel2:nth-child(2) {
+    right: 5px;
+    /* Positioniert das vierte Bild rechts */
+    top: 50%;
+    /* Zentriert es vertikal */
+    transform: translate(0, -50%);
+}
+
+.right-panel {
+    position: relative;
+    margin-left: 620px;
+    top: 15px;
+}
+
+@media (max-width: 1200px) {
+    .align {
+        visibility: visible;
+    }
+}
+
+@media (max-width: 720px) {
+    .align {
+        right: 250px;
+    }
+    .right-panel {
+        left: 70vw;
+        margin-left: 0;
+    }
+    .panel2:nth-child(2) {
+        right: -10px;
+    }
+}
+
+@media (max-width: 640px) {
+    .align {
+        right: 220px;
+    }
+}
+
+@media (max-width: 640px) {
+    .align {
+        right: 200px;
+    }
+}
+
+@media (max-width: 545px) {
+    .align {
+        right: 180px;
+    }
+}
+
+@media (max-width: 500px) {
+    .align {
+        right: 160px;
+    }
+    .right-panel {
+        left: 60vw;
+    }
+}
+
+@media (max-width: 460px) {
+    .align {
+        right: 140px;
+    }
+}
+
+@media (max-width: 420px) {
+    .align {
+        right: 120px;
+    }
+}
+
+@media (max-width: 370px) {
+    .align {
+        right: 100px;
+    }
+}
+
+@media (max-width: 340px) {
+    .align {
+        right: 80px;
+    }
+    .right-panel {
+        left: 50vw;
+    }
 }
 
 @media only screen and (max-width: 720px) {
@@ -36,10 +193,16 @@ canvas {
     canvas {
         height: 100vh;
     }
+
     h1 {
         display: none;
     }
+
     body {
         align-items: normal;
+    }
+
+    .align {
+        right: -10px;
     }
 }
