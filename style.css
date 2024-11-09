@@ -45,62 +45,52 @@ canvas {
 
 .circle {
     width: 50px;
-    /* Die Breite jedes Bildes */
     height: 50px;
-    /* Die Höhe jedes Bildes */
     border-radius: 50%;
-    /* Macht die Bilder rund */
 }
 
 .panel1:nth-child(1) {
     top: -10px;
-    /* Positioniert das erste Bild oben */
     left: 50%;
-    /* Zentriert es horizontal */
     transform: translate(-50%, 0);
 }
 
 .panel1:nth-child(2) {
     bottom: -10px;
-    /* Positioniert das zweite Bild unten */
     left: 50%;
-    /* Zentriert es horizontal */
     transform: translate(-50%, 0);
 }
 
 .panel1:nth-child(3) {
     left: -20px;
-    /* Positioniert das dritte Bild links */
     top: 50%;
-    /* Zentriert es vertikal */
     transform: translate(0, -50%);
 }
 
 .panel1:nth-child(4) {
     right: -20px;
-    /* Positioniert das vierte Bild rechts */
     top: 50%;
-    /* Zentriert es vertikal */
     transform: translate(0, -50%);
 }
 
-/* Abstand zwischen den Bildern */
 .panel2 {
     position: absolute;
 }
 
 .panel2:nth-child(1) {
-    /* Positioniert das dritte Bild links */
     top: 50%;
-    /* Zentriert es vertikal */
     transform: translate(0, -50%);
 }
 
 .panel2:nth-child(2) {
     right: 5px;
-    /* Positioniert das vierte Bild rechts */
     top: 50%;
-    /* Zentriert es vertikal */
+    transform: translate(0, -50%);
+}
+
+.panel2:nth-child(3) {
+    right: 60px;
+    top: 50%;
     transform: translate(0, -50%);
 }
 
@@ -126,6 +116,9 @@ canvas {
     }
     .panel2:nth-child(2) {
         right: -10px;
+    }
+    .panel2:nth-child(3) {
+        right: 110px;
     }
 }
 
@@ -185,7 +178,7 @@ canvas {
 
 @media only screen and (max-width: 720px) {
     canvas {
-        width: 100%;
+        width: 100vw;
     }
 }
 
@@ -203,6 +196,15 @@ canvas {
     }
 
     .align {
-        right: -10px;
+        right: -35px;
+        margin: 0;
+        height: 0;
+        bottom: 120px;
+    }
+    .panel1:nth-child(1) {
+        top: -45px;
+    }
+    .panel1:nth-child(2) {
+        top: 5px;
     }
 }

@@ -124,7 +124,7 @@ class Character extends MovableObject {
     shootCooldown = false;
     shootCooldownTime = 600;
     coins = 0;
-    ammo = 10;
+    ammo = 0;
 
     constructor() {
         super().loadImage('img/1.Sharkie/1.IDLE/1.png');
@@ -214,23 +214,43 @@ class Character extends MovableObject {
     }
 
     checkKeyboardInput() {
-        if (this.keyboard.UP || this.keyboard.DOWN || this.keyboard.LEFT || this.keyboard.RIGHT) {
-            this.currentAnimation = 'swim';
-            this.lastKeyPressTime = Date.now();
-            this.isLongIdle = false;
-            this.currentLongIdleImageIndex = 0;
-            this.isFinSlapAnimating = false; 
-
-            if (!this.isAnimatingSwim) {
-                this.isAnimatingSwim = true;
-            }
-        } else if (this.keyboard.ATTACK && !this.attackCooldown && this.isAlive) {
+        if (this.isMovementKeyPressed()) {
+            this.handleMovementKeys();
+        } else if (this.isAttackPressed()) {
             this.startFinSlapAttack();
-        } else if (this.keyboard.SPACE && this.canShoot()) {
+        } else if (this.isShootingPressed()) {
             this.startShooting();
         } else {
-            this.isAnimatingSwim = false;
+            this.endSwimmingAnimation();
         }
+    }
+    
+    isMovementKeyPressed() {
+        return this.keyboard.UP || this.keyboard.DOWN || this.keyboard.LEFT || this.keyboard.RIGHT;
+    }
+    
+    handleMovementKeys() {
+        this.currentAnimation = 'swim';
+        this.lastKeyPressTime = Date.now();
+        this.isLongIdle = false;
+        this.currentLongIdleImageIndex = 0;
+        this.isFinSlapAnimating = false;
+    
+        if (!this.isAnimatingSwim) {
+            this.isAnimatingSwim = true;
+        }
+    }
+    
+    isAttackPressed() {
+        return this.keyboard.ATTACK && !this.attackCooldown && this.isAlive;
+    }
+    
+    isShootingPressed() {
+        return this.keyboard.SPACE && this.canShoot();
+    }
+    
+    endSwimmingAnimation() {
+        this.isAnimatingSwim = false;
     }
 
     canShoot() {
@@ -287,12 +307,11 @@ class Character extends MovableObject {
         const currentTime = Date.now();
         const elapsed = currentTime - this.lastKeyPressTime;
 
-        if (elapsed > 3000) { // Zeitraum von 3 Sekunden
+        if (elapsed > 15000) { 
             this.isLongIdle = true;
         } else {
             this.isLongIdle = false;
         }
-
         if (this.isAnimatingSwim) {
             this.currentAnimation = 'swim';
         } else {
@@ -302,32 +321,49 @@ class Character extends MovableObject {
 
     handleMovement() {
         let isMoving = false;
-
+    
+        isMoving |= this.handleHorizontalMovement();
+        isMoving |= this.handleVerticalMovement();
+    
+        this.updateWalkSound(isMoving);
+        this.updateCameraPosition();
+    }
+    
+    handleHorizontalMovement() {
         if (this.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.isAlive) {
             this.x += this.speed;
             this.otherDirection = false;
-            isMoving = true;
+            return true;
         }
         if (this.keyboard.LEFT && this.x > 0 && this.isAlive) {
             this.x -= this.speed;
             this.otherDirection = true;
-            isMoving = true;
+            return true;
         }
+        return false;
+    }
+    
+    handleVerticalMovement() {
         if (this.keyboard.UP && this.y > -120 && this.isAlive) {
             this.y -= this.speed;
-            isMoving = true;
+            return true;
         }
         if (this.keyboard.DOWN && this.y < 290 && this.isAlive) {
             this.y += this.speed;
-            isMoving = true;
+            return true;
         }
-
+        return false;
+    }
+    
+    updateWalkSound(isMoving) {
         if (isMoving) {
             this.playWalkSound();
         } else {
             this.stopWalkSound();
         }
-
+    }
+    
+    updateCameraPosition() {
         this.world.camera_x = 0 - this.x;
     }
 

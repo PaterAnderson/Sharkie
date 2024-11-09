@@ -123,9 +123,8 @@ function checkShootBtn() {
     });
 }
 
-
-
 function togglePause() {
-    isPaused = !isPaused; // Zustand umkehren
-    keyboard.PAUSE = isPaused; // PAUSE-Wert setzen
+    isPaused = !isPaused; 
+    keyboard.PAUSE = isPaused;
+    console.log(isPaused)
 }

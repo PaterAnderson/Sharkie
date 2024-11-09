@@ -76,7 +76,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_SPAWNING);
         this.loadImages(this.IMAGES_ATTACK);
         this.x = 2000;
-        this.currentImage = 0; // Initialisierung der aktuellen Bildindex
+        this.currentImage = 0;
     }
 
     animate() {
@@ -91,48 +91,79 @@ class Endboss extends MovableObject {
 
     updateAnimation() {
         if (!this.spawned) {
-            if (this.checkSpawnDistance()) {
-                this.spawning = true;
-                this.spawned = true;
-                this.currentImage = 0;
-            }
-        }
-        if (this.spawning) {
-            this.playAnimation(this.IMAGES_SPAWNING);
-            if (this.currentImage >= 10) {
-                this.spawning = false;
-            }
-            this.y = -150;
-            if (!this.isSoundMuted) {
-                this.spawning_sound.play();
-            }
-            this.checkMusicPlay();
+            this.handleSpawning();
             return;
         }
-        if (this.spawned && !this.hasMovedLeft) { // Überprüfen, ob er noch nicht bewegt wurde
-            this.moveleft();
-            this.hasMovedLeft = true; // Setze das Flagco
+    
+        if (this.spawning) {
+            this.handleSpawningAnimation();
+            return;
         }
+    
+        this.handleMovement();
+        this.handleStateAnimations();
+    }
+    
+    handleSpawning() {
+        if (this.checkSpawnDistance()) {
+            this.spawning = true;
+            this.spawned = true;
+            this.currentImage = 0;
+        }
+    }
+    
+    handleSpawningAnimation() {
+        this.playAnimation(this.IMAGES_SPAWNING);
+        if (this.currentImage >= 10) {
+            this.spawning = false;
+        }
+        this.y = -150;
+        if (!this.isSoundMuted) {
+            this.spawning_sound.play();
+        }
+        this.checkMusicPlay();
+    }
+    
+    handleMovement() {
+        if (this.spawned && !this.hasMovedLeft) { 
+            this.moveleft();
+            this.hasMovedLeft = true; 
+        }
+    }
+    
+    handleStateAnimations() {
         if (this.isDead()) {
-            this.boss_music.pause();
-            if (this.firstframedead) {
-                this.currentImage = 0;
-                this.firstframedead = false;
-            }
-            this.playDeadAnimation(this.IMAGES_DEAD);
+            this.handleDeathAnimation();
         } else if (this.isHurt()) {
-            if (!this.isSoundMuted) {
-                this.boss_hurt.play();
-            }
-            this.playAnimation(this.IMAGES_HURT);
+            this.handleHurtAnimation();
         } else if (this.isAttacking) {
-            this.playAnimation(this.IMAGES_ATTACK);
-            if (this.currentImage >= 6) {
-                this.isAttacking = false;
-                this.currentImage = 0;
-            }
+            this.handleAttackAnimation();
         } else {
             this.playAnimation(this.IMAGES_FLOATING);
+        }
+    }
+    
+    handleDeathAnimation() {
+        this.boss_music.pause();
+        if (this.firstframedead) {
+            this.currentImage = 0;
+            this.firstframedead = false;
+        }
+        this.playDeadAnimation(this.IMAGES_DEAD);
+    }
+    
+    handleHurtAnimation() {
+        if (!this.isSoundMuted) {
+            this.boss_hurt.play();
+        }
+        this.playAnimation(this.IMAGES_HURT);
+    }
+    
+    handleAttackAnimation() {
+        this.playAnimation(this.IMAGES_ATTACK);
+        if (this.currentImage >= 6) {
+            this.isAttacking = false;
+            this.currentImage = 0;
         }
     }
 
@@ -184,7 +215,6 @@ class Endboss extends MovableObject {
             if (!this.isDead() && !this.isHurt() && this.spawning == false) {
                 this.isAttacking = true;
                 this.currentImage = 0;
-                // Den Bite-Sound nur abspielen, wenn der Boss gespawnt ist und angreift
                 if (this.spawned) {
                     if (!this.isSoundMuted) {
                         this.boss_bite.play();

@@ -41,6 +41,10 @@ class World {
         this.draw();
         this.expectPause();
         canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
+        canvas.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            this.handleCanvasClick(event);
+        });
         this.endboss = new Endboss(this);
     }
 
@@ -363,6 +367,9 @@ class World {
                 this.togglePause();
             }
         });
+        document.getElementById('pause-btn').addEventListener('touchstart', () => {
+            this.togglePause();
+        });
     }
 
     drawPauseMenu() {
@@ -425,9 +432,14 @@ class World {
 
     handleCanvasClick(event) {
         const rect = this.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
+        let x, y;
+        if (event.touches) {
+            x = event.touches[0].clientX - rect.left;
+            y = event.touches[0].clientY - rect.top;
+        } else {
+            x = event.clientX - rect.left;
+            y = event.clientY - rect.top;
+        }
         if (!this.isGameActive) {
             this.handleStartButtonClick(x, y);
         } else {
@@ -506,14 +518,14 @@ class World {
     }
 
     isInsideStartButton(x, y) {
-        let scaleFactor = 1;
+        let scaleFactor = 1; 
         let buttonWidth = this.startButton.width * scaleFactor;
         let buttonHeight = this.startButton.height * scaleFactor;
         let buttonX = (this.canvas.width - buttonWidth) / 2;
         let buttonY = (this.canvas.height - buttonHeight) / 2.3;
-
+    
         return x >= buttonX && x <= buttonX + buttonWidth &&
-            y >= buttonY && y <= buttonY + buttonHeight;
+               y >= buttonY && y <= buttonY + buttonHeight;
     }
 
     isInsideTryAgainButton(x, y, scaleFactor, offsetY) {
@@ -521,9 +533,9 @@ class World {
         let tryAgainHeight = this.tryAgainImage.height * scaleFactor;
         let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
         let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
-
+    
         return x >= tryAgainX && x <= tryAgainX + tryAgainWidth &&
-            y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
+               y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
     }
 
     addObjectsToMap(objects) {
