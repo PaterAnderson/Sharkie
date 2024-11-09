@@ -134,6 +134,7 @@ class Endboss extends MovableObject {
     handleStateAnimations() {
         if (this.isDead()) {
             this.handleDeathAnimation();
+            this.spawned = false;
         } else if (this.isHurt()) {
             this.handleHurtAnimation();
         } else if (this.isAttacking) {
@@ -197,17 +198,17 @@ class Endboss extends MovableObject {
     }
 
     checkCharacterHealth() {
-        return world.character.energy <= 0;
+        return world.character.isDead();
     }
 
     checkMusicPlay() {
-        setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             if (this.spawned && !this.isSoundMuted && !this.isDead() && !this.checkCharacterHealth() && this.x >= -500) {
                 this.boss_music.play();
             } else {
                 this.boss_music.pause();
             }
-        }, 1000);
+        }, 1000));
     }
 
     startAttackAnimation() {
