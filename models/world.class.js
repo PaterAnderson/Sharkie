@@ -7,7 +7,6 @@ class World {
     camera_x = 0;
     victoryImage = new Image();
     gameOverImage = new Image();
-    tryAgainImage = new Image();
     showVictoryScreen = false;
     showGameOverScreen = false;
     statusBar = new StatusBar();
@@ -41,7 +40,6 @@ class World {
     loadImages() {
         this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
         this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
-        this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
     }
 
     setWorld() {
@@ -325,10 +323,8 @@ class World {
     handleEndGameScreens() {
         if (this.showVictoryScreen) {
             this.drawVictoryScreen(this.victoryImage);
-            this.drawTryAgainButton(0.3, -100);
         } else if (this.showGameOverScreen) {
             this.drawScreen(this.gameOverImage);
-            this.drawTryAgainButton(0.3, -200);
         }
     }
 
@@ -366,15 +362,6 @@ class World {
         let y = (this.canvas.height - newHeight) / 3;
 
         this.ctx.drawImage(image, x, y, newWidth, newHeight);
-    }
-
-    drawTryAgainButton(scaleFactor, offsetY) {
-        let tryAgainWidth = this.tryAgainImage.width * scaleFactor;
-        let tryAgainHeight = this.tryAgainImage.height * scaleFactor;
-        let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
-        let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
-
-        this.ctx.drawImage(this.tryAgainImage, tryAgainX, tryAgainY, tryAgainWidth, tryAgainHeight);
     }
 
     toggleSound() {
@@ -417,26 +404,6 @@ class World {
         sounds.forEach(sound => {
             sound.muted = this.isSoundMuted;
         });
-    }
-
-    handleTryAgainButtonClick(x, y) {
-        if (this.isGameStopped) {
-            if (this.showVictoryScreen && this.isInsideTryAgainButton(x, y, 0.3, -100)) {
-                this.restart();
-            } else if (this.showGameOverScreen && this.isInsideTryAgainButton(x, y, 0.3, -200)) {
-                this.restart();
-            }
-        }
-    }
-
-    isInsideTryAgainButton(x, y, scaleFactor, offsetY) {
-        let tryAgainWidth = this.tryAgainImage.width * scaleFactor;
-        let tryAgainHeight = this.tryAgainImage.height * scaleFactor;
-        let tryAgainX = (this.canvas.width - tryAgainWidth) / 2;
-        let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
-
-        return x >= tryAgainX && x <= tryAgainX + tryAgainWidth &&
-            y >= tryAgainY && y <= tryAgainY + tryAgainHeight;
     }
 
     addObjectsToMap(objects) {
