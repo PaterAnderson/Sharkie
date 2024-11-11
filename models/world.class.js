@@ -84,6 +84,8 @@ class World {
         this.throwableObject = [];
         this.finslapObject = [];
         this.resetWorldItems();
+        this.removeRetryButton();
+        this.removeRetryButton2();
     }
 
     resetWorldItems() {
@@ -323,8 +325,10 @@ class World {
     handleEndGameScreens() {
         if (this.showVictoryScreen) {
             this.drawVictoryScreen(this.victoryImage);
+            this.addRetryButton2();
         } else if (this.showGameOverScreen) {
             this.drawScreen(this.gameOverImage);
+            this.addRetryButton();
         }
     }
 
@@ -442,6 +446,22 @@ class World {
     removeStartMenu() {
         document.getElementById('startMenu').classList.add('d-none');
         document.getElementById('startButton').classList.add('d-none');
+    }
+
+    addRetryButton() {
+        document.getElementById('retryButton').classList.remove('d-none');
+    }
+
+    removeRetryButton() {
+        document.getElementById('retryButton').classList.add('d-none');
+    }
+
+    addRetryButton2() {
+        document.getElementById('retryButton2').classList.remove('d-none');
+    }
+
+    removeRetryButton2() {
+        document.getElementById('retryButton2').classList.add('d-none');
     }
 
     addControllsMenu() {

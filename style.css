@@ -60,6 +60,29 @@ canvas {
     transition: transform 0.3s ease;
 }
 
+.retry-image {
+    position: absolute;
+    cursor: pointer;
+    width: 200px;
+    top: 50%;
+    left: 36%;
+    transition: transform 0.3s ease;
+}
+
+.retry-image2 {
+    position: absolute;
+    cursor: pointer;
+    width: 200px;
+    top: 65%;
+    left: 36%;
+    transition: transform 0.3s ease;
+}
+
+.retry-image:hover,
+.retry-image2:hover {
+    transform: translate(-0%, 0%) scale(1.1);
+}
+
 .center-image:hover {
     transform: translate(-50%, -100%) scale(1.1); /* Bild vergrößern */
 }
