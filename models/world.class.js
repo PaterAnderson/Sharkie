@@ -64,6 +64,7 @@ class World {
             this.checkCollisions();
             this.checkThrowObjects();
             this.checkEndbossPosition();
+            this.removeStartMenu();
         }, 200));
         this.level.enemies.forEach(enemy => enemy.startAnimation());
         this.level.lights.forEach(light => light.startAnimation());
@@ -509,5 +510,15 @@ class World {
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
+    }
+
+    addStartMenu() {
+        document.getElementById('startMenu').classList.remove('d-none');
+        document.getElementById('startButton').classList.remove('d-none');
+    }
+    
+    removeStartMenu() {
+        document.getElementById('startMenu').classList.add('d-none');
+        document.getElementById('startButton').classList.add('d-none');
     }
 }
