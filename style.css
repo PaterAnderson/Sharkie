@@ -46,10 +46,10 @@ canvas {
     cursor: pointer;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -100%); 
-    width: 250px; 
-    height: auto;
+    transform: translate(-50%, -100%);
     transition: transform 0.3s ease;
+    background-color: transparent;
+    border: none;
 }
 
 .sound-image {
@@ -58,24 +58,34 @@ canvas {
     top: 6%;
     left: 75%;
     transition: transform 0.3s ease;
+    background-color: transparent;
+    border: none;
 }
 
 .retry-image {
     position: absolute;
     cursor: pointer;
     width: 200px;
-    top: 50%;
+    top: 55%;
     left: 36%;
     transition: transform 0.3s ease;
+    background-color: transparent;
+    border: none;
 }
 
 .retry-image2 {
     position: absolute;
     cursor: pointer;
     width: 200px;
-    top: 65%;
-    left: 36%;
+    top: 70%;
+    left: 35%;
     transition: transform 0.3s ease;
+    background-color: transparent;
+    border: none;
+}
+
+.image-scaling {
+    width: 200px;
 }
 
 .retry-image:hover,
@@ -84,7 +94,7 @@ canvas {
 }
 
 .center-image:hover {
-    transform: translate(-50%, -100%) scale(1.1); /* Bild vergrößern */
+    transform: translate(-50%, -100%) scale(1.1);
 }
 
 .sound-image:hover {
