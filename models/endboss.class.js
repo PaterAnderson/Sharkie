@@ -90,6 +90,8 @@ class Endboss extends MovableObject {
     }
 
     updateAnimation() {
+        this.handleMovement();
+        this.handleStateAnimations();
         if (!this.spawned) {
             this.handleSpawning();
             return;
@@ -99,9 +101,6 @@ class Endboss extends MovableObject {
             this.handleSpawningAnimation();
             return;
         }
-    
-        this.handleMovement();
-        this.handleStateAnimations();
     }
     
     handleSpawning() {
