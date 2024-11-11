@@ -8,6 +8,10 @@ body {
     background-position: center;
     background-size: cover;
     font-family: 'luckiest', Arial, Helvetica, sans-serif;
+    -webkit-user-select: none; /* Für Safari */
+    -moz-user-select: none; /* Für Firefox */
+    -ms-user-select: none; /* Für Internet Explorer/Edge */
+    user-select: none; /* Standard */
 }
 
 @font-face {
@@ -38,7 +42,7 @@ canvas {
 .overlay-image {
     position: absolute;
     top: 0;
-    object-fit: cover; 
+    object-fit: cover;
 }
 
 .center-image {
@@ -181,15 +185,26 @@ canvas {
     .align {
         right: 250px;
     }
+
     .right-panel {
         left: 70vw;
         margin-left: 0;
     }
+
     .panel2:nth-child(2) {
         right: -10px;
     }
+
     .panel2:nth-child(3) {
         right: 110px;
+    }
+
+    .center-scaling {
+        width: 250px;
+    }
+    
+    .image-scaling {
+        width: 120px;
     }
 }
 
@@ -197,11 +212,14 @@ canvas {
     .align {
         right: 220px;
     }
-}
 
-@media (max-width: 640px) {
-    .align {
-        right: 200px;
+    .center-scaling {
+        width: 180px;
+    }
+
+    .retry-image,
+    .retry-image2 {
+        left: 34%;
     }
 }
 
@@ -209,12 +227,26 @@ canvas {
     .align {
         right: 180px;
     }
+
+    .sound-image {
+        top: 28px;
+    }
+
+    .sound-scaling {
+        width: 40px;
+    }
+
+    .retry-image,
+    .retry-image2 {
+        left: 31%;
+    }
 }
 
 @media (max-width: 500px) {
     .align {
         right: 160px;
     }
+
     .right-panel {
         left: 60vw;
     }
@@ -224,11 +256,23 @@ canvas {
     .align {
         right: 140px;
     }
+
+    .center-scaling {
+        width: 120px;
+    }
+
+    .sound-image {
+        top: 20px;
+    }
 }
 
 @media (max-width: 420px) {
     .align {
         right: 120px;
+    }
+    .retry-image,
+    .retry-image2 {
+        left: 25%;
     }
 }
 
@@ -236,12 +280,26 @@ canvas {
     .align {
         right: 100px;
     }
+
+    .sound-image {
+        top: 19px;
+    }
+
+    .sound-scaling {
+        width: 20px;
+    }
+
+    .retry-image,
+    .retry-image2 {
+        left: 20%;
+    }
 }
 
 @media (max-width: 340px) {
     .align {
         right: 80px;
     }
+
     .right-panel {
         left: 50vw;
     }
@@ -289,9 +347,11 @@ canvas {
         height: 0;
         bottom: 120px;
     }
+
     .panel1:nth-child(1) {
         top: -45px;
     }
+
     .panel1:nth-child(2) {
         top: 5px;
     }
