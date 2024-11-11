@@ -52,8 +52,20 @@ canvas {
     transition: transform 0.3s ease;
 }
 
+.sound-image {
+    position: absolute;
+    cursor: pointer;
+    top: 6%;
+    left: 75%;
+    transition: transform 0.3s ease;
+}
+
 .center-image:hover {
     transform: translate(-50%, -100%) scale(1.1); /* Bild vergrößern */
+}
+
+.sound-image:hover {
+    transform: translate(-0%, 0%) scale(1.1);
 }
 
 

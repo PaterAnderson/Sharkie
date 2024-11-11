@@ -8,8 +8,6 @@ class World {
     victoryImage = new Image();
     gameOverImage = new Image();
     tryAgainImage = new Image();
-    soundUmuteImg = new Image();
-    soundMuteImg = new Image();
     showVictoryScreen = false;
     showGameOverScreen = false;
     statusBar = new StatusBar();
@@ -37,11 +35,6 @@ class World {
         this.isSoundMuted = false;
         this.draw();
         this.expectPause();
-        canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
-        canvas.addEventListener('touchstart', (event) => {
-            event.preventDefault();
-            this.handleCanvasClick(event);
-        });
         this.endboss = new Endboss(this);
     }
 
@@ -49,8 +42,6 @@ class World {
         this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
         this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
         this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
-        this.soundUmuteImg.src = "img/unmute.png";
-        this.soundMuteImg.src = "img/mute.png";
     }
 
     setWorld() {
@@ -295,22 +286,9 @@ class World {
     handleOptionsMenu() {
         if (this.isGamePaused) {
             this.addControllsMenu();
-            this.drawSoundIcon();
             return;
         } else {
             this.removeControllsMenu();
-        }
-    }
-
-    drawSoundIcon() {
-        const iconX = 520;
-        const iconY = 43;
-        const iconSize = 60;
-
-        if (this.isSoundMuted) {
-            this.ctx.drawImage(this.soundMuteImg, iconX, iconY, iconSize, iconSize);
-        } else {
-            this.ctx.drawImage(this.soundUmuteImg, iconX, iconY, iconSize, iconSize);
         }
     }
 
@@ -345,9 +323,7 @@ class World {
         this.keyboard.PAUSE = this.isGamePaused;
 
         if (this.isGamePaused) {
-            if (this.isGameActive) {
-                this.stop();
-            }
+            this.stop();
         } else {
             this.run();
         }
@@ -385,30 +361,6 @@ class World {
         let tryAgainY = this.canvas.height - tryAgainHeight + offsetY;
 
         this.ctx.drawImage(this.tryAgainImage, tryAgainX, tryAgainY, tryAgainWidth, tryAgainHeight);
-    }
-
-    handleCanvasClick(event) {
-        const rect = this.canvas.getBoundingClientRect();
-        let x, y;
-        if (event.touches) {
-            x = event.touches[0].clientX - rect.left;
-            y = event.touches[0].clientY - rect.top;
-        } else {
-            x = event.clientX - rect.left;
-            y = event.clientY - rect.top;
-        }
-        this.handleTryAgainButtonClick(x, y);
-        this.handleSoundIconClick(x, y);
-    }
-
-    handleSoundIconClick(x, y) {
-        const iconX = 520;
-        const iconY = 43;
-        const iconSize = 60;
-
-        if (x >= iconX && x <= iconX + iconSize && y >= iconY && y <= iconY + iconSize) {
-            this.toggleSound();
-        }
     }
 
     toggleSound() {
@@ -505,7 +457,7 @@ class World {
         document.getElementById('startMenu').classList.remove('d-none');
         document.getElementById('startButton').classList.remove('d-none');
     }
-    
+
     removeStartMenu() {
         document.getElementById('startMenu').classList.add('d-none');
         document.getElementById('startButton').classList.add('d-none');
@@ -513,9 +465,22 @@ class World {
 
     addControllsMenu() {
         document.getElementById('controllsMenu').classList.remove('d-none');
+        this.checkSoundSymbol();
     }
 
     removeControllsMenu() {
         document.getElementById('controllsMenu').classList.add('d-none');
+        document.getElementById('unmuteButton').classList.add('d-none');
+        document.getElementById('muteButton').classList.add('d-none');
+    }
+
+    checkSoundSymbol() {
+        if (!this.isSoundMuted && this.isGamePaused) {
+            document.getElementById('muteButton').classList.add('d-none');
+            document.getElementById('unmuteButton').classList.remove('d-none');
+        } else {
+            document.getElementById('unmuteButton').classList.add('d-none');
+            document.getElementById('muteButton').classList.remove('d-none');
+        }
     }
 }

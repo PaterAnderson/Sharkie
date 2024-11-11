@@ -22,16 +22,16 @@ class DrawableObject {
             y: this.y,
             width: this.width,
             height: this.height
-        }; 
+        };
         return hitbox;
     }
 
     drawHitbox(ctx) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'transparent';
-            ctx.rect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
-            ctx.stroke();
+        ctx.beginPath();
+        ctx.lineWidth = '5';
+        ctx.strokeStyle = 'transparent';
+        ctx.rect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
+        ctx.stroke();
     }
 
     loadImages(arr) {
