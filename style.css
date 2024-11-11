@@ -26,10 +26,21 @@ h1 {
     text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
+.canvas-container {
+    position: relative;
+}
+
 canvas {
     background-color: black;
     display: block;
 }
+
+.overlay-image {
+    position: absolute;
+    top: 0;
+    object-fit: cover; /* Bild wird skaliert, während es das Seitenverhältnis beibehält */
+}
+
 
 .align {
     position: relative;
@@ -180,10 +191,27 @@ canvas {
     canvas {
         width: 100vw;
     }
+
+    .canvas-container {
+        width: 100vw;
+    }
+
+    .overlay-image {
+        width: 100vw;
+    }
+
 }
 
 @media only screen and (max-height: 480px) {
     canvas {
+        height: 100vh;
+    }
+
+    .canvas-container {
+        height: 100vh;
+    }
+
+    .overlay-image {
         height: 100vh;
     }
 
