@@ -38,7 +38,22 @@ canvas {
 .overlay-image {
     position: absolute;
     top: 0;
-    object-fit: cover; /* Bild wird skaliert, während es das Seitenverhältnis beibehält */
+    object-fit: cover; 
+}
+
+.center-image {
+    position: absolute;
+    cursor: pointer;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%); 
+    width: 250px; 
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.center-image:hover {
+    transform: translate(-50%, -100%) scale(1.1); /* Bild vergrößern */
 }
 
 
