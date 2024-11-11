@@ -32,6 +32,7 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.isSoundMuted = false;
+        this.endbossBar = new StatusBar(500);
         this.draw();
         this.expectPause();
         this.endboss = new Endboss(this);
@@ -239,6 +240,19 @@ class World {
         }
     }
 
+    checkEnbossSpawn() {
+        for (let enemy of this.level.enemies) {
+            if (enemy instanceof Endboss) {
+                if (enemy.spawned) {
+                    this.addToMap(this.endbossBar);
+                    this.endbossBar.setBossPercentage(enemy.energy);
+                } else {
+                    return;
+                }
+            }
+        }
+    }
+
     collectAmmo(ammo, index) {
         this.character.addAmmo();
         this.ammoBar.setAmmo(this.character.ammo);
@@ -292,6 +306,7 @@ class World {
     }
 
     addFixedObjectsToMap() {
+        this.checkEnbossSpawn();
         this.addToMap(this.statusBar);
         this.addToMap(this.ammoBar);
         this.addToMap(this.coinBar);
