@@ -16,8 +16,6 @@ class CoinItem extends MovableObject {
         super().loadImage('img/4. Marcadores/1. Coins/1.png');
         this.loadImages(this.COIN_IMG);
         this.placeCoin();
-        this.animate();
-
     }
 
     placeCoin() {

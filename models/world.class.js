@@ -55,6 +55,8 @@ class World {
         }, 200));
         this.level.enemies.forEach(enemy => enemy.startAnimation());
         this.level.lights.forEach(light => light.startAnimation());
+        this.level.coins.forEach(coin => coin.startAnimation());
+        this.level.ammo.forEach(ammo => ammo.startAnimation());
         this.character.startAnimation();
         this.isGameStopped = false;
     }
@@ -64,6 +66,8 @@ class World {
         this.isGameStopped = true;
         this.level.enemies.forEach(enemy => enemy.stopAnimation());
         this.level.lights.forEach(light => light.stopAnimation());
+        this.level.coins.forEach(coin => coin.stopAnimation());
+        this.level.ammo.forEach(ammo => ammo.stopAnimation());
         this.character.stopAnimation();
         this.intervalIDs.forEach(id => clearInterval(id));
         this.intervalIDs = [];
