@@ -1,7 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let isPaused = false; // Variable zur Verfolgung des Pausenstatus
+let isPaused = false; 
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -12,25 +12,25 @@ function init() {
 
 window.addEventListener("keydown", (event) => {
     switch (event.key) {
-        case 'w': // W
+        case 'w': 
             keyboard.UP = true;
             break;
-        case 'a': // A
+        case 'a': 
             keyboard.LEFT = true;
             break;
-        case 'd': // D
+        case 'd': 
             keyboard.RIGHT = true;
             break;
-        case 's': // S
+        case 's': 
             keyboard.DOWN = true;
             break;
-        case 'e': // E
+        case 'e': 
             keyboard.ATTACK = true;
             break;
-        case ' ': // Space
+        case ' ': 
             keyboard.SPACE = true;
             break;
-        case 'Escape': // ESC
+        case 'Escape': 
             togglePause();
             break;
     }
@@ -38,22 +38,22 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("keyup", (event) => {
     switch (event.key) {
-        case 'w': // W
+        case 'w': 
             keyboard.UP = false;
             break;
-        case 'a': // A
+        case 'a': 
             keyboard.LEFT = false;
             break;
-        case 'd': // D
+        case 'd': 
             keyboard.RIGHT = false;
             break;
-        case 's': // S
+        case 's': 
             keyboard.DOWN = false;
             break;
-        case 'e': // E
+        case 'e': 
             keyboard.ATTACK = false;
             break;
-        case ' ': // Space
+        case ' ': 
             keyboard.SPACE = false;
             break;
     }

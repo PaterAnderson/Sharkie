@@ -9,7 +9,7 @@ class CoinItem extends MovableObject {
     y = 30;
     height = 40;
     width = 40;
-    static MIN_DISTANCE = 100; // Mindestabstand zwischen den Coins
+    static MIN_DISTANCE = 100; 
     static coins = [];
 
     constructor() {
@@ -35,10 +35,10 @@ class CoinItem extends MovableObject {
         for (let coin of CoinItem.coins) {
             let distance = Math.sqrt(Math.pow(newX - coin.x, 2) + Math.pow(newY - coin.y, 2));
             if (distance < CoinItem.MIN_DISTANCE) {
-                return false; // Position ist zu nah, also ungültig
+                return false; 
             }
         }
-        return true; // Position ist gültig
+        return true; 
     }
 
     animate() {

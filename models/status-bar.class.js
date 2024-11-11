@@ -22,7 +22,7 @@ class StatusBar extends DrawableObject {
     }
 
     setPercentage(percentage) {
-        this.percentage = percentage; // => 0 ... 5
+        this.percentage = percentage; 
         let path = this.HEALTH_IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }

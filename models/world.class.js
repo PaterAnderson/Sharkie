@@ -507,7 +507,7 @@ class World {
     }
 
     handleTryAgainButtonClick(x, y) {
-        if (this.isGameStopped) { // Nur wenn das Spiel gestoppt ist
+        if (this.isGameStopped) { 
             if (this.showVictoryScreen && this.isInsideTryAgainButton(x, y, 0.3, -100)) {
                 this.restart();
             } else if (this.showGameOverScreen && this.isInsideTryAgainButton(x, y, 0.3, -200)) {

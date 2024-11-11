@@ -44,8 +44,8 @@ class PufferFish extends MovableObject {
         this.y = Math.random() * 450;
         this.x = 700 + Math.random() * 2500;
         this.speed = 0.15 + Math.random() * 0.45;
-        this.isBulking = false; // Flag um zu wissen, ob wir bereits in der Bulk Animation sind.
-        this.hasBulked = false; // Flag um zu wissen, ob die Bulk Animation bereits abgespielt wurde.
+        this.isBulking = false; 
+        this.hasBulked = false; 
     }
 
     animate() {
@@ -56,7 +56,6 @@ class PufferFish extends MovableObject {
     }
 
     updateAnimation() {
-        // Berechne die Abstände zum Character
         let distanceX = this.x - world.character.x;
         let distanceY = this.y - world.character.y;
         let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
@@ -66,26 +65,25 @@ class PufferFish extends MovableObject {
             return;
         }
 
-        // Überprüfung, ob der Pufferfish in den Radius des Characters kommt
         if (distance < 300 && !this.hasBulked && !this.isBulking) {
             this.playBulkAnimation();
         } else if (this.isBulking) {
         } else if (this.hasBulked) {
-            this.playAnimation(this.IMAGES_BULKFLOAT); // Immer in BulkFloat bleiben
+            this.playAnimation(this.IMAGES_BULKFLOAT);
         } else {
             this.playAnimation(this.IMAGES_FLOATING);
         }
     }
 
     async playBulkAnimation() {
-        this.isBulking = true; // Setze das Flag, da nun die Bulk Animation startet
-        this.hasBulked = true; // Setze das Flag, dass die Bulk Animation bereits abgespielt wurde
+        this.isBulking = true; 
+        this.hasBulked = true; 
         this.currentImage = 0;
         for (let index = 0; index < this.IMAGES_BULKING.length; index++) {
             this.playAnimation(this.IMAGES_BULKING);
-            await this.sleep(150); // Warten für die Dauer der Animation
+            await this.sleep(150); 
         }
-        this.isBulking = false; // Setze das Flag zurück, nachdem die Bulking-Animation beendet ist
+        this.isBulking = false; 
     }
 
     playDeadAnimation(images) {

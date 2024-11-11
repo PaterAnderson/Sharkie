@@ -15,14 +15,14 @@ class AmmoItem extends MovableObject {
     width = 50;
     static MIN_DISTANCE = 100;
     static ammo = [];
-    static MAX_Y = 500; // Maximalwerte für die y-Koordinate
+    static MAX_Y = 500; 
 
     constructor(world) {
         super().loadImage('img/4. Marcadores/Posión/Animada/1.png');
         this.loadImages(this.AMMO_IMG);
         this.placeAmmo();
         this.animate();
-        this.world = world; // Referenz zur Welt hinzufügen
+        this.world = world; 
         this.drop();
     }
 

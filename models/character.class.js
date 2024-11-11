@@ -97,7 +97,7 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
     ];
 
-    speed = 3; //2
+    speed = 2; 
     width = 250;
     height = 250;
     y = 90;
@@ -147,7 +147,7 @@ class Character extends MovableObject {
     }
 
     animateAttack() {
-        this.playFinSlapAnimation(); // Direkt die Animation starten
+        this.playFinSlapAnimation(); 
     }
 
     startMovement() {
@@ -271,14 +271,14 @@ class Character extends MovableObject {
 
     startFinSlapAttack() {
         this.isFinSlapAnimating = true;
-        this.currentImage = 0; // Setze den aktuellen Frame auf 0
-        this.attackCooldown = true; // Cooldown aktivieren für die Nahkampfattacke
-        this.animateAttack(); // Attack Animation starten
-        this.melee_sound.play(); // Melee-Sound abspielen
+        this.currentImage = 0; 
+        this.attackCooldown = true; 
+        this.animateAttack(); 
+        this.melee_sound.play();
 
         setTimeout(() => {
-            this.attackCooldown = false; // Cooldown zurücksetzen
-            this.melee_sound.pause(); // Den Sound anhalten
+            this.attackCooldown = false; 
+            this.melee_sound.pause(); 
             this.melee_sound.currentTime = 0; 
         }, this.attackCooldownTime);
     }
@@ -292,7 +292,7 @@ class Character extends MovableObject {
                 let bubble = new ThrowableObject(this.x + 180, this.y + 100, this.otherDirection);
                 this.world.throwableObject.push(bubble);
                 this.canCreateBubble = false;
-                this.isShooting = false; // Setze auf false, wenn die Animation beendet ist
+                this.isShooting = false;
             } else {
                 setTimeout(() => this.playShootingAnimation(), 80);
             }
@@ -415,7 +415,7 @@ class Character extends MovableObject {
         this.currentLongIdleImageIndex++;
 
         if (this.currentLongIdleImageIndex >= 14) {
-            this.currentLongIdleImageIndex = 10; // Zurück auf 11-14 Zyklus setzen
+            this.currentLongIdleImageIndex = 10; 
         }
     }
 
