@@ -28,16 +28,16 @@ class CoinBar extends DrawableObject {
     resolveCoinIndex() {
         if (this.coins == 10) {
             return 5;
-        } else if (this.coins >= 8) { // Korrigiert: >= 80
+        } else if (this.coins >= 8) {
             return 4;
-        } else if (this.coins >= 6) { // Korrigiert: >= 60
+        } else if (this.coins >= 6) {
             return 3;
-        } else if (this.coins >= 4) { // Korrigiert: >= 40
+        } else if (this.coins >= 4) {
             return 2;
-        } else if (this.coins >= 2) { // Korrigiert: >= 20
+        } else if (this.coins >= 2) {
             return 1;
         } else {
-            return 0; // für < 20
+            return 0;
         }
     }
 

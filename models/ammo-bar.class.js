@@ -20,7 +20,7 @@ class AmmoBar extends DrawableObject {
     }
 
     setAmmo(ammo) {
-        this.ammo = ammo; // => 0 ... 5
+        this.ammo = ammo;
         let path = this.AMMO_IMAGES[this.resolveAmmoIndex()];
         this.img = this.imageCache[path];
     }
@@ -28,16 +28,16 @@ class AmmoBar extends DrawableObject {
     resolveAmmoIndex() {
         if (this.ammo == 10) {
             return 5;
-        } else if (this.ammo >= 8) { // Korrigiert: >= 80
+        } else if (this.ammo >= 8) {         
             return 4;
-        } else if (this.ammo >= 6) { // Korrigiert: >= 60
+        } else if (this.ammo >= 6) { 
             return 3;
-        } else if (this.ammo >= 4) { // Korrigiert: >= 40
+        } else if (this.ammo >= 4) { 
             return 2;
-        } else if (this.ammo >= 2) { // Korrigiert: >= 20
+        } else if (this.ammo >= 1) { 
             return 1;
         } else {
-            return 0; // für < 20
+            return 0;
         }
     }
 
