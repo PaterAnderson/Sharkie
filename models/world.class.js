@@ -17,7 +17,6 @@ class World {
     finslapObject = [];
     canCreateFinslap = true;
     intervalIDs = [];
-    isGameActive = false;
     isGamePaused = false;
     isGameStopped = false;
 
