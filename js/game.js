@@ -3,6 +3,12 @@ let world;
 let keyboard = new Keyboard();
 let isPaused = false; 
 
+window.oncontextmenu = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+};
+
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
