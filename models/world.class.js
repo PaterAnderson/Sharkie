@@ -8,7 +8,6 @@ class World {
     victoryImage = new Image();
     gameOverImage = new Image();
     tryAgainImage = new Image();
-    optionMenu = new Image();
     soundUmuteImg = new Image();
     soundMuteImg = new Image();
     showVictoryScreen = false;
@@ -50,7 +49,6 @@ class World {
         this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
         this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
         this.tryAgainImage.src = "img/6.Botones/Try again/Recurso 15.png";
-        this.optionMenu.src = "img/controlls.png";
         this.soundUmuteImg.src = "img/unmute.png";
         this.soundMuteImg.src = "img/mute.png";
     }
@@ -296,9 +294,11 @@ class World {
 
     handleOptionsMenu() {
         if (this.isGamePaused) {
-            this.drawPauseMenu();
+            this.addControllsMenu();
             this.drawSoundIcon();
             return;
+        } else {
+            this.removeControllsMenu();
         }
     }
 
@@ -362,17 +362,6 @@ class World {
         document.getElementById('pause-btn').addEventListener('touchstart', () => {
             this.togglePause();
         });
-    }
-
-    drawPauseMenu() {
-        if (this.optionMenu.complete) {
-            let scaleFactor = 1;
-            let newWidth = this.optionMenu.width * scaleFactor;
-            let newHeight = this.optionMenu.height * scaleFactor;
-            let x = (this.canvas.width - newWidth) / 2;
-            let y = (this.canvas.height - newHeight) / 2;
-            this.ctx.drawImage(this.optionMenu, x, y, newWidth, newHeight);
-        }
     }
 
     drawVictoryScreen() {
@@ -520,5 +509,13 @@ class World {
     removeStartMenu() {
         document.getElementById('startMenu').classList.add('d-none');
         document.getElementById('startButton').classList.add('d-none');
+    }
+
+    addControllsMenu() {
+        document.getElementById('controllsMenu').classList.remove('d-none');
+    }
+
+    removeControllsMenu() {
+        document.getElementById('controllsMenu').classList.add('d-none');
     }
 }

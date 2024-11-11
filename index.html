@@ -36,10 +36,16 @@
 
     <div class="canvas-container">
         <canvas id="canvas" width="720" height="480"></canvas>
-        <img id="startMenu" src="./img/welcome-screen.png" alt="Welcome Screen" class="overlay-image">
-        <button onclick="world.restart()" id="startButton" class="center-button">
-            <img src="./img/start.png" alt="Start" class="center-image">
-        </button>
+        <div>
+            <img id="startMenu" src="./img/welcome-screen.png" alt="Welcome Screen" class="overlay-image">
+            <button onclick="world.restart()" id="startButton" class="center-button">
+                <img src="./img/start.png" alt="Start" class="center-image">
+            </button>
+        </div>
+        <div>
+            <img id="controllsMenu" src="./img/controlls.png" alt="Controlls" class="overlay-image d-none">
+        </div>
+
     </div>
 
     <section id="hud" class="align d-none">
