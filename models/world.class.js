@@ -363,7 +363,7 @@ class World {
         let newWidth = image.width * scaleFactor;
         let newHeight = image.height * scaleFactor;
         let x = (this.canvas.width - newWidth) / 2;
-        let y = (this.canvas.height - newHeight) / 3;
+        let y = (this.canvas.height - newHeight) / 2.5;
 
         this.ctx.drawImage(image, x, y, newWidth, newHeight);
     }
