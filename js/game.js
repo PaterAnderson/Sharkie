@@ -3,11 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let isPaused = false;
 
-/*window.oncontextmenu = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
-};*/
+
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -76,55 +72,67 @@ function setupTouchControls() {
 }
 
 function checkUpBtn() {
-    document.getElementById('up-btn').addEventListener('touchstart', () => {
+    const upBtn = document.getElementById('up-btn');
+    upBtn.addEventListener('touchstart', (event) => {
+        event.preventDefault();
         keyboard.UP = true;
     });
-    document.getElementById('up-btn').addEventListener('touchend', () => {
+    upBtn.addEventListener('touchend', () => {
         keyboard.UP = false;
     });
 }
 
 function checkLeftBtn() {
-    document.getElementById('left-btn').addEventListener('touchstart', () => {
+    const leftBtn = document.getElementById('left-btn');
+    leftBtn.addEventListener('touchstart', (event) => {
+        event.preventDefault(); 
         keyboard.LEFT = true;
     });
-    document.getElementById('left-btn').addEventListener('touchend', () => {
+    leftBtn.addEventListener('touchend', () => {
         keyboard.LEFT = false;
     });
 }
 
 function checkRightBtn() {
-    document.getElementById('right-btn').addEventListener('touchstart', () => {
+    const rightBtn = document.getElementById('right-btn');
+    rightBtn.addEventListener('touchstart', (event) => {
+        event.preventDefault();
         keyboard.RIGHT = true;
     });
-    document.getElementById('right-btn').addEventListener('touchend', () => {
+    rightBtn.addEventListener('touchend', () => {
         keyboard.RIGHT = false;
     });
 }
 
 function checkDownBtn() {
-    document.getElementById('down-btn').addEventListener('touchstart', () => {
+    const downBtn = document.getElementById('down-btn');
+    downBtn.addEventListener('touchstart', (event) => {
+        event.preventDefault(); 
         keyboard.DOWN = true;
     });
-    document.getElementById('down-btn').addEventListener('touchend', () => {
+    downBtn.addEventListener('touchend', () => {
         keyboard.DOWN = false;
     });
 }
 
 function checkSlapBtn() {
-    document.getElementById('slap-btn').addEventListener('touchstart', () => {
+    const slapBtn = document.getElementById('slap-btn');
+    slapBtn.addEventListener('touchstart', (event) => {
+        event.preventDefault(); 
         keyboard.ATTACK = true;
     });
-    document.getElementById('slap-btn').addEventListener('touchend', () => {
+    slapBtn.addEventListener('touchend', () => {
         keyboard.ATTACK = false;
     });
 }
 
 function checkShootBtn() {
-    document.getElementById('shoot-btn').addEventListener('touchstart', () => {
+    const shootBtn = document.getElementById('shoot-btn');
+    shootBtn.addEventListener('touchstart', (event) => {
+        event.preventDefault(); 
         keyboard.SPACE = true;
     });
-    document.getElementById('shoot-btn').addEventListener('touchend', () => {
+    shootBtn.addEventListener('touchend', () => {
         keyboard.SPACE = false;
     });
 }

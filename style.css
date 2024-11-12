@@ -8,10 +8,6 @@ body {
     background-position: center;
     background-size: cover;
     font-family: 'luckiest', Arial, Helvetica, sans-serif;
-    -webkit-user-select: none; /* Für Safari */
-    -moz-user-select: none; /* Für Firefox */
-    -ms-user-select: none; /* Für Internet Explorer/Edge */
-    user-select: none; /* Standard */
 }
 
 @font-face {
@@ -209,7 +205,7 @@ canvas {
     .center-scaling {
         width: 250px;
     }
-    
+
     .image-scaling {
         width: 120px;
     }
@@ -281,6 +277,7 @@ canvas {
     .align {
         right: 120px;
     }
+
     .retry-image,
     .retry-image2 {
         left: 25%;
@@ -327,6 +324,10 @@ canvas {
 
     .overlay-image {
         width: 100vw;
+    }
+
+    h2 {
+        margin-bottom: 0px;
     }
 
 }
