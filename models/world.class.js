@@ -97,6 +97,7 @@ class World {
         this.level.resetCoins();
         this.level.resetAmmo();
         this.level.resetLights();
+        this.level.resetBackgroundObjects();
     }
 
     resetFlags() {
