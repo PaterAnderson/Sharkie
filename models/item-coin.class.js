@@ -9,7 +9,7 @@ class CoinItem extends MovableObject {
     y = 30;
     height = 40;
     width = 40;
-    static MIN_DISTANCE = 100; 
+    static MIN_DISTANCE = 250; 
     static coins = [];
 
     constructor() {

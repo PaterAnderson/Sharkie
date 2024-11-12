@@ -40,7 +40,7 @@ class Level {
     }
 
     resetCoins() {
-        this.coins = [];
+        CoinItem.coins = [];
         this.coins = [
             new CoinItem(),
             new CoinItem(),
