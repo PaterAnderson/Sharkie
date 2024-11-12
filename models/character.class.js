@@ -160,37 +160,35 @@ class Character extends MovableObject {
         this.checkKeyboardInput();
         this.updateCurrentAnimation();
         this.handleMovement();
-
         if (this.isDead()) {
-            this.isAlive = false;
-            this.dying_sound.play();
-            this.playDeadAnimation(this.IMAGES_DEAD);
-            return;
-        }
-
-        if (this.isElectricHurt) {
-            this.playElectricHurtAnimation();
-            this.electric_hurt_sound.play();
-            return;
-        }
-
-        if (this.isHurt()) {
-            this.playAnimation(this.IMAGES_HURT);
-            this.hurt_sound.play();
-            return;
-        }
-
-        if (this.isFinSlapAnimating) {
+            this.handleDeath();
+        } else if (this.isElectricHurt) {
+            this.playElectricHurt();
+        } else if (this.isHurt()) {
+            this.playHurt();
+        } else if (this.isFinSlapAnimating) {
             this.playFinSlapAnimation();
-            return;
-        }
-
-        if (this.isShooting) {
+        } else if (this.isShooting) {
             this.playShootingAnimation();
-            return;
+        } else {
+            this.playCurrentAnimation();
         }
-
-        this.playCurrentAnimation();
+    }
+    
+    handleDeath() {
+        this.isAlive = false;
+        this.dying_sound.play();
+        this.playDeadAnimation(this.IMAGES_DEAD);
+    }
+    
+    playElectricHurt() {
+        this.playElectricHurtAnimation();
+        this.electric_hurt_sound.play();
+    }
+    
+    playHurt() {
+        this.playAnimation(this.IMAGES_HURT);
+        this.hurt_sound.play();
     }
 
     playElectricHurtAnimation() {
@@ -305,7 +303,6 @@ class Character extends MovableObject {
     updateCurrentAnimation() {
         const currentTime = Date.now();
         const elapsed = currentTime - this.lastKeyPressTime;
-
         if (elapsed > 15000) { 
             this.isLongIdle = true;
         } else {
@@ -320,10 +317,8 @@ class Character extends MovableObject {
 
     handleMovement() {
         let isMoving = false;
-    
         isMoving |= this.handleHorizontalMovement();
         isMoving |= this.handleVerticalMovement();
-    
         this.updateWalkSound(isMoving);
         this.updateCameraPosition();
     }
