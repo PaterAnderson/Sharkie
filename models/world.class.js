@@ -9,6 +9,7 @@ class World {
     gameOverImage = new Image();
     showVictoryScreen = false;
     showGameOverScreen = false;
+    isGameOverShowing = false;
     statusBar = new StatusBar();
     ammoBar = new AmmoBar();
     coinBar = new CoinBar();
@@ -101,6 +102,7 @@ class World {
     }
 
     resetFlags() {
+        this.isGameOverShowing = false;
         this.isSoundMuted = false;
         this.showVictoryScreen = false;
         this.showGameOverScreen = false;
@@ -175,11 +177,14 @@ class World {
     }
 
     showGameOver() {
-        setTimeout(() => {
-            this.showGameOverScreen = true;
-            this.loosingSound.play();
-            this.stop();
-        }, 1500);
+        if (!this.isGameOverShowing) { 
+            this.isGameOverShowing = true; 
+            setTimeout(() => {
+                this.showGameOverScreen = true;
+                this.loosingSound.play();
+                this.stop();
+            }, 1500);
+        }
     }
 
     checkThrowableCollisions() {
