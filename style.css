@@ -30,6 +30,13 @@ h1 {
     text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
+h2 {
+    font-size: 15px;
+    margin-top: -20px;
+    color: indianred;
+    visibility: hidden;
+}
+
 .canvas-container {
     position: relative;
 }
@@ -263,6 +270,10 @@ canvas {
 
     .sound-image {
         top: 20px;
+    }
+
+    h2 {
+        visibility: visible;
     }
 }
 
