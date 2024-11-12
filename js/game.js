@@ -3,10 +3,14 @@ let world;
 let keyboard = new Keyboard();
 let isPaused = false; 
 
+window.addEventListener('touchstart', function(event) {
+    if (event.touches.length > 0) {
+        event.preventDefault(); 
+    }
+}, { passive: false });
+
 window.oncontextmenu = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
+    return true; 
 };
 
 function init() {
