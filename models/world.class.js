@@ -10,6 +10,7 @@ class World {
     showVictoryScreen = false;
     showGameOverScreen = false;
     isGameOverShowing = false;
+    endbossBar = new EndbossBar();
     statusBar = new StatusBar();
     ammoBar = new AmmoBar();
     coinBar = new CoinBar();
@@ -32,7 +33,6 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.isSoundMuted = false;
-        this.endbossBar = new StatusBar(500);
         this.draw();
         this.expectPause();
         this.endboss = new Endboss(this);
@@ -111,6 +111,7 @@ class World {
 
     resetObjects() {
         this.statusBar = new StatusBar();
+        this.endbossBar = new EndbossBar();
         this.ammoBar = new AmmoBar();
         this.coinBar = new CoinBar();
     }
@@ -255,7 +256,7 @@ class World {
             if (enemy instanceof Endboss) {
                 if (enemy.spawned) {
                     this.addToMap(this.endbossBar);
-                    this.endbossBar.setBossPercentage(enemy.energy);
+                    this.endbossBar.setPercentage(enemy.energy);
                 } else {
                     return;
                 }
