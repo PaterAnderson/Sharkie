@@ -96,11 +96,11 @@ class Endboss extends MovableObject {
             this.handleSpawning();
             return;
         }
-    
         if (this.spawning) {
             this.handleSpawningAnimation();
             return;
         }
+        this.checkMusicPlay();
     }
     
     handleSpawning() {
@@ -120,7 +120,6 @@ class Endboss extends MovableObject {
         if (!this.isSoundMuted) {
             this.spawning_sound.play();
         }
-        this.checkMusicPlay();
     }
     
     handleMovement() {
@@ -207,7 +206,7 @@ class Endboss extends MovableObject {
             } else {
                 this.boss_music.pause();
             }
-        }, 1000));
+        }, 200));
     }
 
     startAttackAnimation() {
