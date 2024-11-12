@@ -1,16 +1,16 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let isPaused = false; 
+let isPaused = false;
 
-window.addEventListener('touchstart', function(event) {
+window.addEventListener('touchstart', function (event) {
     if (event.touches.length > 0) {
-        event.preventDefault(); 
+        event.preventDefault();
     }
 }, { passive: false });
 
-window.oncontextmenu = function(event) {
-    return true; 
+window.oncontextmenu = function (event) {
+    return true;
 };
 
 function init() {
@@ -22,25 +22,25 @@ function init() {
 
 window.addEventListener("keydown", (event) => {
     switch (event.key) {
-        case 'w': 
+        case 'w':
             keyboard.UP = true;
             break;
-        case 'a': 
+        case 'a':
             keyboard.LEFT = true;
             break;
-        case 'd': 
+        case 'd':
             keyboard.RIGHT = true;
             break;
-        case 's': 
+        case 's':
             keyboard.DOWN = true;
             break;
-        case 'e': 
+        case 'e':
             keyboard.ATTACK = true;
             break;
-        case ' ': 
+        case ' ':
             keyboard.SPACE = true;
             break;
-        case 'Escape': 
+        case 'Escape':
             togglePause();
             break;
     }
@@ -48,22 +48,22 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("keyup", (event) => {
     switch (event.key) {
-        case 'w': 
+        case 'w':
             keyboard.UP = false;
             break;
-        case 'a': 
+        case 'a':
             keyboard.LEFT = false;
             break;
-        case 'd': 
+        case 'd':
             keyboard.RIGHT = false;
             break;
-        case 's': 
+        case 's':
             keyboard.DOWN = false;
             break;
-        case 'e': 
+        case 'e':
             keyboard.ATTACK = false;
             break;
-        case ' ': 
+        case ' ':
             keyboard.SPACE = false;
             break;
     }
@@ -72,11 +72,11 @@ window.addEventListener("keyup", (event) => {
 
 function setupTouchControls() {
     checkUpBtn(),
-    checkLeftBtn(),
-    checkRightBtn(),
-    checkDownBtn(),
-    checkSlapBtn(),
-    checkShootBtn()
+        checkLeftBtn(),
+        checkRightBtn(),
+        checkDownBtn(),
+        checkSlapBtn(),
+        checkShootBtn()
 }
 
 function checkUpBtn() {
@@ -134,6 +134,38 @@ function checkShootBtn() {
 }
 
 function togglePause() {
-    isPaused = !isPaused; 
+    isPaused = !isPaused;
     keyboard.PAUSE = isPaused;
+}
+
+function removeStartMenu() {
+    document.getElementById('startMenu').classList.add('d-none');
+    document.getElementById('startButton').classList.add('d-none');
+}
+
+function addStartMenu() {
+    document.getElementById('startMenu').classList.remove('d-none');
+    document.getElementById('startButton').classList.remove('d-none');
+}
+
+function addRetryButton() {
+    document.getElementById('retryButton').classList.remove('d-none');
+}
+
+function removeRetryButton() {
+    document.getElementById('retryButton').classList.add('d-none');
+}
+
+function addRetryButton2() {
+    document.getElementById('retryButton2').classList.remove('d-none');
+}
+
+function removeRetryButton2() {
+    document.getElementById('retryButton2').classList.add('d-none');
+}
+
+function removeControllsMenu() {
+    document.getElementById('controllsMenu').classList.add('d-none');
+    document.getElementById('unmuteButton').classList.add('d-none');
+    document.getElementById('muteButton').classList.add('d-none');
 }
