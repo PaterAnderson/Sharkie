@@ -326,6 +326,7 @@ canvas {
 @media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;
+        width: 100vw;
     }
 
     .canvas-container {
@@ -334,6 +335,8 @@ canvas {
 
     .overlay-image {
         height: 100vh;
+        width: 100vw;
+        object-fit: fill;
     }
 
     h1 {
@@ -348,7 +351,7 @@ canvas {
         right: -35px;
         margin: 0;
         height: 0;
-        bottom: 120px;
+        bottom: 60px;
     }
 
     .panel1:nth-child(1) {
