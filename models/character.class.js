@@ -97,7 +97,7 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
     ];
 
-    speed = 2; 
+    speed = 2;
     width = 250;
     height = 250;
     y = 90;
@@ -139,6 +139,9 @@ class Character extends MovableObject {
         this.keyboard = keyboard;
     }
 
+    /**
+     * Starts the main animation loop, including movement handling.
+     */
     animate() {
         this.startMovement();
         this.intervalIDs.push(setInterval(() => {
@@ -146,16 +149,25 @@ class Character extends MovableObject {
         }, 150));
     }
 
+    /**
+     * Triggers the finishing slap animation.
+     */
     animateAttack() {
-        this.playFinSlapAnimation(); 
+        this.playFinSlapAnimation();
     }
 
+    /**
+     * Starts the movement loop that handles character movements.
+     */
     startMovement() {
         this.intervalIDs.push(setInterval(() => {
             this.handleMovement();
         }, 1000 / 60));
     }
 
+    /**
+     * Updates the animation based on the character's current state and input.
+     */
     updateAnimation() {
         this.checkKeyboardInput();
         this.updateCurrentAnimation();
@@ -174,27 +186,42 @@ class Character extends MovableObject {
             this.playCurrentAnimation();
         }
     }
-    
+
+    /**
+     * Handles character death, plays the death sound, and triggers the dead animation.
+     */
     handleDeath() {
         this.isAlive = false;
         this.dying_sound.play();
         this.playDeadAnimation(this.IMAGES_DEAD);
     }
-    
+
+    /**
+     * Plays the electric hurt animation and sound.
+     */
     playElectricHurt() {
         this.playElectricHurtAnimation();
         this.electric_hurt_sound.play();
     }
-    
+
+    /**
+     * Plays the hurt animation and sound.
+     */
     playHurt() {
         this.playAnimation(this.IMAGES_HURT);
         this.hurt_sound.play();
     }
 
+    /**
+     * Plays the electric hurt animation frames.
+     */
     playElectricHurtAnimation() {
         this.playAnimation(this.IMAGES_ELECTRIC_HURT);
     }
 
+    /**
+     * Plays the current animation based on the character's state.
+     */
     playCurrentAnimation() {
         switch (this.currentAnimation) {
             case 'swim':
@@ -210,6 +237,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Checks keyboard input for movement or attack actions.
+     */
     checkKeyboardInput() {
         if (this.isMovementKeyPressed()) {
             this.handleMovementKeys();
@@ -221,70 +251,101 @@ class Character extends MovableObject {
             this.endSwimmingAnimation();
         }
     }
-    
+
+    /**
+     * Checks if any movement keys are currently pressed.
+     * @returns {boolean} - True if any movement key is pressed, otherwise false.
+     */
     isMovementKeyPressed() {
         return this.keyboard.UP || this.keyboard.DOWN || this.keyboard.LEFT || this.keyboard.RIGHT;
     }
-    
+
+    /**
+     * Handles logic when movement keys are pressed.
+     */
     handleMovementKeys() {
         this.currentAnimation = 'swim';
         this.lastKeyPressTime = Date.now();
         this.isLongIdle = false;
         this.currentLongIdleImageIndex = 0;
         this.isFinSlapAnimating = false;
-    
+
         if (!this.isAnimatingSwim) {
             this.isAnimatingSwim = true;
         }
     }
-    
+
+    /**
+     * Checks if the attack key is pressed.
+     * @returns {boolean} - True if the attack key is pressed and attack can occur, otherwise false.
+     */
     isAttackPressed() {
         return this.keyboard.ATTACK && !this.attackCooldown && this.isAlive;
     }
-    
+
+    /**
+     * Checks if the shooting key is pressed.
+     * @returns {boolean} - True if the shoot key is pressed and shooting is allowed, otherwise false.
+     */
     isShootingPressed() {
         return this.keyboard.SPACE && this.canShoot();
     }
-    
+
+    /**
+     * Ends the swimming animation state.
+     */
     endSwimmingAnimation() {
         this.isAnimatingSwim = false;
     }
 
+    /**
+     * Checks if the character can shoot based on cooldown and ammo availability.
+     * @returns {boolean} - True if the character can shoot, otherwise false.
+     */
     canShoot() {
         return !this.shootCooldown && this.ammo > 0 && this.isAlive;
     }
 
+    /**
+     * Initiates the shooting action.
+     */
     startShooting() {
         this.isShooting = true;
         this.currentImage = 0;
-        this.shootCooldown = true; 
+        this.shootCooldown = true;
 
         this.playShootingAnimation();
         setTimeout(() => {
-            this.shootCooldown = false; 
-            this.shooting_sound.pause(); 
-            this.shooting_sound.currentTime = 0; 
+            this.shootCooldown = false;
+            this.shooting_sound.pause();
+            this.shooting_sound.currentTime = 0;
         }, this.shootCooldownTime);
     }
 
+    /**
+     * Initiates the finishing slap attack.
+     */
     startFinSlapAttack() {
         this.isFinSlapAnimating = true;
-        this.currentImage = 0; 
-        this.attackCooldown = true; 
-        this.animateAttack(); 
+        this.currentImage = 0;
+        this.attackCooldown = true;
+        this.animateAttack();
         this.melee_sound.play();
 
         setTimeout(() => {
-            this.attackCooldown = false; 
-            this.melee_sound.pause(); 
-            this.melee_sound.currentTime = 0; 
+            this.attackCooldown = false;
+            this.melee_sound.pause();
+            this.melee_sound.currentTime = 0;
         }, this.attackCooldownTime);
     }
 
+    /**
+     * Plays the shooting animation and manages ammo usage.
+     */
     playShootingAnimation() {
         if (this.isShooting) {
             let isFinished = this.playAnimation(this.IMAGES_SHOOT);
-            if (isFinished && this.useAmmo()) { 
+            if (isFinished && this.useAmmo()) {
                 this.shooting_sound.play();
                 this.world.ammoBar.setAmmo(this.ammo);
                 let bubble = new ThrowableObject(this.x + 180, this.y + 100, this.otherDirection);
@@ -300,21 +361,20 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Updates the current animation based on user input and idle time.
+     */
     updateCurrentAnimation() {
         const currentTime = Date.now();
         const elapsed = currentTime - this.lastKeyPressTime;
-        if (elapsed > 15000) { 
-            this.isLongIdle = true;
-        } else {
-            this.isLongIdle = false;
-        }
-        if (this.isAnimatingSwim) {
-            this.currentAnimation = 'swim';
-        } else {
-            this.currentAnimation = this.isLongIdle ? 'long_idle' : 'idle';
-        }
+        this.isLongIdle = elapsed > 15000;
+
+        this.currentAnimation = this.isAnimatingSwim ? 'swim' : (this.isLongIdle ? 'long_idle' : 'idle');
     }
 
+    /**
+     * Handles all movement for the character, including horizontal and vertical directions.
+     */
     handleMovement() {
         let isMoving = false;
         isMoving |= this.handleHorizontalMovement();
@@ -322,7 +382,11 @@ class Character extends MovableObject {
         this.updateWalkSound(isMoving);
         this.updateCameraPosition();
     }
-    
+
+    /**
+     * Handles horizontal movement to the left or right based on keyboard input.
+     * @returns {boolean} - True if the character moved horizontally, otherwise false.
+     */
     handleHorizontalMovement() {
         if (this.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.isAlive) {
             this.x += this.speed;
@@ -336,7 +400,11 @@ class Character extends MovableObject {
         }
         return false;
     }
-    
+
+    /**
+     * Handles vertical movement up or down based on keyboard input.
+     * @returns {boolean} - True if the character moved vertically, otherwise false.
+     */
     handleVerticalMovement() {
         if (this.keyboard.UP && this.y > -120 && this.isAlive) {
             this.y -= this.speed;
@@ -348,7 +416,11 @@ class Character extends MovableObject {
         }
         return false;
     }
-    
+
+    /**
+     * Updates the walking sound based on whether the character is moving.
+     * @param {boolean} isMoving - Indicates if the character is currently moving.
+     */
     updateWalkSound(isMoving) {
         if (isMoving) {
             this.playWalkSound();
@@ -356,11 +428,17 @@ class Character extends MovableObject {
             this.stopWalkSound();
         }
     }
-    
+
+    /**
+     * Updates the camera's position to follow the character.
+     */
     updateCameraPosition() {
         this.world.camera_x = 0 - this.x;
     }
 
+    /**
+     * Plays the finishing slap animation frames if the character is currently animating.
+     */
     playFinSlapAnimation() {
         if (this.isFinSlapAnimating) {
             if (this.currentImage < this.IMAGES_FINSLAP.length) {
@@ -375,6 +453,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Plays the walking sound if it is not already playing.
+     */
     playWalkSound() {
         if (this.walking_sound.paused) {
             this.walking_sound.currentTime = 0;
@@ -382,12 +463,18 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Stops the walking sound if it is currently playing.
+     */
     stopWalkSound() {
         if (!this.walking_sound.paused) {
             this.walking_sound.pause();
         }
     }
 
+    /**
+     * Updates the long idle animation based on the current idle state of the character.
+     */
     updateLongIdleAnimation() {
         if (this.currentLongIdleImageIndex < 10) {
             this.handleInitialImages();
@@ -396,6 +483,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Handles the initial frame images for long idle animation.
+     */
     handleInitialImages() {
         let i = this.currentLongIdleImageIndex % this.IMAGES_LONG_IDLE.length;
         let path = this.IMAGES_LONG_IDLE[i];
@@ -403,6 +493,9 @@ class Character extends MovableObject {
         this.currentLongIdleImageIndex++;
     }
 
+    /**
+     * Handles the subsequent frame images for long idle animation.
+     */
     handleSubsequentImages() {
         this.currentLongIdleImageIndex = this.calculateCurrentIndexForSubsequentImages();
         let path = this.IMAGES_LONG_IDLE[this.currentLongIdleImageIndex];
@@ -410,14 +503,22 @@ class Character extends MovableObject {
         this.currentLongIdleImageIndex++;
 
         if (this.currentLongIdleImageIndex >= 14) {
-            this.currentLongIdleImageIndex = 10; 
+            this.currentLongIdleImageIndex = 10;
         }
     }
 
+    /**
+     * Calculates the current index for subsequent images in the long idle animation.
+     * @returns {number} - The calculated index for images.
+     */
     calculateCurrentIndexForSubsequentImages() {
-        return 10 + (this.currentLongIdleImageIndex - 10) % 4; 
+        return 10 + (this.currentLongIdleImageIndex - 10) % 4;
     }
 
+    /**
+     * Plays the dead animation frames using the provided images.
+     * @param {Array} images - The array of image paths for the dead animation.
+     */
     playDeadAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -427,6 +528,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Increases the ammo count, capping it between 0 and 10.
+     */
     addAmmo() {
         this.ammo += 1;
         if (this.ammo < 0) {
@@ -436,6 +540,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Uses 1 ammo if available.
+     * @returns {boolean} - True if ammo was successfully used, otherwise false.
+     */
     useAmmo() {
         if (this.ammo > 0) {
             this.ammo -= 1;
@@ -444,6 +552,10 @@ class Character extends MovableObject {
         return false;
     }
 
+    /**
+     * Returns the hitbox object for the character.
+     * @returns {Object} - The hitbox with properties x, y, width, and height.
+     */
     getHitbox() {
         return {
             x: this.x + 50,
@@ -453,6 +565,9 @@ class Character extends MovableObject {
         };
     }
 
+    /**
+     * Increases the coin count, capping it between 0 and 10.
+     */
     addCoin() {
         this.coins += 1;
         if (this.coins < 0) {

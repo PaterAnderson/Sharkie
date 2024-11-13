@@ -16,6 +16,10 @@ class Level {
     }
 
     
+    /**
+     * The `resetEnemies` function initializes an array with instances of different enemy objects such
+     * as JellyFish, SuperJellyFish, PufferFish, and Endboss.
+     */
     resetEnemies() {
         this.enemies = []; 
         this.enemies = [
@@ -39,6 +43,9 @@ class Level {
         ];
     }
 
+    /**
+     * The `resetCoins` function initializes an array of `CoinItem` objects with ten instances.
+     */
     resetCoins() {
         CoinItem.coins = [];
         this.coins = [
@@ -55,6 +62,9 @@ class Level {
         ];
     }
 
+    /**
+     * The resetAmmo function initializes an array with five new instances of the AmmoItem class.
+     */
     resetAmmo() {
         this.ammo = [];
         this.ammo = [
@@ -67,6 +77,9 @@ class Level {
     }
 
 
+    /**
+     * The `resetLights` function initializes an array of `Light` objects with a single instance.
+     */
     resetLights() {
         this.lights = [];
         this.lights = [
@@ -74,6 +87,10 @@ class Level {
         ];
     }
 
+    /**
+     * The function `resetBackgroundObjects` initializes an array of background objects with specific
+     * image paths and positions.
+     */
     resetBackgroundObjects() {
         this.backgroundObjects = [];
         this.backgroundObjects = [

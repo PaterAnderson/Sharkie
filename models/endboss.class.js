@@ -79,147 +79,200 @@ class Endboss extends MovableObject {
         this.currentImage = 0;
     }
 
-    animate() {
-        if (this.hasMovedLeft) {
-            this.moveleft();
-        }
-        this.startAttackAnimation();
-        this.intervalIDs.push(setInterval(() => {
-            this.updateAnimation();
-        }, 180));          
+/**
+ * Starts the animation loop, managing movement and attack animations.
+ */
+animate() {
+    if (this.hasMovedLeft) {
+        this.moveleft();
     }
+    this.startAttackAnimation();
+    this.intervalIDs.push(setInterval(() => {
+        this.updateAnimation();
+    }, 180));          
+}
 
-    updateAnimation() {
-        this.handleMovement();
-        this.handleStateAnimations();
-        if (!this.spawned) {
-            this.handleSpawning();
-            return;
-        }
-        if (this.spawning) {
-            this.handleSpawningAnimation();
-            return;
-        }
-        this.checkMusicPlay();
+/**
+ * Updates the current animation state based on character's movement and actions.
+ */
+updateAnimation() {
+    this.handleMovement();
+    this.handleStateAnimations();
+    if (!this.spawned) {
+        this.handleSpawning();
+        return;
     }
-    
-    handleSpawning() {
-        if (this.checkSpawnDistance()) {
-            this.spawning = true;
-            this.spawned = true;
-            this.currentImage = 0;
-        }
+    if (this.spawning) {
+        this.handleSpawningAnimation();
+        return;
     }
-    
-    handleSpawningAnimation() {
-        this.playAnimation(this.IMAGES_SPAWNING);
-        if (this.currentImage >= 10) {
-            this.spawning = false;
-        }
-        this.y = -150;
-        if (!this.isSoundMuted) {
-            this.spawning_sound.play();
-        }
-    }
-    
-    handleMovement() {
-        if (this.spawned && !this.hasMovedLeft) { 
-            this.moveleft();
-            this.hasMovedLeft = true; 
-        }
-    }
-    
-    handleStateAnimations() {
-        if (this.isDead()) {
-            this.handleDeathAnimation();
-            this.spawned = false;
-        } else if (this.isHurt()) {
-            this.handleHurtAnimation();
-        } else if (this.isAttacking) {
-            this.handleAttackAnimation();
-        } else {
-            this.playAnimation(this.IMAGES_FLOATING);
-        }
-    }
-    
-    handleDeathAnimation() {
-        this.boss_music.pause();
-        if (this.firstframedead) {
-            this.currentImage = 0;
-            this.firstframedead = false;
-        }
-        this.playDeadAnimation(this.IMAGES_DEAD);
-    }
-    
-    handleHurtAnimation() {
-        if (!this.isSoundMuted) {
-            this.boss_hurt.play();
-        }
-        this.playAnimation(this.IMAGES_HURT);
-    }
-    
-    handleAttackAnimation() {
-        this.playAnimation(this.IMAGES_ATTACK);
-        if (this.currentImage >= 6) {
-            this.isAttacking = false;
-            this.currentImage = 0;
-        }
-    }
+    this.checkMusicPlay();
+}
 
-    playAnimation(images) {
-        this.currentImage = this.currentImage % images.length;
-        let path = images[this.currentImage];
-        this.img = this.imageCache[path];
+/**
+ * Handles the spawning logic for the character.
+ */
+handleSpawning() {
+    if (this.checkSpawnDistance()) {
+        this.spawning = true;
+        this.spawned = true;
+        this.currentImage = 0;
+    }
+}
+
+/**
+ * Manages the spawning animation, including sound effects.
+ */
+handleSpawningAnimation() {
+    this.playAnimation(this.IMAGES_SPAWNING);
+    if (this.currentImage >= 10) {
+        this.spawning = false;
+    }
+    this.y = -150;
+    if (!this.isSoundMuted) {
+        this.spawning_sound.play();
+    }
+}
+
+/**
+ * Handles the movement of the character after spawning.
+ */
+handleMovement() {
+    if (this.spawned && !this.hasMovedLeft) { 
+        this.moveleft();
+        this.hasMovedLeft = true; 
+    }
+}
+
+/**
+ * Handles the animation states based on the character's current status.
+ */
+handleStateAnimations() {
+    if (this.isDead()) {
+        this.handleDeathAnimation();
+        this.spawned = false;
+    } else if (this.isHurt()) {
+        this.handleHurtAnimation();
+    } else if (this.isAttacking) {
+        this.handleAttackAnimation();
+    } else {
+        this.playAnimation(this.IMAGES_FLOATING);
+    }
+}
+
+/**
+ * Manages the death animation of the character.
+ */
+handleDeathAnimation() {
+    this.boss_music.pause();
+    if (this.firstframedead) {
+        this.currentImage = 0;
+        this.firstframedead = false;
+    }
+    this.playDeadAnimation(this.IMAGES_DEAD);
+}
+
+/**
+ * Manages the hurt animation of the character, including sound effects.
+ */
+handleHurtAnimation() {
+    if (!this.isSoundMuted) {
+        this.boss_hurt.play();
+    }
+    this.playAnimation(this.IMAGES_HURT);
+}
+
+/**
+ * Manages the attack animation of the character.
+ */
+handleAttackAnimation() {
+    this.playAnimation(this.IMAGES_ATTACK);
+    if (this.currentImage >= 6) {
+        this.isAttacking = false;
+        this.currentImage = 0;
+    }
+}
+
+/**
+ * Plays the specified animation frames.
+ * @param {Array} images - The array of image paths for the animation.
+ */
+playAnimation(images) {
+    this.currentImage = this.currentImage % images.length;
+    let path = images[this.currentImage];
+    this.img = this.imageCache[path];
+    this.currentImage++;
+}
+
+/**
+ * Plays the dead animation frames.
+ * @param {Array} images - The array of image paths for the dead animation.
+ */
+playDeadAnimation(images) {
+    let i = this.currentImage % images.length;
+    let path = images[i];
+    this.img = this.imageCache[path];
+    if (i < images.length - 1) {
         this.currentImage++;
     }
+}
 
-    playDeadAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        if (i < images.length - 1) {
-            this.currentImage++;
+/**
+ * Returns the hitbox object for the character.
+ * @returns {Object} - The hitbox with properties x, y, width, and height.
+ */
+getHitbox() {
+    return {
+        x: this.x + 40,
+        y: this.y + 220,
+        width: this.width - 80,
+        height: this.height - 350
+    }
+}
+
+/**
+ * Checks if the character is within the required distance to spawn.
+ * @returns {boolean} - True if the character can spawn, otherwise false.
+ */
+checkSpawnDistance() {
+    return world.character.x >= 1500;
+}
+
+/**
+ * Checks the health status of the character.
+ * @returns {boolean} - True if the character is dead, otherwise false.
+ */
+checkCharacterHealth() {
+    return world.character.isDead();
+}
+
+/**
+ * Manages the background music based on the character's state.
+ */
+checkMusicPlay() {
+    this.intervalIDs.push(setInterval(() => {
+        if (this.spawned && !this.isSoundMuted && !this.isDead() && !this.checkCharacterHealth() && this.x >= -500) {
+            this.boss_music.play();
+        } else {
+            this.boss_music.pause();
         }
-    }
+    }, 200));
+}
 
-    getHitbox() {
-        return {
-            x: this.x + 40,
-            y: this.y + 220,
-            width: this.width - 80,
-            height: this.height - 350
-        }
-    }
-
-    checkSpawnDistance() {
-        return world.character.x >= 1500;
-    }
-
-    checkCharacterHealth() {
-        return world.character.isDead();
-    }
-
-    checkMusicPlay() {
-        this.intervalIDs.push(setInterval(() => {
-            if (this.spawned && !this.isSoundMuted && !this.isDead() && !this.checkCharacterHealth() && this.x >= -500) {
-                this.boss_music.play();
-            } else {
-                this.boss_music.pause();
-            }
-        }, 200));
-    }
-
-    startAttackAnimation() {
-        this.intervalIDs.push(setInterval(() => {
-            if (!this.isDead() && !this.isHurt() && this.spawning == false) {
-                this.isAttacking = true;
-                this.currentImage = 0;
-                if (this.spawned) {
-                    if (!this.isSoundMuted) {
-                        this.boss_bite.play();
-                    }
+/**
+ * Starts the attack animation with a defined interval.
+ */
+startAttackAnimation() {
+    this.intervalIDs.push(setInterval(() => {
+        if (!this.isDead() && !this.isHurt() && this.spawning == false) {
+            this.isAttacking = true;
+            this.currentImage = 0;
+            if (this.spawned) {
+                if (!this.isSoundMuted) {
+                    this.boss_bite.play();
                 }
             }
-        }, 5000));
-    }
+        }
+    }, 5000));
+}
 }

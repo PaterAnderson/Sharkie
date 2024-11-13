@@ -48,6 +48,9 @@ class PufferFish extends MovableObject {
         this.hasBulked = false; 
     }
 
+    /**
+     * The `animate` function moves an object left and updates its animation at a set interval.
+     */
     animate() {
         this.moveleft();
         this.intervalIDs.push(setInterval(() => {
@@ -55,6 +58,15 @@ class PufferFish extends MovableObject {
         }, 150));
     }
 
+    /**
+     * The function `updateAnimation` calculates the distance between two points and plays different
+     * animations based on certain conditions.
+     * @returns If the character is dead, the `updateAnimation()` function will return after playing
+     * the dead animation. If the character is not dead, the function will continue to check the
+     * distance between the current object and the character. Depending on the distance and the
+     * object's state (bulking, bulked, or floating), different animations will be played. If none of
+     * the conditions are met, the function will return
+     */
     updateAnimation() {
         let distanceX = this.x - world.character.x;
         let distanceY = this.y - world.character.y;
@@ -75,6 +87,10 @@ class PufferFish extends MovableObject {
         }
     }
 
+    /**
+     * The function `playBulkAnimation` sets flags for bulking, plays a series of images in a loop with
+     * a delay, and then resets the bulking flag.
+     */
     async playBulkAnimation() {
         this.isBulking = true; 
         this.hasBulked = true; 
@@ -86,6 +102,10 @@ class PufferFish extends MovableObject {
         this.isBulking = false; 
     }
 
+    /**
+     * The function `playDeadAnimation` cycles through a set of images to create an animation effect.
+     * @param images - An array of image paths that will be used to play a "dead" animation.
+     */
     playDeadAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -95,6 +115,10 @@ class PufferFish extends MovableObject {
         }
     }
 
+    /**
+     * The function uses setInterval to move an object horizontally at a constant speed while applying
+     * gravity vertically.
+     */
     throw() {
         this.speedY = 25;
         this.applyGravity();
@@ -105,6 +129,13 @@ class PufferFish extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * The `sleep` function in JavaScript returns a promise that resolves after a specified number of
+     * milliseconds.
+     * @param ms - The `ms` parameter in the `sleep` function represents the number of milliseconds for
+     * which the function will pause execution before resolving the promise.
+     * @returns A Promise is being returned.
+     */
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

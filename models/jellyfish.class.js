@@ -27,6 +27,8 @@ class JellyFish extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.25;
     }
 
+    /* The `animate()` method in the `JellyFish` class is responsible for animating the jellyfish
+    object. */
     animate() {
         this.moveleft();
         this.intervalIDs.push(setInterval(() => {
@@ -34,6 +36,10 @@ class JellyFish extends MovableObject {
         }, 250));
     };
 
+    /**
+     * The function `updateAnimation` checks if an object is dead and plays the corresponding
+     * animation.
+     */
     updateAnimation() {
         if (this.isDead()) {
             this.playDeadAnimation(this.IMAGES_DEAD);
@@ -42,6 +48,10 @@ class JellyFish extends MovableObject {
         }
     }
 
+    /**
+     * The function playDeadAnimation cycles through a set of images to create a "dead" animation
+     * effect.
+     */
     playDeadAnimation() {
         this.currentImage = (this.currentImage + 1) % this.IMAGES_DEAD.length;
         this.loadImage(this.IMAGES_DEAD[this.currentImage]);

@@ -15,16 +15,20 @@ class AmmoItem extends MovableObject {
     width = 50;
     static MIN_DISTANCE = 100;
     static ammo = [];
-    static MAX_Y = 500; 
+    static MAX_Y = 500;
     intervalIDs = [];
 
     constructor(world) {
         super().loadImage('img/4. Marcadores/Posión/Animada/1.png');
         this.loadImages(this.AMMO_IMG);
         this.placeAmmo();
-        this.world = world; 
+        this.world = world;
     }
 
+    /**
+     * The `placeAmmo` function generates random coordinates for an ammo item and adds it to an array of
+     * ammo items.
+     */
     placeAmmo() {
         this.x = 800 + Math.random() * 1500;
         this.y = Math.random() * -100;
@@ -32,6 +36,9 @@ class AmmoItem extends MovableObject {
         AmmoItem.ammo.push({ x: this.x, y: this.y });
     }
 
+    /**
+     * The `animate` function drops an object and plays an animation at a set interval.
+     */
     animate() {
         this.drop();
         this.intervalIDs.push(setInterval(() => {
@@ -39,6 +46,11 @@ class AmmoItem extends MovableObject {
         }, 250));
     }
 
+    /**
+     * The `drop` function simulates gravity by incrementing the y position of an object until it reaches a
+     * maximum y value, then removes the object from an array and repositions it before calling the
+     * function recursively.
+     */
     drop() {
         this.speedY = 40;
         const gravityInterval = setInterval(() => {
@@ -54,6 +66,10 @@ class AmmoItem extends MovableObject {
         this.intervalIDs.push(gravityInterval);
     }
 
+    /**
+     * The `resetAmmo` function clears all interval timers associated with ammo items and resets the
+     * `AmmoItem.ammo` array to an empty array.
+     */
     static resetAmmo() {
         AmmoItem.ammo.forEach(ammo => {
             ammo.intervalIDs.forEach(id => clearInterval(id));

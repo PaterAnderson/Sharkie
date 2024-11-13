@@ -19,12 +19,26 @@ class CoinBar extends DrawableObject {
         this.setCoins(0);
     }
 
+/**
+ * The `setCoins` function sets the number of coins and updates the image displayed accordingly.
+ * @param coins - The `coins` parameter in the `setCoins` function is used to set the value of the
+ * `coins` property of the object. This function also uses the `coins` value to determine the path of
+ * the image to be displayed based on the resolved coin index.
+ */
     setCoins(coins) {
         this.coins = coins; 
         let path = this.COIN_IMAGES[this.resolveCoinIndex()];
         this.img = this.imageCache[path];
     }
 
+/**
+ * The `resolveCoinIndex` function returns an index based on the number of coins, with specific
+ * thresholds for different index values.
+ * @returns The `resolveCoinIndex` function returns a value based on the number of coins. If the number
+ * of coins is 10, it returns 5. If the number of coins is greater than or equal to 8, it returns 4. If
+ * the number of coins is greater than or equal to 6, it returns 3. If the number of coins is greater
+ * than or equal to
+ */
     resolveCoinIndex() {
         if (this.coins == 10) {
             return 5;

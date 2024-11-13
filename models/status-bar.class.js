@@ -21,12 +21,27 @@ class StatusBar extends DrawableObject {
         this.setPercentage(100);
     }
 
+    /**
+     * The function `setPercentage` sets the percentage value and updates the image based on the
+     * percentage.
+     * @param percentage - The `percentage` parameter in the `setPercentage` function is used to update
+     * the percentage value of an object. This function sets the `percentage` property of the object to
+     * the provided value and then resolves the image path based on the updated percentage value.
+     */
     setPercentage(percentage) {
         this.percentage = percentage; 
         let path = this.HEALTH_IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * The function `resolveImageIndex` returns an image index based on the percentage value provided.
+     * @returns The resolveImageIndex() function returns a numerical value based on the percentage
+     * property of the object it is called on. The value returned corresponds to different image
+     * indexes based on the percentage value. If the percentage is 100, it returns 5. If the percentage
+     * is greater than or equal to 80, it returns 4. If the percentage is greater than or equal to 60,
+     * it returns
+     */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;

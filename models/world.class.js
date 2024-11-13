@@ -38,15 +38,24 @@ class World {
         this.endboss = new Endboss(this);
     }
 
+    /**
+ * Loads necessary images for the game scenes.
+ */
     loadImages() {
         this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
         this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
     }
 
+    /**
+     * Sets the world reference in the character object.
+     */
     setWorld() {
         this.character.world = this;
     }
 
+    /**
+     * Starts the game loop and initializes animations for game objects.
+     */
     run() {
         this.intervalIDs.push(setInterval(() => {
             this.checkCollisions();
@@ -62,18 +71,26 @@ class World {
         this.isGameStopped = false;
     }
 
+    /**
+     * Stops the game loop and halts all game object animations.
+     */
     stop() {
         if (this.isGameStopped) return;
         this.isGameStopped = true;
+
         this.level.enemies.forEach(enemy => enemy.stopAnimation());
         this.level.lights.forEach(light => light.stopAnimation());
         this.level.coins.forEach(coin => coin.stopAnimation());
         this.level.ammo.forEach(ammo => ammo.stopAnimation());
         this.character.stopAnimation();
+
         this.intervalIDs.forEach(id => clearInterval(id));
         this.intervalIDs = [];
     }
 
+    /**
+     * Restarts the game after stopping it and resetting the world state.
+     */
     restart() {
         this.stop();
         this.resetWorld();
@@ -81,6 +98,9 @@ class World {
         this.run();
     }
 
+    /**
+     * Resets the world state to prepare for a new game.
+     */
     resetWorld() {
         this.character = new Character();
         this.camera_x = 0;
@@ -93,6 +113,9 @@ class World {
         removeRetryButton2();
     }
 
+    /**
+     * Resets various world items to their initial states.
+     */
     resetWorldItems() {
         this.level.resetEnemies();
         this.level.resetAmmo();
@@ -101,6 +124,9 @@ class World {
         this.level.resetCoins();
     }
 
+    /**
+     * Resets game status flags.
+     */
     resetFlags() {
         this.isGameOverShowing = false;
         this.isSoundMuted = false;
@@ -109,6 +135,9 @@ class World {
         this.canCreateFinslap = true;
     }
 
+    /**
+     * Resets and initializes the interface objects for the game.
+     */
     resetObjects() {
         this.statusBar = new StatusBar();
         this.endbossBar = new EndbossBar();
@@ -116,12 +145,18 @@ class World {
         this.coinBar = new CoinBar();
     }
 
+    /**
+     * Checks if the attack button is pressed to potentially create a finslap.
+     */
     checkThrowObjects() {
         if (this.keyboard.ATTACK && this.canCreateFinslap) {
             this.createFinslap();
         }
     }
 
+    /**
+     * Creates a finslap object and manages its lifecycle.
+     */
     createFinslap() {
         let slap = new Finslap(this.character.x + 210, this.character.y + 130, this.character.otherDirection);
         this.finslapObject.push(slap);
@@ -131,6 +166,9 @@ class World {
         setTimeout(() => this.canCreateFinslap = true, 600);
     }
 
+    /**
+ * Checks for all types of collisions in the game.
+ */
     checkCollisions() {
         this.checkCharacterEnemyCollisions();
         this.checkThrowableCollisions();
@@ -138,6 +176,9 @@ class World {
         this.checkAmmoCollisions();
     }
 
+    /**
+     * Checks for collisions between the character and enemies.
+     */
     checkCharacterEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !this.isGameStopped) {
@@ -152,6 +193,10 @@ class World {
         }
     }
 
+    /**
+     * Handles the event when the character collides with an enemy.
+     * @param {Enemy} enemy - The enemy object that the character collided with.
+     */
     handleCharacterHitByEnemy(enemy) {
         if (enemy.energy > 0) {
             if (enemy instanceof SuperJellyFish) {
@@ -163,6 +208,10 @@ class World {
         }
     }
 
+    /**
+     * Handles the event when an enemy dies.
+     * @param {Enemy} enemy - The enemy that has died.
+     */
     handleEnemyDeath(enemy) {
         setTimeout(() => {
             const index = this.level.enemies.indexOf(enemy);
@@ -177,9 +226,12 @@ class World {
         }, enemy.despawnTimer);
     }
 
+    /**
+     * Displays the game over screen if the character dies.
+     */
     showGameOver() {
-        if (!this.isGameOverShowing) { 
-            this.isGameOverShowing = true; 
+        if (!this.isGameOverShowing) {
+            this.isGameOverShowing = true;
             setTimeout(() => {
                 this.showGameOverScreen = true;
                 this.loosingSound.play();
@@ -188,6 +240,9 @@ class World {
         }
     }
 
+    /**
+     * Checks for collisions between throwable objects and enemies.
+     */
     checkThrowableCollisions() {
         this.throwableObject.forEach((throwable, index) => {
             this.level.enemies.forEach((enemy) => {
@@ -210,6 +265,10 @@ class World {
         });
     }
 
+    /**
+     * Handles what happens when a finslap hits an enemy.
+     * @param {Enemy} enemy - The enemy that has been hit by a finslap.
+     */
     handleFinslapHit(enemy) {
         if (enemy instanceof PufferFish) {
             enemy.throw();
@@ -221,6 +280,9 @@ class World {
         this.hit_sound.play();
     }
 
+    /**
+     * Checks for collisions between the character and coins.
+     */
     checkCoinCollisions() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
@@ -232,6 +294,9 @@ class World {
         });
     }
 
+    /**
+     * Checks for collisions between the character and ammo items.
+     */
     checkAmmoCollisions() {
         this.level.ammo.forEach((ammo, index) => {
             if (this.character.isColliding(ammo)) {
@@ -240,17 +305,21 @@ class World {
         });
     }
 
+    /**
+     * Checks the position of the end boss to determine if the game should end.
+     */
     checkEndbossPosition() {
         for (let enemy of this.level.enemies) {
-            if (enemy instanceof Endboss) {
-                if (enemy.x <= -500) {
-                    this.stop();
-                    this.showGameOver();
-                }
+            if (enemy instanceof Endboss && enemy.x <= -500) {
+                this.stop();
+                this.showGameOver();
             }
         }
     }
 
+    /**
+     * Adds the end boss health bar to the map if the end boss has spawned.
+     */
     checkEnbossSpawn() {
         for (let enemy of this.level.enemies) {
             if (enemy instanceof Endboss) {
@@ -264,6 +333,11 @@ class World {
         }
     }
 
+    /**
+     * Collects ammo when the character collides with an ammo item.
+     * @param {Ammo} ammo - The ammo item collected by the character.
+     * @param {number} index - The index of the ammo item in the level's ammo array.
+     */
     collectAmmo(ammo, index) {
         this.character.addAmmo();
         this.ammoBar.setAmmo(this.character.ammo);
@@ -278,12 +352,19 @@ class World {
         }
     }
 
+    /**
+ * Spawns additional ammo items in the level until there are at least 5.
+ */
     spawnAmmoItems() {
         for (let index = this.level.ammo.length; index <= 5; index++) {
             this.level.ammo.push(new AmmoItem());
         }
     }
 
+    /**
+     * Removes a specified finslap object from the list of throwable objects.
+     * @param {Finslap} slap - The finslap object to be removed.
+     */
     removeFinslapObject(slap) {
         const index = this.finslapObject.indexOf(slap);
         if (index !== -1) {
@@ -291,6 +372,9 @@ class World {
         }
     }
 
+    /**
+     * Main draw function that handles rendering the game scene.
+     */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
@@ -307,6 +391,9 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Handles the display of the options menu if the game is paused.
+     */
     handleOptionsMenu() {
         if (this.isGamePaused) {
             this.addControllsMenu();
@@ -316,6 +403,9 @@ class World {
         }
     }
 
+    /**
+     * Adds fixed objects such as status bars to the game map.
+     */
     addFixedObjectsToMap() {
         this.checkEnbossSpawn();
         this.addToMap(this.statusBar);
@@ -323,6 +413,9 @@ class World {
         this.addToMap(this.coinBar);
     }
 
+    /**
+     * Adds dynamic objects (character, enemies, etc.) to the game map.
+     */
     addDynamicObjectsToMap() {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
@@ -333,6 +426,9 @@ class World {
         this.addObjectsToMap(this.finslapObject);
     }
 
+    /**
+     * Handles and displays the end game screens based on the game state.
+     */
     handleEndGameScreens() {
         if (this.showVictoryScreen) {
             this.drawVictoryScreen(this.victoryImage);
@@ -343,6 +439,9 @@ class World {
         }
     }
 
+    /**
+     * Toggles the pause state of the game.
+     */
     togglePause() {
         this.isGamePaused = !this.isGamePaused;
         this.keyboard.PAUSE = this.isGamePaused;
@@ -354,6 +453,9 @@ class World {
         }
     }
 
+    /**
+     * Sets up event listeners for pausing the game with keyboard or touch controls.
+     */
     expectPause() {
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Escape') {
@@ -365,10 +467,17 @@ class World {
         });
     }
 
+    /**
+     * Draws the victory screen using the victory image.
+     */
     drawVictoryScreen() {
         this.ctx.drawImage(this.victoryImage, 0, 0, this.canvas.width, this.canvas.height);
     }
 
+    /**
+     * Draws a specified screen image centered on the canvas.
+     * @param {HTMLImageElement} image - The image to be drawn on the screen.
+     */
     drawScreen(image) {
         let scaleFactor = 0.3;
         let newWidth = image.width * scaleFactor;
@@ -379,6 +488,9 @@ class World {
         this.ctx.drawImage(image, x, y, newWidth, newHeight);
     }
 
+    /**
+     * Toggles the sound on and off for the entire game.
+     */
     toggleSound() {
         this.isSoundMuted = !this.isSoundMuted;
         this.updateEnemySound();
@@ -386,6 +498,9 @@ class World {
         this.updateWorldSounds();
     }
 
+    /**
+     * Updates the sound settings for enemy objects.
+     */
     updateEnemySound() {
         for (let enemy of this.level.enemies) {
             if (enemy instanceof Endboss) {
@@ -394,6 +509,9 @@ class World {
         }
     }
 
+    /**
+     * Updates sound settings for various in-game sounds.
+     */
     updateWorldSounds() {
         let sounds = [
             this.collectingCoin_sound,
@@ -407,6 +525,9 @@ class World {
         });
     }
 
+    /**
+ * Updates sound settings for the character's sounds based on mute status.
+ */
     updateCharacterSounds() {
         let sounds = [
             this.character.dying_sound,
@@ -421,10 +542,18 @@ class World {
         });
     }
 
+    /**
+     * Adds multiple objects to the map by iterating through the array.
+     * @param {Array} objects - The array of objects to add to the map.
+     */
     addObjectsToMap(objects) {
         objects.forEach((o) => this.addToMap(o));
     }
 
+    /**
+     * Adds a single object to the map, handling its drawing and hitbox display.
+     * @param {GameObject} mo - The object to be added to the map.
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
@@ -437,6 +566,10 @@ class World {
         }
     }
 
+    /**
+     * Flips the object's image horizontally for rendering in the opposite direction.
+     * @param {GameObject} mo - The object whose image will be flipped.
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -444,16 +577,26 @@ class World {
         mo.x = mo.x * -1;
     }
 
+    /**
+     * Restores the object's image orientation after flipping.
+     * @param {GameObject} mo - The object to restore its image orientation.
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
 
+    /**
+     * Displays the controls menu in the game.
+     */
     addControllsMenu() {
         document.getElementById('controllsMenu').classList.remove('d-none');
         this.checkSoundSymbol();
     }
 
+    /**
+     * Updates the visibility of the sound symbol based on the game's sound settings.
+     */
     checkSoundSymbol() {
         if (!this.isSoundMuted && this.isGamePaused) {
             document.getElementById('muteButton').classList.add('d-none');

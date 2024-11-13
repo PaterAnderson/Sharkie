@@ -18,6 +18,10 @@ class Finslap extends MovableObject {
         this.throw();
     }
 
+/**
+ * The function uses setInterval to continuously update the x position of an object based on a
+ * direction multiplier and applies gravity to the object.
+ */
     throw() {
         this.speedY = 2;
         this.applyGravity();

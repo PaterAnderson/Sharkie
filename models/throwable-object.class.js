@@ -17,6 +17,9 @@ class ThrowableObject extends MovableObject {
         this.throw(); 
     }
 
+    /**
+     * The function throws an error and then continuously moves an object horizontally at a set speed.
+     */
     throw() {
         this.speedY = 5;
         this.applyGravity();
@@ -27,10 +30,18 @@ class ThrowableObject extends MovableObject {
         }, 50);
     }
 
+    /**
+     * The function "hitEnemy" is used to make an enemy object take damage.
+     * @param enemy - The `enemy` parameter
+     * representing an enemy entity 
+     */
     hitEnemy(enemy) {
         enemy.hit(this.damage); 
     }
 
+    /**
+     * The `remove()` function sets the `isRemoved` property to true.
+     */
     remove() {
         this.isRemoved = true; 
     }

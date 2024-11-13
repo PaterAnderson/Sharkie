@@ -21,6 +21,8 @@ class SuperJellyFish extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.25;
     }
 
+    /* The `animate()` method in the `SuperJellyFish` class is defining the behavior of the object when
+    it is animated. */
     animate() {
         this.moveleft();
         this.intervalIDs.push(setInterval(() => {

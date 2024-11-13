@@ -9,6 +9,9 @@ class Light extends MovableObject {
         this.x = Math.random() * 850;
     }
 
+    /**
+     * The animate function calls the moveleft method.
+     */
     animate() {
         this.moveleft();
     }
