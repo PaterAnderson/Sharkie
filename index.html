@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sharkie</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="./img/favicon.png" type="image/png">
     <script src="models/drawable-object.class.js"></script>
@@ -34,12 +34,12 @@
 <body onload="init()">
 
     <h1>Sharkie</h1>
-    <h2>Please turn your Smartphone for a better expierience!</h2>
 
     <div class="canvas-container">
         <canvas id="canvas" width="720" height="480"></canvas>
         <div>
             <img id="startMenu" src="./img/welcome-screen.png" alt="Welcome Screen" class="overlay-image">
+            <img id="smartphone" src="./img/smartphone.png" alt="Please Turn your Device" class="overlay-image zindex">
             <button onclick="world.restart()" id="startButton" class="center-image">
                 <img src="./img/start.png" alt="Start" class="center-scaling">
             </button>

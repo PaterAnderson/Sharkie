@@ -26,13 +26,6 @@ h1 {
     text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-h2 {
-    font-size: 15px;
-    margin-top: -20px;
-    color: indianred;
-    visibility: hidden;
-}
-
 .canvas-container {
     position: relative;
 }
@@ -48,6 +41,12 @@ canvas {
     object-fit: cover;
 }
 
+.smartphone.image {
+    position: absolute;
+    top: 0;
+    object-fit: cover;
+}
+
 .center-image {
     position: absolute;
     cursor: pointer;
@@ -57,6 +56,10 @@ canvas {
     transition: transform 0.3s ease;
     background-color: transparent;
     border: none;
+}
+
+.zindex {
+    z-index: 2;
 }
 
 .sound-image {
@@ -179,9 +182,6 @@ canvas {
 }
 
 @media (max-width: 1200px) {
-    .align {
-        visibility: visible;
-    }
 }
 
 @media (max-width: 720px) {
@@ -267,10 +267,6 @@ canvas {
     .sound-image {
         top: 20px;
     }
-
-    h2 {
-        visibility: visible;
-    }
 }
 
 @media (max-width: 420px) {
@@ -325,11 +321,6 @@ canvas {
     .overlay-image {
         width: 100vw;
     }
-
-    h2 {
-        margin-bottom: 0px;
-    }
-
 }
 
 @media only screen and (max-height: 480px) {
@@ -366,5 +357,29 @@ canvas {
 
     .panel1:nth-child(2) {
         top: 5px;
+    }
+}
+
+@media (pointer: coarse) {
+    .align {
+        visibility: visible;
+    }
+}
+
+@media (pointer: fine) {
+    #smartphone {
+        visibility: hidden;
+    }
+}
+
+@media (orientation: portrait) {
+    .align {
+        visibility: hidden;
+    }
+}
+
+@media (orientation: landscape) {
+    #smartphone {
+        visibility: hidden;
     }
 }
