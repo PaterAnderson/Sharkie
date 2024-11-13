@@ -151,7 +151,6 @@ class World {
     */
     loadSoundSetting() {
         const mutedSetting = localStorage.getItem('isSoundMuted');
-        console.log('Lade Sound-Einstellung:', mutedSetting);
         this.isSoundMuted = mutedSetting === 'true';
         this.updateWorldSounds();
         this.updateEnemySound();
