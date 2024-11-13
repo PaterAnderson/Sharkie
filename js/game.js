@@ -26,9 +26,11 @@ function openImprint() {
     if (!imprintDisplayed) {
         imprintDisplayed = true;
         document.getElementById('imprint').classList.remove('d-none');
+        world.stop();
     } else {
         imprintDisplayed = false;
         document.getElementById('imprint').classList.add('d-none');
+        world.run();
     }
 }
 
