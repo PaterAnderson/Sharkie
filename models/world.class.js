@@ -39,8 +39,8 @@ class World {
     }
 
     /**
- * Loads necessary images for the game scenes.
- */
+    * Loads necessary images for the game scenes.
+    */
     loadImages() {
         this.victoryImage.src = "img/6.Botones/Tittles/You win/Mesa de trabajo 1.png";
         this.gameOverImage.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
@@ -95,6 +95,7 @@ class World {
         this.stop();
         this.resetWorld();
         this.setWorld();
+        this.loadSoundSetting();
         this.run();
     }
 
@@ -129,7 +130,7 @@ class World {
      */
     resetFlags() {
         this.isGameOverShowing = false;
-        this.isSoundMuted = false;
+        
         this.showVictoryScreen = false;
         this.showGameOverScreen = false;
         this.canCreateFinslap = true;
@@ -143,6 +144,18 @@ class World {
         this.endbossBar = new EndbossBar();
         this.ammoBar = new AmmoBar();
         this.coinBar = new CoinBar();
+    }
+
+    /**
+    * Lädt die Soundeinstellung aus dem LocalStorage.
+    */
+    loadSoundSetting() {
+        const mutedSetting = localStorage.getItem('isSoundMuted');
+        console.log('Lade Sound-Einstellung:', mutedSetting);
+        this.isSoundMuted = mutedSetting === 'true';
+        this.updateWorldSounds();
+        this.updateEnemySound();
+        this.updateCharacterSounds();
     }
 
     /**
@@ -496,6 +509,14 @@ class World {
         this.updateEnemySound();
         this.updateCharacterSounds();
         this.updateWorldSounds();
+        this.saveSoundSetting();
+    }
+
+    /**
+    * Speichert die aktuelle Soundeinstellung im LocalStorage.
+    */
+    saveSoundSetting() {
+        localStorage.setItem('isSoundMuted', this.isSoundMuted);
     }
 
     /**
