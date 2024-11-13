@@ -2,6 +2,7 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let isPaused = false;
+let imprintDisplayed = false;
 
 /**
  * Initializes the game by setting up the canvas and world, and stops the world.
@@ -11,6 +12,24 @@ function init() {
     world = new World(canvas, keyboard);
     world.stop();
     setupTouchControls();
+}
+
+/**
+ * Toggles the display of the imprint section.
+ * If the imprint is currently hidden, it will be shown;
+ * otherwise, it will be hidden.
+ *
+ * @function openImprint
+ * @returns {void} This function does not return a value.
+ */
+function openImprint() {
+    if (!imprintDisplayed) {
+        imprintDisplayed = true;
+        document.getElementById('imprint').classList.remove('d-none');
+    } else {
+        imprintDisplayed = false;
+        document.getElementById('imprint').classList.add('d-none');
+    }
 }
 
 /**
