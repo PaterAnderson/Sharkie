@@ -3,10 +3,6 @@ let world;
 let keyboard = new Keyboard();
 let isPaused = false;
 
-function showAlert() {
-    alert("Hey. Da ich jetzt nicht unbedingt ein Ticket aufmachen wollte. Teile ich dir/euch einfach hier schnell etwas mit. Das Optionsmenü funktioniert schon die ganze Zeit. Wie man im Startbildschirm erkennen kann, muss man einfach ESC drücken um es zu öffnen. Dort kann man die Regeln lesen, sowie den Sound muten. Das Spiel wird dabei auch pausiert. Habt ihr warscheinlich einfach nur übersehen haha ;)");
-}
-
 /**
  * Initializes the game by setting up the canvas and world, and stops the world.
  */
