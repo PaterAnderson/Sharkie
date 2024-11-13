@@ -393,12 +393,13 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
         this.ctx.translate(-this.camera_x, 0);
-
-        this.addFixedObjectsToMap();
+    
         this.ctx.translate(this.camera_x, 0);
         this.addDynamicObjectsToMap();
         this.ctx.translate(-this.camera_x, 0);
-
+    
+        this.addFixedObjectsToMap(); 
+        
         this.handleEndGameScreens();
         this.handleOptionsMenu();
         requestAnimationFrame(() => this.draw());
@@ -430,7 +431,7 @@ class World {
      * Adds dynamic objects (character, enemies, etc.) to the game map.
      */
     addDynamicObjectsToMap() {
-        this.addToMap(this.character);
+        this.addToMap(this.character); 
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.lights);
         this.addObjectsToMap(this.level.coins);
